@@ -474,27 +474,14 @@
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
     // 🔥 REEMPLAZA con tu configuración de Firebase (copiada de la consola)
-    <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyCBvUhrt9yh60u616zEq7LnoZpVXXkVBEQ",
-    authDomain: "edrunners-ac6e0.firebaseapp.com",
-    projectId: "edrunners-ac6e0",
-    storageBucket: "edrunners-ac6e0.firebasestorage.app",
-    messagingSenderId: "192001208731",
-    appId: "1:192001208731:web:3ae4560c57c8332b5ff13e"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-</script>
-        // ... el resto de las credenciales
-    };
+    const firebaseConfig = {
+  apiKey: "AIzaSyCBvUhrt9yh60u616zEq7LnoZpVXXkVBEQ",
+  authDomain: "edrunners-ac6e0.firebaseapp.com",
+  projectId: "edrunners-ac6e0",
+  storageBucket: "edrunners-ac6e0.firebasestorage.app",
+  messagingSenderId: "192001208731",
+  appId: "1:192001208731:web:3ae4560c57c8332b5ff13e"
+};
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
