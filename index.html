@@ -94,11 +94,10 @@
         .whatsapp-float:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(37,211,102,0.6); }
         .btn svg { margin-right: 8px; width: 20px; height: 20px; fill: currentColor; }
 
-        /* ========== NUEVOS ESTILOS PARA AUTENTICACIÓN ========== */
-        /* Botón flotante de registro con animación */
+        /* ========== ESTILOS PARA AUTENTICACIÓN ========== */
         .register-float {
             position: fixed;
-            bottom: 110px;  /* Justo encima del WhatsApp (que está a 30px) */
+            bottom: 110px;
             right: 30px;
             background-color: var(--primary-color);
             color: white;
@@ -115,11 +114,7 @@
             transition: all 0.3s ease;
             animation: pulse 1.5s infinite;
         }
-        .register-float:hover {
-            transform: scale(1.1);
-            background-color: var(--primary-hover);
-        }
-        /* Tooltip flotante con mensaje llamativo */
+        .register-float:hover { transform: scale(1.1); background-color: var(--primary-hover); }
         .register-float::after {
             content: "🔐 ÚNETE";
             position: absolute;
@@ -134,17 +129,13 @@
             opacity: 0;
             transition: opacity 0.3s;
             pointer-events: none;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
-        .register-float:hover::after {
-            opacity: 1;
-        }
+        .register-float:hover::after { opacity: 1; }
         @keyframes pulse {
             0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
             70% { box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); }
             100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
         }
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -178,10 +169,7 @@
             color: white;
             font-size: 1rem;
         }
-        .modal-content button {
-            margin-top: 10px;
-            width: 100%;
-        }
+        .modal-content button { margin-top: 10px; width: 100%; }
         .close-modal {
             position: absolute;
             top: 15px;
@@ -206,9 +194,7 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(16,185,129,0.5);
         }
-        .user-panel:hover {
-            transform: scale(1.05);
-        }
+        .user-panel:hover { transform: scale(1.05); }
         .user-avatar {
             background: white;
             color: var(--primary-color);
@@ -233,15 +219,20 @@
             display: none;
             border: 1px solid var(--primary-color);
         }
-        .user-panel:hover .user-tooltip {
-            display: block;
-        }
+        .user-panel:hover .user-tooltip { display: block; }
         @media (max-width: 768px) {
             .register-float, .user-panel { bottom: 100px; }
         }
 
-        @media (min-width: 768px) { .hero h1 { font-size: 3.5rem; } .product-grid { grid-template-columns: repeat(2, 1fr); } .features-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (min-width: 1024px) { .product-grid { grid-template-columns: repeat(3, 1fr); } .features-grid { grid-template-columns: repeat(4, 1fr); } }
+        @media (min-width: 768px) {
+            .hero h1 { font-size: 3.5rem; }
+            .product-grid { grid-template-columns: repeat(2, 1fr); }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (min-width: 1024px) {
+            .product-grid { grid-template-columns: repeat(3, 1fr); }
+            .features-grid { grid-template-columns: repeat(4, 1fr); }
+        }
     </style>
 </head>
 <body>
@@ -334,18 +325,12 @@
     </a>
 
     <!-- ========== ELEMENTOS DE AUTENTICACIÓN ========== -->
-    <!-- Botón flotante de registro (se muestra si no hay sesión) -->
-    <div id="registerBtn" class="register-float" style="display: flex;">
-        🔐
-    </div>
-
-    <!-- Panel de usuario (se muestra cuando hay sesión activa) -->
+    <div id="registerBtn" class="register-float" style="display: flex;">🔐</div>
     <div id="userPanel" class="user-panel" style="display: none;">
         <div class="user-avatar" id="userAvatar">U</div>
         <div class="user-tooltip" id="userTooltip">Cerrar sesión</div>
     </div>
 
-    <!-- Modal de autenticación -->
     <div id="authModal" class="modal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
@@ -359,265 +344,274 @@
     </div>
 
     <script>
-        <script>
-    // ========== CONFIGURACIÓN DE GOOGLE SHEETS (productos) ==========
-    const PRODUCTS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRGjMz9Zwo1g8PruSjNcSJq6kTUQrEGkN_hQRBH0dvjIA_IwwKQ5p2pb7Bmrnvd7sLB2hMvqj-oFR6L/pub?output=csv";
+        // ========== CONFIGURACIÓN DE GOOGLE SHEETS (productos) ==========
+        const PRODUCTS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRGjMz9Zwo1g8PruSjNcSJq6kTUQrEGkN_hQRBH0dvjIA_IwwKQ5p2pb7Bmrnvd7sLB2hMvqj-oFR6L/pub?output=csv";
 
-    const fallbackProducts = [
-        { nombre: "Samsung Galaxy A17", especificaciones: "128GB Almacenamiento / 4GB RAM", precio: "$180", imagen_url: "image/sam-a171.webp", link_wa: "https://wa.me/584129056964?text=Hola,%20me%20interesa%20el%20Samsung%20Galaxy%20A17" },
-        { nombre: "Honor X6c", especificaciones: "256GB Almacenamiento / 6GB RAM", precio: "$220", imagen_url: "image/HONOR1.webp", link_wa: "https://wa.me/584129056964?text=Hola,%20me%20interesa%20el%20Honor%20X6c" },
-        { nombre: "Controles PS5", especificaciones: "Múltiples colores disponibles", precio: "$45", imagen_url: "image/dualsense.webp", link_wa: "https://wa.me/584129056964?text=Hola,%20me%20interesan%20los%20Controles%20de%20PS5" },
-        { nombre: "Ventilador de Cuello Pro 360°", especificaciones: "Recargable / Diseño ergonómico", precio: "$25", imagen_url: "", link_wa: "https://wa.me/584129056964?text=Hola,%20me%20interesa%20el%20Ventilador%20de%20Cuello" },
-        { nombre: "Combo Revive-TV", especificaciones: "TV Box + Convertidor HDMI a AV", precio: "$65", imagen_url: "", link_wa: "https://wa.me/584129056964?text=Hola,%20me%20interesa%20el%20Combo%20Revive-TV" },
-        { nombre: "PROXIMAMENTE", especificaciones: "Nuevos productos pronto", precio: "", imagen_url: "image/cargando.webp", link_wa: "#" }
-    ];
+        const fallbackProducts = [
+            { nombre: "Samsung Galaxy A17", especificaciones: "128GB Almacenamiento / 4GB RAM", precio: "$180", imagen_url: "image/sam-a171.webp", link_wa: "https://wa.me/584129056964?text=Hola,%20me%20interesa%20el%20Samsung%20Galaxy%20A17" },
+            { nombre: "Honor X6c", especificaciones: "256GB Almacenamiento / 6GB RAM", precio: "$220", imagen_url: "image/HONOR1.webp", link_wa: "https://wa.me/584129056964?text=Hola,%20me%20interesa%20el%20Honor%20X6c" },
+            { nombre: "Controles PS5", especificaciones: "Múltiples colores disponibles", precio: "$45", imagen_url: "image/dualsense.webp", link_wa: "https://wa.me/584129056964?text=Hola,%20me%20interesan%20los%20Controles%20de%20PS5" },
+            { nombre: "Ventilador de Cuello Pro 360°", especificaciones: "Recargable / Diseño ergonómico", precio: "$25", imagen_url: "", link_wa: "https://wa.me/584129056964?text=Hola,%20me%20interesa%20el%20Ventilador%20de%20Cuello" },
+            { nombre: "Combo Revive-TV", especificaciones: "TV Box + Convertidor HDMI a AV", precio: "$65", imagen_url: "", link_wa: "https://wa.me/584129056964?text=Hola,%20me%20interesa%20el%20Combo%20Revive-TV" },
+            { nombre: "PROXIMAMENTE", especificaciones: "Nuevos productos pronto", precio: "", imagen_url: "image/cargando.webp", link_wa: "#" }
+        ];
 
-    const productGrid = document.getElementById('productGrid');
-    let currentProducts = [];
+        const productGrid = document.getElementById('productGrid');
+        let currentProducts = [];
 
-    function renderProducts(filterText = '') {
-        const term = filterText.toLowerCase().trim();
-        const filtered = term === '' ? currentProducts : currentProducts.filter(p => 
-            p.nombre.toLowerCase().includes(term) || 
-            p.especificaciones.toLowerCase().includes(term)
-        );
-        if (filtered.length === 0) {
-            productGrid.innerHTML = `<div class="no-results">🔍 No encontramos productos con "${filterText}". Escríbenos por WhatsApp y te ayudamos.</div>`;
-            return;
-        }
-        const html = filtered.map(p => `
-            <div class="product-card" data-name="${p.nombre.replace(/"/g, '&quot;')}" data-specs="${p.especificaciones.replace(/"/g, '&quot;')}">
-                <div class="product-image">
-                    ${p.imagen_url ? `<img src="${p.imagen_url}" alt="${p.nombre}" loading="lazy" onerror="this.parentElement.innerHTML='<span>📷 Imagen: ${p.nombre}</span>'">` : `<span>📷 Imagen: ${p.nombre}</span>`}
-                </div>
-                <h3 class="product-title">${p.nombre}</h3>
-                <p class="product-specs">${p.especificaciones}</p>
-                ${p.precio ? `<div class="product-price">${p.precio}</div>` : ''}
-                <a href="${p.link_wa}" target="_blank" class="btn btn-outline" style="width: 100%;">Consultar por WhatsApp</a>
-            </div>
-        `).join('');
-        productGrid.innerHTML = html;
-    }
-
-    function parseCSV(csvText) {
-        const lines = csvText.split(/\r?\n/);
-        if (lines.length < 2) return [];
-        const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
-        const idxNombre = headers.indexOf('nombre');
-        const idxEspecs = headers.indexOf('especificaciones');
-        const idxPrecio = headers.indexOf('precio');
-        const idxImagen = headers.indexOf('imagen_url');
-        const idxLink = headers.indexOf('link_wa');
-        if (idxNombre === -1) return [];
-        const products = [];
-        for (let i = 1; i < lines.length; i++) {
-            if (!lines[i].trim()) continue;
-            let row = lines[i];
-            let values = [];
-            let inQuote = false;
-            let current = '';
-            for (let ch of row) {
-                if (ch === '"') inQuote = !inQuote;
-                else if (ch === ',' && !inQuote) {
-                    values.push(current.trim());
-                    current = '';
-                } else current += ch;
+        function renderProducts(filterText = '') {
+            const term = filterText.toLowerCase().trim();
+            const filtered = term === '' ? currentProducts : currentProducts.filter(p => 
+                p.nombre.toLowerCase().includes(term) || 
+                p.especificaciones.toLowerCase().includes(term)
+            );
+            if (filtered.length === 0) {
+                productGrid.innerHTML = `<div class="no-results">🔍 No encontramos productos con "${filterText}". Escríbenos por WhatsApp y te ayudamos.</div>`;
+                return;
             }
-            values.push(current.trim());
-            const nombre = values[idxNombre] || '';
-            if (!nombre) continue;
-            products.push({
-                nombre: nombre,
-                especificaciones: idxEspecs !== -1 ? values[idxEspecs] : '',
-                precio: idxPrecio !== -1 ? values[idxPrecio] : '',
-                imagen_url: idxImagen !== -1 ? values[idxImagen] : '',
-                link_wa: idxLink !== -1 ? values[idxLink] : `https://wa.me/584129056964?text=Hola,%20me%20interesa%20${encodeURIComponent(nombre)}`
+            const html = filtered.map(p => `
+                <div class="product-card" data-name="${p.nombre.replace(/"/g, '&quot;')}" data-specs="${p.especificaciones.replace(/"/g, '&quot;')}">
+                    <div class="product-image">
+                        ${p.imagen_url ? `<img src="${p.imagen_url}" alt="${p.nombre}" loading="lazy" onerror="this.parentElement.innerHTML='<span>📷 Imagen: ${p.nombre}</span>'">` : `<span>📷 Imagen: ${p.nombre}</span>`}
+                    </div>
+                    <h3 class="product-title">${p.nombre}</h3>
+                    <p class="product-specs">${p.especificaciones}</p>
+                    ${p.precio ? `<div class="product-price">${p.precio}</div>` : ''}
+                    <a href="${p.link_wa}" target="_blank" class="btn btn-outline" style="width: 100%;">Consultar por WhatsApp</a>
+                </div>
+            `).join('');
+            productGrid.innerHTML = html;
+        }
+
+        function parseCSV(csvText) {
+            const lines = csvText.split(/\r?\n/);
+            if (lines.length < 2) return [];
+            const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+            const idxNombre = headers.indexOf('nombre');
+            const idxEspecs = headers.indexOf('especificaciones');
+            const idxPrecio = headers.indexOf('precio');
+            const idxImagen = headers.indexOf('imagen_url');
+            const idxLink = headers.indexOf('link_wa');
+            if (idxNombre === -1) return [];
+            const products = [];
+            for (let i = 1; i < lines.length; i++) {
+                if (!lines[i].trim()) continue;
+                let row = lines[i];
+                let values = [];
+                let inQuote = false;
+                let current = '';
+                for (let ch of row) {
+                    if (ch === '"') inQuote = !inQuote;
+                    else if (ch === ',' && !inQuote) {
+                        values.push(current.trim());
+                        current = '';
+                    } else current += ch;
+                }
+                values.push(current.trim());
+                const nombre = values[idxNombre] || '';
+                if (!nombre) continue;
+                products.push({
+                    nombre: nombre,
+                    especificaciones: idxEspecs !== -1 ? values[idxEspecs] : '',
+                    precio: idxPrecio !== -1 ? values[idxPrecio] : '',
+                    imagen_url: idxImagen !== -1 ? values[idxImagen] : '',
+                    link_wa: idxLink !== -1 ? values[idxLink] : `https://wa.me/584129056964?text=Hola,%20me%20interesa%20${encodeURIComponent(nombre)}`
+                });
+            }
+            return products;
+        }
+
+        async function loadProducts() {
+            productGrid.innerHTML = '<div class="no-results">Cargando productos...</div>';
+            if (PRODUCTS_CSV_URL) {
+                try {
+                    const response = await fetch(PRODUCTS_CSV_URL);
+                    if (response.ok) {
+                        const csvText = await response.text();
+                        const products = parseCSV(csvText);
+                        if (products.length > 0) {
+                            currentProducts = products;
+                            renderProducts();
+                            setupSearchFilter();
+                            return;
+                        }
+                    }
+                } catch (e) { console.warn("Error CSV, usando respaldo", e); }
+            }
+            currentProducts = fallbackProducts;
+            renderProducts();
+            setupSearchFilter();
+        }
+
+        let searchInitialized = false;
+        function setupSearchFilter() {
+            if (searchInitialized) return;
+            const searchInput = document.getElementById('mobileSearchInput');
+            const searchBtn = document.getElementById('mobileSearchBtn');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => renderProducts(e.target.value));
+                if (searchBtn) searchBtn.addEventListener('click', () => renderProducts(searchInput.value));
+            }
+            searchInitialized = true;
+        }
+
+        function initSticky() {
+            const stickySearch = document.getElementById('stickySearch');
+            if (!stickySearch) return;
+            window.addEventListener('scroll', () => {
+                if (window.innerWidth >= 768) return;
+                if (window.pageYOffset > 100) stickySearch.classList.add('visible');
+                else stickySearch.classList.remove('visible');
             });
         }
-        return products;
-    }
 
-    async function loadProducts() {
-        productGrid.innerHTML = '<div class="no-results">Cargando productos...</div>';
-        if (PRODUCTS_CSV_URL) {
-            try {
-                const response = await fetch(PRODUCTS_CSV_URL);
-                if (response.ok) {
-                    const csvText = await response.text();
-                    const products = parseCSV(csvText);
-                    if (products.length > 0) {
-                        currentProducts = products;
-                        renderProducts();
-                        setupSearchFilter();
-                        return;
-                    }
-                }
-            } catch (e) { console.warn("Error CSV, usando respaldo", e); }
+        function initFadeIn() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+            }, { threshold: 0.15 });
+            document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
         }
-        currentProducts = fallbackProducts;
-        renderProducts();
-        setupSearchFilter();
-    }
 
-    let searchInitialized = false;
-    function setupSearchFilter() {
-        if (searchInitialized) return;
-        const searchInput = document.getElementById('mobileSearchInput');
-        const searchBtn = document.getElementById('mobileSearchBtn');
-        if (searchInput) {
-            searchInput.addEventListener('input', (e) => renderProducts(e.target.value));
-            if (searchBtn) searchBtn.addEventListener('click', () => renderProducts(searchInput.value));
-        }
-        searchInitialized = true;
-    }
+        // ========== FIREBASE AUTH (carga tradicional, compatible móvil) ==========
+        function loadFirebaseAndInit() {
+            // Cargar Firebase App
+            const firebaseAppScript = document.createElement('script');
+            firebaseAppScript.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+            firebaseAppScript.onload = () => {
+                // Cargar Firebase Auth
+                const firebaseAuthScript = document.createElement('script');
+                firebaseAuthScript.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+                firebaseAuthScript.onload = () => {
+                    // Configuración
+                    const firebaseConfig = {
+                        apiKey: "AIzaSyCBvUhrt9yh60u616zEq7LnoZpVXXkVBEQ",
+                        authDomain: "edrunners-ac6e0.firebaseapp.com",
+                        projectId: "edrunners-ac6e0",
+                        storageBucket: "edrunners-ac6e0.firebasestorage.app",
+                        messagingSenderId: "192001208731",
+                        appId: "1:192001208731:web:3ae4560c57c8332b5ff13e"
+                    };
+                    firebase.initializeApp(firebaseConfig);
+                    const auth = firebase.auth();
+                    
+                    // Elementos DOM
+                    const registerBtn = document.getElementById('registerBtn');
+                    const userPanelDiv = document.getElementById('userPanel');
+                    const modal = document.getElementById('authModal');
+                    const closeModal = document.querySelector('.close-modal');
+                    const modalTitle = document.getElementById('modalTitle');
+                    const submitBtn = document.getElementById('submitAuthBtn');
+                    const toggleMsg = document.getElementById('toggleAuthMsg');
+                    const emailInput = document.getElementById('emailInput');
+                    const passwordInput = document.getElementById('passwordInput');
+                    const authErrorDiv = document.getElementById('authError');
+                    const userAvatarSpan = document.getElementById('userAvatar');
+                    const userTooltipSpan = document.getElementById('userTooltip');
 
-    function initSticky() {
-        const stickySearch = document.getElementById('stickySearch');
-        if (!stickySearch) return;
-        window.addEventListener('scroll', () => {
-            if (window.innerWidth >= 768) return;
-            if (window.pageYOffset > 100) stickySearch.classList.add('visible');
-            else stickySearch.classList.remove('visible');
-        });
-    }
+                    let isLoginMode = false;
 
-    function initFadeIn() {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
-        }, { threshold: 0.15 });
-        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-    }
-
-    // ========== FIREBASE AUTH (sin módulos, para compatibilidad móvil) ==========
-    // Cargar Firebase dinámicamente con scripts tradicionales
-    function loadFirebaseAndInit() {
-        // Cargar scripts de Firebase
-        const firebaseAppScript = document.createElement('script');
-        firebaseAppScript.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        firebaseAppScript.onload = () => {
-            const firebaseAuthScript = document.createElement('script');
-            firebaseAuthScript.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-            firebaseAuthScript.onload = () => {
-                // Configuración de Firebase
-                const firebaseConfig = {
-                    apiKey: "AIzaSyCBvUhrt9yh60u616zEq7LnoZpVXXkVBEQ",
-                    authDomain: "edrunners-ac6e0.firebaseapp.com",
-                    projectId: "edrunners-ac6e0",
-                    storageBucket: "edrunners-ac6e0.firebasestorage.app",
-                    messagingSenderId: "192001208731",
-                    appId: "1:192001208731:web:3ae4560c57c8332b5ff13e"
-                };
-                firebase.initializeApp(firebaseConfig);
-                const auth = firebase.auth();
-                
-                // Elementos DOM
-                const registerBtn = document.getElementById('registerBtn');
-                const userPanelDiv = document.getElementById('userPanel');
-                const modal = document.getElementById('authModal');
-                const closeModal = document.querySelector('.close-modal');
-                const modalTitle = document.getElementById('modalTitle');
-                const submitBtn = document.getElementById('submitAuthBtn');
-                const toggleMsg = document.getElementById('toggleAuthMsg');
-                const emailInput = document.getElementById('emailInput');
-                const passwordInput = document.getElementById('passwordInput');
-                const authErrorDiv = document.getElementById('authError');
-                const userAvatarSpan = document.getElementById('userAvatar');
-                const userTooltipSpan = document.getElementById('userTooltip');
-
-                let isLoginMode = false;
-
-                // Abrir modal
-                registerBtn.addEventListener('click', () => {
-                    modal.style.display = 'flex';
-                });
-
-                // Cerrar modal
-                closeModal.addEventListener('click', () => {
-                    modal.style.display = 'none';
-                    authErrorDiv.innerText = '';
-                });
-                window.addEventListener('click', (e) => {
-                    if (e.target === modal) {
-                        modal.style.display = 'none';
-                        authErrorDiv.innerText = '';
+                    // Abrir modal
+                    if (registerBtn) {
+                        registerBtn.addEventListener('click', () => {
+                            modal.style.display = 'flex';
+                        });
                     }
-                });
 
-                // Alternar modo
-                toggleMsg.addEventListener('click', () => {
-                    isLoginMode = !isLoginMode;
-                    if (isLoginMode) {
-                        modalTitle.innerText = 'Iniciar Sesión';
-                        submitBtn.innerText = 'Iniciar Sesión';
-                        toggleMsg.innerText = '¿No tienes cuenta? Regístrate';
-                    } else {
-                        modalTitle.innerText = 'Regístrate';
-                        submitBtn.innerText = 'Registrarse';
-                        toggleMsg.innerText = '¿Ya tienes cuenta? Inicia sesión';
+                    // Cerrar modal
+                    if (closeModal) {
+                        closeModal.addEventListener('click', () => {
+                            modal.style.display = 'none';
+                            if (authErrorDiv) authErrorDiv.innerText = '';
+                        });
                     }
-                    authErrorDiv.innerText = '';
-                });
-
-                // Enviar
-                submitBtn.addEventListener('click', async () => {
-                    const email = emailInput.value;
-                    const password = passwordInput.value;
-                    if (!email || !password) {
-                        authErrorDiv.innerText = 'Completa todos los campos';
-                        return;
-                    }
-                    authErrorDiv.innerText = '';
-                    try {
-                        if (isLoginMode) {
-                            await auth.signInWithEmailAndPassword(email, password);
-                        } else {
-                            await auth.createUserWithEmailAndPassword(email, password);
+                    window.addEventListener('click', (e) => {
+                        if (e.target === modal) {
+                            modal.style.display = 'none';
+                            if (authErrorDiv) authErrorDiv.innerText = '';
                         }
-                        modal.style.display = 'none';
-                        emailInput.value = '';
-                        passwordInput.value = '';
-                    } catch (error) {
-                        let msg = error.message;
-                        if (msg.includes('email-already-in-use')) msg = 'Este correo ya está registrado. Inicia sesión.';
-                        else if (msg.includes('weak-password')) msg = 'La contraseña debe tener al menos 6 caracteres.';
-                        else if (msg.includes('user-not-found')) msg = 'Usuario no encontrado. Regístrate primero.';
-                        else if (msg.includes('wrong-password')) msg = 'Contraseña incorrecta.';
-                        authErrorDiv.innerText = msg;
-                    }
-                });
+                    });
 
-                // Observar estado
-                auth.onAuthStateChanged((user) => {
-                    if (user) {
-                        registerBtn.style.display = 'none';
-                        userPanelDiv.style.display = 'flex';
-                        const emailShort = user.email.split('@')[0];
-                        const initial = emailShort.charAt(0).toUpperCase();
-                        userAvatarSpan.innerText = initial;
-                        userTooltipSpan.innerText = `Hola, ${emailShort} | Cerrar sesión`;
-                        userPanelDiv.onclick = () => {
-                            if (confirm('¿Cerrar sesión?')) {
-                                auth.signOut();
+                    // Alternar modo
+                    if (toggleMsg) {
+                        toggleMsg.addEventListener('click', () => {
+                            isLoginMode = !isLoginMode;
+                            if (isLoginMode) {
+                                modalTitle.innerText = 'Iniciar Sesión';
+                                submitBtn.innerText = 'Iniciar Sesión';
+                                toggleMsg.innerText = '¿No tienes cuenta? Regístrate';
+                            } else {
+                                modalTitle.innerText = 'Regístrate';
+                                submitBtn.innerText = 'Registrarse';
+                                toggleMsg.innerText = '¿Ya tienes cuenta? Inicia sesión';
                             }
-                        };
-                    } else {
-                        registerBtn.style.display = 'flex';
-                        userPanelDiv.style.display = 'none';
+                            if (authErrorDiv) authErrorDiv.innerText = '';
+                        });
                     }
-                });
-            };
-            document.head.appendChild(firebaseAuthScript);
-        };
-        document.head.appendChild(firebaseAppScript);
-    }
 
-    // Iniciar todo
-    document.addEventListener('DOMContentLoaded', () => {
-        initFadeIn();
-        initSticky();
-        loadProducts();
-        loadFirebaseAndInit();  // Cargar Firebase después de los productos
-    });
-</script>
+                    // Enviar formulario
+                    if (submitBtn) {
+                        submitBtn.addEventListener('click', async () => {
+                            const email = emailInput.value;
+                            const password = passwordInput.value;
+                            if (!email || !password) {
+                                if (authErrorDiv) authErrorDiv.innerText = 'Completa todos los campos';
+                                return;
+                            }
+                            if (authErrorDiv) authErrorDiv.innerText = '';
+                            try {
+                                if (isLoginMode) {
+                                    await auth.signInWithEmailAndPassword(email, password);
+                                } else {
+                                    await auth.createUserWithEmailAndPassword(email, password);
+                                }
+                                modal.style.display = 'none';
+                                emailInput.value = '';
+                                passwordInput.value = '';
+                            } catch (error) {
+                                let msg = error.message;
+                                if (msg.includes('email-already-in-use')) msg = 'Este correo ya está registrado. Inicia sesión.';
+                                else if (msg.includes('weak-password')) msg = 'La contraseña debe tener al menos 6 caracteres.';
+                                else if (msg.includes('user-not-found')) msg = 'Usuario no encontrado. Regístrate primero.';
+                                else if (msg.includes('wrong-password')) msg = 'Contraseña incorrecta.';
+                                if (authErrorDiv) authErrorDiv.innerText = msg;
+                            }
+                        });
+                    }
+
+                    // Observar estado de autenticación
+                    auth.onAuthStateChanged((user) => {
+                        if (user) {
+                            if (registerBtn) registerBtn.style.display = 'none';
+                            if (userPanelDiv) userPanelDiv.style.display = 'flex';
+                            const emailShort = user.email.split('@')[0];
+                            const initial = emailShort.charAt(0).toUpperCase();
+                            if (userAvatarSpan) userAvatarSpan.innerText = initial;
+                            if (userTooltipSpan) userTooltipSpan.innerText = `Hola, ${emailShort} | Cerrar sesión`;
+                            if (userPanelDiv) {
+                                userPanelDiv.onclick = () => {
+                                    if (confirm('¿Cerrar sesión?')) {
+                                        auth.signOut();
+                                    }
+                                };
+                            }
+                        } else {
+                            if (registerBtn) registerBtn.style.display = 'flex';
+                            if (userPanelDiv) userPanelDiv.style.display = 'none';
+                        }
+                    });
+                };
+                document.head.appendChild(firebaseAuthScript);
+            };
+            document.head.appendChild(firebaseAppScript);
+        }
+
+        // Iniciar todo cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', () => {
+            initFadeIn();
+            initSticky();
+            loadProducts();
+            loadFirebaseAndInit();  // Cargar Firebase después de los productos
+        });
+    </script>
 </body>
 </html>
