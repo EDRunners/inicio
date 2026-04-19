@@ -467,9 +467,12 @@
                     const authErrorDiv = document.getElementById('authError');
                     let isLoginMode = false;
 
-                    // Alternar modo
+                        // Alternar modo (registro/login)
                     if (toggleMsg) {
-                        toggleMsg.addEventListener('click', () => {
+                        toggleMsg.addEventListener('click', (event) => {
+                            // Importante: Prevenir cualquier comportamiento por defecto
+                            event.preventDefault();
+                            // Cambiar el modo
                             isLoginMode = !isLoginMode;
                             if (isLoginMode) {
                                 modalTitle.innerText = 'Iniciar Sesión';
@@ -480,26 +483,36 @@
                                 submitBtn.innerText = 'Registrarse';
                                 toggleMsg.innerText = '¿Ya tienes cuenta? Inicia sesión';
                             }
+                            // Limpiar mensajes de error anteriores
                             if (authErrorDiv) authErrorDiv.innerText = '';
                         });
                     }
 
-                    // Enviar formulario
+                        // Enviar formulario (Registrarse / Iniciar Sesión)
                     if (submitBtn) {
-                        submitBtn.addEventListener('click', async () => {
+                        submitBtn.addEventListener('click', async (event) => {
+                            // Importante: Prevenir el envío tradicional del formulario
+                            event.preventDefault();
+                            
                             const email = emailInput.value;
                             const password = passwordInput.value;
+                            
                             if (!email || !password) {
                                 if (authErrorDiv) authErrorDiv.innerText = 'Completa todos los campos';
                                 return;
                             }
+                            
                             if (authErrorDiv) authErrorDiv.innerText = '';
+                            
                             try {
                                 if (isLoginMode) {
+                                    // Iniciar sesión
                                     await auth.signInWithEmailAndPassword(email, password);
                                 } else {
+                                    // Registrar nuevo usuario
                                     await auth.createUserWithEmailAndPassword(email, password);
                                 }
+                                // Cerrar el modal y limpiar los campos si todo es correcto
                                 modal.style.display = 'none';
                                 emailInput.value = '';
                                 passwordInput.value = '';
