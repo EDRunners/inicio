@@ -386,18 +386,26 @@
         }
 
         async function loadProducts() {
-            productGrid.innerHTML = '<div class="no-results">Cargando productos...</div>';
-            try {
-                const response = await fetch(PRODUCTS_CSV_URL);
-                if (response.ok) {
-                    const products = parseCSV(await response.text());
-                    if (products.length) { currentProducts = products; renderProducts(); setupSearchFilter(); return; }
+    productGrid.innerHTML = '<div class="no-results">Cargando productos...</div>';
+    if (PRODUCTS_CSV_URL) {
+        try {
+            const response = await fetch(PRODUCTS_CSV_URL);
+            if (response.ok) {
+                const csvText = await response.text();
+                const products = parseCSV(csvText);
+                if (products.length > 0) {
+                    currentProducts = products.reverse(); // 🔁 Invertir orden: los nuevos primeros
+                    renderProducts();
+                    setupSearchFilter();
+                    return;
                 }
-            } catch(e) {}
-            currentProducts = fallbackProducts;
-            renderProducts();
-            setupSearchFilter();
-        }
+            }
+        } catch (e) { console.warn("Error CSV, usando respaldo", e); }
+    }
+    currentProducts = fallbackProducts.reverse(); // También invertir respaldo
+    renderProducts();
+    setupSearchFilter();
+}
 
         let searchInitialized = false;
         function setupSearchFilter() {
