@@ -6,7 +6,7 @@
     <title>EDRunners Escritorio | Tu Cuenta</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ========== ESTILOS (los mismos que tenías) ========== */
+        /* ========== ESTILOS CON VARIABLES PARA MODO CLARO/OSCURO ========== */
         :root {
             --bg-color: #141517;
             --surface-color: #1f2023;
@@ -17,8 +17,15 @@
             --glow: 0 0 20px rgba(16, 185, 129, 0.15);
             --transition: all 0.3s ease;
         }
+        body.tema-claro {
+            --bg-color: #f5f5f7;
+            --surface-color: #ffffff;
+            --text-light: #1f1f2f;
+            --text-muted: #555;
+            --glow: 0 0 20px rgba(0,0,0,0.08);
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-light); line-height: 1.6; overflow-x: hidden; }
+        body { background-color: var(--bg-color); color: var(--text-light); line-height: 1.6; overflow-x: hidden; transition: var(--transition); }
         a { text-decoration: none; color: inherit; }
         h1, h2, h3 { font-weight: 700; line-height: 1.2; }
         .text-primary { color: var(--primary-color); }
@@ -32,12 +39,14 @@
         .btn:hover { background-color: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16,185,129,0.4); }
         .btn-outline { background-color: transparent; border: 2px solid var(--primary-color); color: var(--primary-color); box-shadow: none; }
         .btn-outline:hover { background-color: rgba(16,185,129,0.1); }
+        .btn.disabled { opacity: 0.5; pointer-events: none; }
         .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
         .fade-in.visible { opacity: 1; transform: translateY(0); }
         header {
             padding: 20px 0; position: fixed; top: 0; width: 100%; background: rgba(20,23,21,0.95);
             backdrop-filter: blur(10px); z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.05);
         }
+        body.tema-claro header { background: rgba(245,245,247,0.95); border-bottom-color: rgba(0,0,0,0.1); }
         .nav-container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
         .nav-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
@@ -63,14 +72,15 @@
         .hero { padding: 160px 0 100px; text-align: center; background: radial-gradient(circle at 50% 0%, rgba(16,185,129,0.1) 0%, transparent 50%); }
         .hero h1 { font-size: 2.5rem; margin-bottom: 20px; }
         .hero p { font-size: 1.1rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 40px; }
-        .products { padding: 80px 0; }
-        .section-title { text-align: center; font-size: 2rem; margin-bottom: 50px; }
+        .products { padding: 40px 0 80px; }
+        .section-title { text-align: center; font-size: 2rem; margin-bottom: 30px; }
         .product-grid { display: grid; grid-template-columns: 1fr; gap: 30px; }
         .product-card {
             background: var(--surface-color); border-radius: 16px; padding: 30px; text-align: center;
             border: 1px solid rgba(255,255,255,0.02); transition: var(--transition);
         }
         .product-card:hover { transform: translateY(-10px); box-shadow: var(--glow); border-color: rgba(16,185,129,0.3); }
+        body.tema-claro .product-card, body.tema-claro .portada-card, body.tema-claro .modal-content { border-color: rgba(0,0,0,0.1); }
         .product-image {
             width: 100%; height: 200px; background-color: rgba(255,255,255,0.02); border-radius: 12px; margin-bottom: 20px;
             display: flex; align-items: center; justify-content: center; color: var(--text-muted);
@@ -81,6 +91,12 @@
         .product-title { font-size: 1.2rem; margin-bottom: 10px; }
         .product-specs { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 10px; }
         .product-price { color: var(--primary-color); font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; }
+        .product-stock { font-size: 0.8rem; margin-bottom: 10px; font-weight: bold; }
+        .product-stock.agotado { color: #ff4444; }
+        .product-stock.pocas { color: #ffaa33; }
+        .filter-buttons { text-align: center; margin: 20px 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+        .filter-btn { background: var(--surface-color); border: 1px solid var(--primary-color); color: var(--text-light); padding: 8px 16px; border-radius: 30px; cursor: pointer; transition: var(--transition); font-size: 0.9rem; }
+        .filter-btn.active, .filter-btn:hover { background: var(--primary-color); color: white; }
         .features { background: var(--surface-color); padding: 80px 0; }
         .features-grid { display: grid; grid-template-columns: 1fr; gap: 40px; }
         .feature-item { text-align: center; }
@@ -94,6 +110,8 @@
         .whatsapp-float { position: fixed; bottom: 30px; right: 30px; background-color: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 4px 15px rgba(37,211,102,0.4); z-index: 1000; transition: var(--transition); }
         .whatsapp-float:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(37,211,102,0.6); }
         .btn svg { margin-right: 8px; width: 20px; height: 20px; fill: currentColor; }
+
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -124,7 +142,7 @@
             background: var(--bg-color);
             border: 1px solid var(--text-muted);
             border-radius: 8px;
-            color: white;
+            color: var(--text-light);
             font-size: 1rem;
         }
         .modal-content button { margin-top: 10px; width: 100%; }
@@ -136,147 +154,58 @@
             cursor: pointer;
             color: var(--text-muted);
         }
-        @media (min-width: 768px) { .hero h1 { font-size: 3.5rem; } .product-grid { grid-template-columns: repeat(2, 1fr); } .features-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (min-width: 1024px) { .product-grid { grid-template-columns: repeat(3, 1fr); } .features-grid { grid-template-columns: repeat(4, 1fr); } }
-        /* ========== CARRUSEL DE PORTADAS ========== */
-.carousel-container {
-    position: relative;
-    max-width: 1200px;
-    margin: 40px auto 20px;
-    overflow: hidden;
-    border-radius: 20px;
-    box-shadow: var(--glow);
-}
 
-.carousel-slides {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
-}
+        /* Carrusel y portadas */
+        .carousel-container {
+            position: relative;
+            max-width: 1200px;
+            margin: 40px auto 20px;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: var(--glow);
+        }
+        .carousel-slides { display: flex; transition: transform 0.5s ease-in-out; }
+        .carousel-slide { min-width: 100%; box-sizing: border-box; cursor: pointer; }
+        .carousel-slide img { width: 100%; height: auto; display: block; border-radius: 20px; object-fit: cover; max-height: 400px; }
+        .carousel-button {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background-color: rgba(0,0,0,0.5); color: white; border: none; font-size: 2rem;
+            padding: 0 12px; cursor: pointer; border-radius: 50%; z-index: 10; transition: background 0.3s;
+        }
+        .carousel-button:hover { background-color: rgba(0,0,0,0.8); }
+        .carousel-button.prev { left: 10px; }
+        .carousel-button.next { right: 10px; }
+        .carousel-dots { text-align: center; margin-top: 15px; }
+        .dot { display: inline-block; width: 12px; height: 12px; margin: 0 5px; background-color: var(--text-muted); border-radius: 50%; cursor: pointer; transition: background 0.3s; }
+        .dot.active { background-color: var(--primary-color); }
+        .portadas { padding: 40px 0 20px; }
+        .portadas h2 { text-align: center; font-size: 1.8rem; margin-bottom: 30px; }
+        .portadas-grid { display: grid; grid-template-columns: 1fr; gap: 25px; }
+        .portada-card {
+            background: var(--surface-color); border-radius: 20px; overflow: hidden; transition: var(--transition);
+            cursor: pointer; border: 1px solid rgba(16,185,129,0.2);
+        }
+        .portada-card:hover { transform: translateY(-5px); box-shadow: var(--glow); border-color: var(--primary-color); }
+        .portada-card img { width: 100%; height: auto; display: block; object-fit: cover; max-height: 250px; }
+        .portada-info { padding: 15px; text-align: center; }
+        .portada-info h3 { font-size: 1.2rem; margin-bottom: 8px; }
+        .portada-info p { color: var(--text-muted); font-size: 0.9rem; }
 
-.carousel-slide {
-    min-width: 100%;
-    box-sizing: border-box;
-    cursor: pointer;
-}
-
-.carousel-slide img {
-    width: 100%;
-    height: auto;
-    display: block;
-    border-radius: 20px;
-    object-fit: cover;
-    max-height: 400px;
-}
-
-.carousel-button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0,0,0,0.5);
-    color: white;
-    border: none;
-    font-size: 2rem;
-    padding: 0 12px;
-    cursor: pointer;
-    border-radius: 50%;
-    z-index: 10;
-    transition: background 0.3s;
-}
-.carousel-button:hover {
-    background-color: rgba(0,0,0,0.8);
-}
-.carousel-button.prev {
-    left: 10px;
-}
-.carousel-button.next {
-    right: 10px;
-}
-
-/* Puntos indicadores (opcional) */
-.carousel-dots {
-    text-align: center;
-    margin-top: 15px;
-}
-.dot {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    margin: 0 5px;
-    background-color: var(--text-muted);
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-.dot.active {
-    background-color: var(--primary-color);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .carousel-button {
-        font-size: 1.5rem;
-        padding: 0 8px;
-    }
-    .carousel-slide img {
-        max-height: 250px;
-    }
-}
-        /* Sección de portadas / destacado de la semana */
-.portadas {
-    padding: 40px 0 20px;
-}
-.portadas h2 {
-    text-align: center;
-    font-size: 1.8rem;
-    margin-bottom: 30px;
-}
-.portadas-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 25px;
-}
-.portada-card {
-    background: var(--surface-color);
-    border-radius: 20px;
-    overflow: hidden;
-    transition: var(--transition);
-    cursor: pointer;
-    border: 1px solid rgba(16,185,129,0.2);
-}
-.portada-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--glow);
-    border-color: var(--primary-color);
-}
-.portada-card img {
-    width: 100%;
-    height: auto;
-    display: block;
-    object-fit: cover;
-    max-height: 250px;
-}
-.portada-info {
-    padding: 15px;
-    text-align: center;
-}
-.portada-info h3 {
-    font-size: 1.2rem;
-    margin-bottom: 8px;
-}
-.portada-info p {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-}
-@media (min-width: 768px) {
-    .portadas-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-@media (min-width: 1024px) {
-    .portadas-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
+        @media (min-width: 768px) {
+            .hero h1 { font-size: 3.5rem; }
+            .product-grid { grid-template-columns: repeat(2, 1fr); }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .portadas-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (min-width: 1024px) {
+            .product-grid { grid-template-columns: repeat(3, 1fr); }
+            .features-grid { grid-template-columns: repeat(4, 1fr); }
+            .portadas-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .carousel-button { font-size: 1.5rem; padding: 0 8px; }
+            .carousel-slide img { max-height: 250px; }
+        }
     </style>
 </head>
 <body>
@@ -295,6 +224,7 @@
                     <span id="userHeaderEmail" style="color: var(--primary-color); font-size: 0.9rem;"></span>
                     <button id="logoutHeaderBtn" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">Salir</button>
                 </div>
+                <button id="temaBtn" class="btn btn-outline" style="padding: 8px 12px; font-size: 1.2rem;">🌙</button>
             </div>
         </div>
     </header>
@@ -317,67 +247,70 @@
                 </a>
             </div>
         </section>
-<!-- CARRUSEL DE PORTADAS (Productos Destacados de la Semana) -->
-<div class="carousel-container">
-    <div class="carousel-slides" id="carouselSlides">
-        <!-- Cada slide: imagen + enlace a WhatsApp con mensaje personalizado -->
-        <div class="carousel-slide" data-wa-msg="Hola! Me gustaría saber mas de las Polisombras">
-            <img src="image/carr1-pc.webp" alt="polisombra">
-        </div>
-        <div class="carousel-slide" data-wa-msg="Hola! Me interesa la Oferta de Telefonos">
-            <img src="image/pack-moto1.webp" alt="Oferta Teléfonos">
-        </div>
-        <div class="carousel-slide" data-wa-msg="Hola! Quiero información del Combo Revive-TV">
-            <img src="image/pack-entre.webp" alt="Combo Revive-TV">
-        </div>
-        <div class="carousel-slide" data-wa-msg="Hola! Me gustaría saber del Pack Gamer Semanal">
-            <img src="image/pack-gamer.webp" alt="Pack Gamer">
-        </div>
-        <!-- Puedes agregar más slides copiando la estructura -->
-    </div>
-    <button class="carousel-button prev" id="prevBtn">❮</button>
-    <button class="carousel-button next" id="nextBtn">❯</button>
-</div>
-<div class="carousel-dots" id="carouselDots"></div>
-<!-- Sección de portadas / Destacado de la semana -->
-<section class="portadas container fade-in">
-    <h2 class="section-title">✨ Destacado de la semana ✨</h2>
-    <div class="portadas-grid">
-        <!-- Portada 1 -->
-        <div class="portada-card" onclick="window.open('https://wa.me/584129056964?text=Hola!%20Me%20gustaría%20saber%20del%20Consolas%20Gamer%20Portatiles', '_blank')">
-            <img src="https://i.ibb.co/TBYxdhq9/packgamer2.webp" alt="Pack Consola Portatil" loading="lazy">
-            <div class="portada-info">
-                <h3>Consolas Portatil Disponibles!</h3>
-                <p>Lleva tu experiencia al siguiente nivel</p>
+
+        <!-- Carrusel de portadas -->
+        <div class="carousel-container">
+            <div class="carousel-slides" id="carouselSlides">
+                <div class="carousel-slide" data-wa-msg="Hola! Me gustaría saber mas de las Polisombras">
+                    <img src="image/carr1-pc.webp" alt="polisombra">
+                </div>
+                <div class="carousel-slide" data-wa-msg="Hola! Me interesa la Oferta de Telefonos">
+                    <img src="image/pack-moto1.webp" alt="Oferta Teléfonos">
+                </div>
+                <div class="carousel-slide" data-wa-msg="Hola! Quiero información del Combo Revive-TV">
+                    <img src="image/pack-entre.webp" alt="Combo Revive-TV">
+                </div>
+                <div class="carousel-slide" data-wa-msg="Hola! Me gustaría saber del Pack Gamer Semanal">
+                    <img src="image/pack-gamer.webp" alt="Pack Gamer">
+                </div>
             </div>
+            <button class="carousel-button prev" id="prevBtn">❮</button>
+            <button class="carousel-button next" id="nextBtn">❯</button>
         </div>
-        <!-- Portada 2 -->
-        <div class="portada-card" onclick="window.open('https://wa.me/584129056964?text=Hola!%20Me%20gustaría%20saber%20del%20Combo%20Revive-TV%20Oferta', '_blank')">
-            <img src="image/pack-moto1.webp" alt="Motorizados VS. Lluvia" loading="lazy">
-            <div class="portada-info">
-                <h3>Motorizados VS. Lluvia</h3>
-                <p>Temporada de Lluvias</p>
+        <div class="carousel-dots" id="carouselDots"></div>
+
+        <!-- Sección destacado de la semana -->
+        <section class="portadas container fade-in">
+            <h2 class="section-title">✨ Destacado de la semana ✨</h2>
+            <div class="portadas-grid">
+                <div class="portada-card" onclick="window.open('https://wa.me/584129056964?text=Hola!%20Me%20gustaría%20saber%20del%20Consolas%20Gamer%20Portatiles', '_blank')">
+                    <img src="https://i.ibb.co/TBYxdhq9/packgamer2.webp" alt="Pack Consola Portatil" loading="lazy">
+                    <div class="portada-info"><h3>Consolas Portatil Disponibles!</h3><p>Lleva tu experiencia al siguiente nivel</p></div>
+                </div>
+                <div class="portada-card" onclick="window.open('https://wa.me/584129056964?text=Hola!%20Me%20gustaría%20saber%20del%20Combo%20Revive-TV%20Oferta', '_blank')">
+                    <img src="image/pack-moto1.webp" alt="Motorizados VS. Lluvia" loading="lazy">
+                    <div class="portada-info"><h3>Motorizados VS. Lluvia</h3><p>Temporada de Lluvias</p></div>
+                </div>
+                <div class="portada-card" onclick="window.open('https://wa.me/584129056964?text=Hola!%20Me%20gustaría%20saber%20del%20Ventilador%20de%20Cuello%20Pro', '_blank')">
+                    <img src="image/pack-entre.webp" alt="Innova" loading="lazy">
+                    <div class="portada-info"><h3>Innova</h3><p>Convierte tu TV vieja en Smart TV</p></div>
+                </div>
             </div>
-        </div>
-        <!-- Portada 3 -->
-        <div class="portada-card" onclick="window.open('https://wa.me/584129056964?text=Hola!%20Me%20gustaría%20saber%20del%20Ventilador%20de%20Cuello%20Pro', '_blank')">
-            <img src="image/pack-entre.webp" alt="Innova" loading="lazy">
-            <div class="portada-info">
-                <h3>Innova</h3>
-                <p>Convierte tu TV vieja en Smart TV</p>
-            </div>
-        </div>
-        
-    </div>
-</section>
+        </section>
+
+        <!-- Productos con filtros y botón ver más -->
         <section class="products container fade-in">
             <h2 class="section-title">Nuestros Productos</h2>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-cat="todos">📱 Todos</button>
+                <button class="filter-btn" data-cat="celular">📱 Celulares</button>
+                <button class="filter-btn" data-cat="accesorio">🎮 Accesorios</button>
+                <button class="filter-btn" data-cat="gaming">🕹️ Gaming</button>
+                <button class="filter-btn" data-cat="tv">📺 TV</button>
+                <button class="filter-btn" data-cat="belleza">💄 Belleza</button>
+                <button class="filter-btn" data-cat="ventilador">🌬️ Ventiladores</button>
+                <button class="filter-btn" data-cat="faro led">🔆 Faro LED</button>
+                <button class="filter-btn" data-cat="camara">🔴 Camara</button>
+                <button class="filter-btn" data-cat="electronica">📺 Electronica</button>
+            </div>
             <div class="product-grid" id="productGrid"><div class="no-results">Cargando productos...</div></div>
+            <div id="verMasContainer" style="text-align: center; margin-top: 30px;">
+                <button id="verMasBtn" class="btn">Ver más productos ↓</button>
+            </div>
         </section>
 
         <section class="features fade-in">
-            <div class="container">
-                <h2 class="section-title">¿Por qué elegir EDRunners Pro?</h2>
+            <div class="container"><h2 class="section-title">¿Por qué elegir EDRunners Pro?</h2>
                 <div class="features-grid">
                     <div class="feature-item"><div class="feature-icon">🛵</div><h3>Delivery Gratis</h3><p class="product-specs">En zonas céntricas de Barquisimeto.</p></div>
                     <div class="feature-item"><div class="feature-icon">📦</div><h3>Envíos Nacionales</h3><p class="product-specs">A través de MRW (Cobro en destino).</p></div>
@@ -390,13 +323,12 @@
         <section class="info-section fade-in">
             <div class="container">
                 <h2><span class="text-primary">Entrega Inmediata</span> en Barquisimeto</h2>
-                <p class="product-specs" style="margin-top: 15px; font-size: 1.1rem;">Tu tiempo vale. Compra hoy y recibe hoy mismo con nuestro servicio exprés.</p>
-                <div style="margin-top: 60px;">
-                    <h3>Métodos de Pago</h3>
+                <p class="product-specs" style="margin-top:15px;font-size:1.1rem;">Tu tiempo vale. Compra hoy y recibe hoy mismo con nuestro servicio exprés.</p>
+                <div style="margin-top:60px;"><h3>Métodos de Pago</h3>
                     <div class="payment-methods">
                         <div class="payment-badge">Pago Móvil (Banesco)</div>
                         <div class="payment-badge">Pago Móvil (Provincial)</div>
-                        <div class="payment-badge"><img src="image/banco/mer.webp" alt="" loading="lazy" style="height: 30px; object-fit: contain;"> Mercantil</div>
+                        <div class="payment-badge"><img src="image/banco/mer.webp" alt="" loading="lazy" style="height:30px;object-fit:contain;"> Mercantil</div>
                         <div class="payment-badge">Divisas en Efectivo</div>
                         <div class="payment-badge">Tasa Oficial BCV</div>
                     </div>
@@ -407,22 +339,22 @@
         <section class="cta-section fade-in">
             <div class="container">
                 <h2>Escríbenos ahora y recibe tu producto hoy mismo</h2>
-                <a href="https://wa.me/584129056964?text=Hola%20equipo%20de%20EDRunners" target="_blank" class="btn" style="padding: 18px 40px; font-size: 1.2rem;">Contactar por WhatsApp</a>
+                <a href="https://wa.me/584129056964?text=Hola%20equipo%20de%20EDRunners" target="_blank" class="btn" style="padding:18px 40px;font-size:1.2rem;">Contactar por WhatsApp</a>
             </div>
         </section>
     </main>
 
     <footer>
         <div class="container">
-            <h3 style="color: #fff; margin-bottom: 10px;">EDRunners <span class="text-primary">Pro</span></h3>
+            <h3 style="color:#fff;margin-bottom:10px;">EDRunners <span class="text-primary">Pro</span></h3>
             <p>Barquisimeto, Estado Lara - Venezuela</p>
             <p>WhatsApp: 0412-9056964</p>
-            <p style="margin-top: 20px; font-size: 0.8rem; color: #555;">&copy; 2026 EDRunners. Todos los derechos reservados.</p>
+            <p style="margin-top:20px;font-size:0.8rem;color:#555;">&copy; 2026 EDRunners. Todos los derechos reservados.</p>
         </div>
     </footer>
 
     <a href="https://wa.me/584129056964?text=Hola,%20vengo%20de%20la%20página" target="_blank" class="whatsapp-float">
-        <svg style="width: 35px; height: 35px; fill: white;" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        <svg style="width:35px;height:35px;fill:white;" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
     </a>
 
     <!-- Modal de autenticación -->
@@ -433,8 +365,8 @@
             <input type="email" id="emailInput" placeholder="Correo electrónico">
             <input type="password" id="passwordInput" placeholder="Contraseña">
             <button id="submitAuthBtn" class="btn">Registrarse</button>
-            <p id="toggleAuthMsg" style="margin-top: 15px; cursor: pointer; color: var(--primary-color);">¿Ya tienes cuenta? Inicia sesión</p>
-            <div id="authError" style="color: #ff4444; margin-top: 10px;"></div>
+            <p id="toggleAuthMsg" style="margin-top:15px;cursor:pointer;color:var(--primary-color);">¿Ya tienes cuenta? Inicia sesión</p>
+            <div id="authError" style="color:#ff4444;margin-top:10px;"></div>
         </div>
     </div>
 
@@ -442,33 +374,96 @@
         // ========== CONFIGURACIÓN ==========
         const PRODUCTS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRGjMz9Zwo1g8PruSjNcSJq6kTUQrEGkN_hQRBH0dvjIA_IwwKQ5p2pb7Bmrnvd7sLB2hMvqj-oFR6L/pub?output=csv";
         const fallbackProducts = [
-            { nombre: "Samsung Galaxy A17", especificaciones: "128GB Almacenamiento / 4GB RAM", precio: "$180", imagen_url: "image/sam-a171.webp", link_wa: "https://wa.me/584129056964?text=Hola,%20me%20interesa%20el%20Samsung%20Galaxy%20A17" },
-            { nombre: "Honor X6c", especificaciones: "256GB Almacenamiento / 6GB RAM", precio: "$220", imagen_url: "image/HONOR1.webp", link_wa: "https://wa.me/584129056964?text=Hola,%20me%20interesa%20el%20Honor%20X6c" },
-            { nombre: "Controles PS5", especificaciones: "Múltiples colores disponibles", precio: "$45", imagen_url: "image/dualsense.webp", link_wa: "https://wa.me/584129056964?text=Hola,%20me%20interesan%20los%20Controles%20de%20PS5" },
-            { nombre: "Ventilador de Cuello Pro 360°", especificaciones: "Recargable / Diseño ergonómico", precio: "$25", imagen_url: "", link_wa: "https://wa.me/584129056964?text=Hola,%20me%20interesa%20el%20Ventilador%20de%20Cuello" },
-            { nombre: "Combo Revive-TV", especificaciones: "TV Box + Convertidor HDMI a AV", precio: "$65", imagen_url: "", link_wa: "https://wa.me/584129056964?text=Hola,%20me%20interesa%20el%20Combo%20Revive-TV" },
-            { nombre: "PROXIMAMENTE", especificaciones: "Nuevos productos pronto", precio: "", imagen_url: "image/cargando.webp", link_wa: "#" }
+            { nombre: "Samsung Galaxy A17", especificaciones: "128GB Almacenamiento / 4GB RAM", precio: "$180", imagen_url: "image/sam-a171.webp", link_wa: "https://wa.me/584129056964?text=Hola,%20me%20interesa%20el%20Samsung%20Galaxy%20A17", categoria: "celular", stock: "disponible" },
+            { nombre: "Honor X6c", especificaciones: "256GB Almacenamiento / 6GB RAM", precio: "$220", imagen_url: "image/HONOR1.webp", link_wa: "https://wa.me/584129056964?text=Hola,%20me%20interesa%20el%20Honor%20X6c", categoria: "celular", stock: "disponible" },
+            { nombre: "Controles PS5", especificaciones: "Múltiples colores disponibles", precio: "$45", imagen_url: "image/dualsense.webp", link_wa: "https://wa.me/584129056964?text=Hola,%20me%20interesan%20los%20Controles%20de%20PS5", categoria: "gaming", stock: "pocas" },
+            { nombre: "Ventilador de Cuello Pro 360°", especificaciones: "Recargable / Diseño ergonómico", precio: "$25", imagen_url: "", link_wa: "https://wa.me/584129056964?text=Hola,%20me%20interesa%20el%20Ventilador%20de%20Cuello", categoria: "accesorio", stock: "agotado" },
+            { nombre: "Combo Revive-TV", especificaciones: "TV Box + Convertidor HDMI a AV", precio: "$65", imagen_url: "", link_wa: "https://wa.me/584129056964?text=Hola,%20me%20interesa%20el%20Combo%20Revive-TV", categoria: "tv", stock: "disponible" },
+            { nombre: "PROXIMAMENTE", especificaciones: "Nuevos productos pronto", precio: "", imagen_url: "image/cargando.webp", link_wa: "#", categoria: "general", stock: "agotado" }
         ];
         const productGrid = document.getElementById('productGrid');
+        let allProducts = [];
         let currentProducts = [];
+        let modoVerTodos = false;
+        let categoriaActual = "todos";
 
+        // ========== FUNCIONES PRINCIPALES ==========
         function renderProducts(filterText = '') {
             const term = filterText.toLowerCase().trim();
-            const filtered = term === '' ? currentProducts : currentProducts.filter(p => p.nombre.toLowerCase().includes(term) || p.especificaciones.toLowerCase().includes(term));
-            if (filtered.length === 0) {
+            // Ocultar carrusel y portadas al buscar
+            const carouselContainer = document.querySelector('.carousel-container');
+            const portadasSection = document.querySelector('.portadas');
+            if (term !== '') {
+                if (carouselContainer) carouselContainer.style.display = 'none';
+                if (portadasSection) portadasSection.style.display = 'none';
+            } else {
+                if (carouselContainer) carouselContainer.style.display = '';
+                if (portadasSection) portadasSection.style.display = '';
+            }
+
+            let productosFiltrados = currentProducts;
+            if (term !== '') {
+                productosFiltrados = currentProducts.filter(p => p.nombre.toLowerCase().includes(term) || p.especificaciones.toLowerCase().includes(term));
+            }
+            if (productosFiltrados.length === 0) {
                 productGrid.innerHTML = `<div class="no-results">🔍 No encontramos productos con "${filterText}". Escríbenos por WhatsApp.</div>`;
                 return;
             }
-            const html = filtered.map(p => `
-                <div class="product-card">
-                    <div class="product-image">${p.imagen_url ? `<img src="${p.imagen_url}" alt="${p.nombre}" loading="lazy" onerror="this.parentElement.innerHTML='<span>📷 Imagen: ${p.nombre}</span>'">` : `<span>📷 Imagen: ${p.nombre}</span>`}</div>
-                    <h3 class="product-title">${p.nombre}</h3>
-                    <p class="product-specs">${p.especificaciones}</p>
-                    ${p.precio ? `<div class="product-price">${p.precio}</div>` : ''}
-                    <a href="${p.link_wa}" target="_blank" class="btn btn-outline" style="width: 100%;">Consultar por WhatsApp</a>
-                </div>
-            `).join('');
+            const html = productosFiltrados.map(p => {
+                let stockHtml = '';
+                let btnDisabled = '';
+                let linkWa = p.link_wa;
+                if (p.stock === 'agotado' || p.stock === '0') {
+                    stockHtml = `<div class="product-stock agotado">❌ Agotado</div>`;
+                    btnDisabled = 'disabled';
+                    linkWa = '#';
+                } else if (p.stock === 'pocas' || (parseInt(p.stock) > 0 && parseInt(p.stock) < 5)) {
+                    stockHtml = `<div class="product-stock pocas">⚠️ ¡Últimas unidades!</div>`;
+                }
+                return `<div class="product-card">
+                            <div class="product-image">${p.imagen_url ? `<img src="${p.imagen_url}" alt="${p.nombre}" loading="lazy" onerror="this.parentElement.innerHTML='<span>📷 Imagen: ${p.nombre}</span>'">` : `<span>📷 Imagen: ${p.nombre}</span>`}</div>
+                            <h3 class="product-title">${p.nombre}</h3>
+                            <p class="product-specs">${p.especificaciones}</p>
+                            ${p.precio ? `<div class="product-price">${p.precio}</div>` : ''}
+                            ${stockHtml}
+                            <a href="${linkWa}" target="_blank" class="btn btn-outline ${btnDisabled}" style="width: 100%;">Consultar por WhatsApp</a>
+                        </div>`;
+            }).join('');
             productGrid.innerHTML = html;
+        }
+
+        function aplicarFiltrosYRender() {
+            let productosFiltrados = allProducts;
+            if (categoriaActual !== "todos") {
+                productosFiltrados = allProducts.filter(p => p.categoria === categoriaActual);
+            }
+            let productosAMostrar = productosFiltrados;
+            if (!modoVerTodos) {
+                productosAMostrar = productosFiltrados.slice(0, 6);
+            }
+            currentProducts = productosAMostrar;
+            renderProducts();
+
+            const verMasBtn = document.getElementById('verMasBtn');
+            if (verMasBtn) {
+                if (modoVerTodos || productosFiltrados.length <= 6) {
+                    verMasBtn.style.display = 'none';
+                } else {
+                    verMasBtn.style.display = 'block';
+                    verMasBtn.innerText = "Ver más productos ↓";
+                }
+            }
+        }
+
+        function cambiarCategoria(categoria) {
+            categoriaActual = categoria;
+            modoVerTodos = false;
+            aplicarFiltrosYRender();
+        }
+
+        function toggleVerMas() {
+            modoVerTodos = !modoVerTodos;
+            aplicarFiltrosYRender();
         }
 
         function parseCSV(csvText) {
@@ -480,20 +475,17 @@
             const idxPrecio = headers.indexOf('precio');
             const idxImagen = headers.indexOf('imagen_url');
             const idxLink = headers.indexOf('link_wa');
+            const idxCategoria = headers.indexOf('categoria');
+            const idxStock = headers.indexOf('stock');
             if (idxNombre === -1) return [];
             const products = [];
             for (let i = 1; i < lines.length; i++) {
                 if (!lines[i].trim()) continue;
-                let row = lines[i];
-                let values = [];
-                let inQuote = false;
-                let current = '';
-                for (let ch of row) {
+                let values = [], inQuote = false, current = '';
+                for (let ch of lines[i]) {
                     if (ch === '"') inQuote = !inQuote;
-                    else if (ch === ',' && !inQuote) {
-                        values.push(current.trim());
-                        current = '';
-                    } else current += ch;
+                    else if (ch === ',' && !inQuote) { values.push(current.trim()); current = ''; }
+                    else current += ch;
                 }
                 values.push(current.trim());
                 const nombre = values[idxNombre] || '';
@@ -503,33 +495,35 @@
                     especificaciones: idxEspecs !== -1 ? values[idxEspecs] : '',
                     precio: idxPrecio !== -1 ? values[idxPrecio] : '',
                     imagen_url: idxImagen !== -1 ? values[idxImagen] : '',
-                    link_wa: idxLink !== -1 ? values[idxLink] : `https://wa.me/584129056964?text=Hola,%20me%20interesa%20${encodeURIComponent(nombre)}`
+                    link_wa: idxLink !== -1 ? values[idxLink] : `https://wa.me/584129056964?text=Hola,%20me%20interesa%20${encodeURIComponent(nombre)}`,
+                    categoria: idxCategoria !== -1 ? values[idxCategoria] : 'general',
+                    stock: idxStock !== -1 ? values[idxStock] : 'disponible'
                 });
             }
             return products;
         }
 
         async function loadProducts() {
-    productGrid.innerHTML = '<div class="no-results">Cargando productos...</div>';
-    if (PRODUCTS_CSV_URL) {
-        try {
-            const response = await fetch(PRODUCTS_CSV_URL);
-            if (response.ok) {
-                const csvText = await response.text();
-                const products = parseCSV(csvText);
-                if (products.length > 0) {
-                    currentProducts = products.reverse(); // 🔁 Invertir orden: los nuevos primeros
-                    renderProducts();
-                    setupSearchFilter();
-                    return;
-                }
+            productGrid.innerHTML = '<div class="no-results">Cargando productos...</div>';
+            if (PRODUCTS_CSV_URL) {
+                try {
+                    const response = await fetch(PRODUCTS_CSV_URL);
+                    if (response.ok) {
+                        const csvText = await response.text();
+                        const products = parseCSV(csvText);
+                        if (products.length > 0) {
+                            allProducts = products;
+                            aplicarFiltrosYRender();
+                            setupSearchFilter();
+                            return;
+                        }
+                    }
+                } catch (e) { console.warn("Error CSV, usando respaldo", e); }
             }
-        } catch (e) { console.warn("Error CSV, usando respaldo", e); }
-    }
-    currentProducts = fallbackProducts.reverse(); // También invertir respaldo
-    renderProducts();
-    setupSearchFilter();
-}
+            allProducts = fallbackProducts;
+            aplicarFiltrosYRender();
+            setupSearchFilter();
+        }
 
         let searchInitialized = false;
         function setupSearchFilter() {
@@ -560,7 +554,63 @@
             document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
         }
 
-        // ========== FIREBASE AUTH (solo para escritorio) ==========
+        // ========== CARRUSEL MEJORADO ==========
+        function initCarousel() {
+            const slides = document.querySelectorAll('.carousel-slide');
+            const slidesContainer = document.getElementById('carouselSlides');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const dotsContainer = document.getElementById('carouselDots');
+            let currentIndex = 0;
+            let interval;
+            const autoplayDelay = 4000;
+            let touchStartX = 0, touchEndX = 0;
+            if (!slides.length) return;
+            dotsContainer.innerHTML = '';
+            slides.forEach((_, i) => {
+                const dot = document.createElement('span');
+                dot.classList.add('dot');
+                if (i === 0) dot.classList.add('active');
+                dot.addEventListener('click', (e) => { e.preventDefault(); goToSlide(i); });
+                dotsContainer.appendChild(dot);
+            });
+            function updateDots() { document.querySelectorAll('.dot').forEach((dot, i) => { if (i === currentIndex) dot.classList.add('active'); else dot.classList.remove('active'); }); }
+            function goToSlide(index) {
+                if (index < 0) index = slides.length - 1;
+                if (index >= slides.length) index = 0;
+                currentIndex = index;
+                slidesContainer.style.transform = `translateX(${-currentIndex * 100}%)`;
+                updateDots();
+                resetAutoplay();
+            }
+            function nextSlide() { goToSlide(currentIndex + 1); }
+            function prevSlide() { goToSlide(currentIndex - 1); }
+            function startAutoplay() { if (interval) clearInterval(interval); interval = setInterval(nextSlide, autoplayDelay); }
+            function resetAutoplay() { if (interval) clearInterval(interval); startAutoplay(); }
+            prevBtn.addEventListener('click', (e) => { e.preventDefault(); prevSlide(); });
+            nextBtn.addEventListener('click', (e) => { e.preventDefault(); nextSlide(); });
+            slidesContainer.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; });
+            slidesContainer.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                if (touchEndX < touchStartX - 50) nextSlide();
+                if (touchEndX > touchStartX + 50) prevSlide();
+            });
+            slides.forEach(slide => {
+                slide.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const msg = slide.getAttribute('data-wa-msg');
+                    if (msg) window.open(`https://wa.me/584129056964?text=${encodeURIComponent(msg)}`, '_blank');
+                });
+            });
+            startAutoplay();
+            const container = document.querySelector('.carousel-container');
+            container.addEventListener('mouseenter', () => clearInterval(interval));
+            container.addEventListener('mouseleave', startAutoplay);
+            container.addEventListener('touchstart', () => clearInterval(interval));
+            container.addEventListener('touchend', startAutoplay);
+        }
+
+        // ========== FIREBASE AUTH (pausada, reemplazar API key) ==========
         function loadFirebaseAndInit() {
             const firebaseAppScript = document.createElement('script');
             firebaseAppScript.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
@@ -568,9 +618,8 @@
                 const firebaseAuthScript = document.createElement('script');
                 firebaseAuthScript.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
                 firebaseAuthScript.onload = () => {
-                    // 🔁 REEMPLAZA ESTA API KEY CON LA NUEVA (después de rotarla en Firebase Console)
                     const firebaseConfig = {
-                        apiKey: "TU_NUEVA_API_KEY_AQUI",   // 👈 CAMBIA ESTO
+                        apiKey: "*****************",  // ⚠️ Cámbiala después de rotarla
                         authDomain: "edrunners-ac6e0.firebaseapp.com",
                         projectId: "edrunners-ac6e0",
                         storageBucket: "edrunners-ac6e0.firebasestorage.app",
@@ -579,7 +628,6 @@
                     };
                     firebase.initializeApp(firebaseConfig);
                     const auth = firebase.auth();
-                    
                     const registerHeaderBtn = document.getElementById('registerHeaderBtn');
                     const userHeaderPanel = document.getElementById('userHeaderPanel');
                     const userHeaderEmail = document.getElementById('userHeaderEmail');
@@ -594,85 +642,47 @@
                     const authErrorDiv = document.getElementById('authError');
                     let isLoginMode = false;
 
-                    // Abrir modal
-                    if (registerHeaderBtn) {
-                        registerHeaderBtn.addEventListener('click', () => { modal.style.display = 'flex'; });
-                    }
-                    if (closeModal) {
-                        closeModal.addEventListener('click', () => {
-                            modal.style.display = 'none';
-                            if (authErrorDiv) authErrorDiv.innerText = '';
-                        });
-                    }
-                    window.addEventListener('click', (e) => {
-                        if (e.target === modal) {
-                            modal.style.display = 'none';
-                            if (authErrorDiv) authErrorDiv.innerText = '';
-                        }
-                    });
-
-                    // Alternar modo
+                    if (registerHeaderBtn) registerHeaderBtn.addEventListener('click', () => modal.style.display = 'flex');
+                    if (closeModal) closeModal.addEventListener('click', () => { modal.style.display = 'none'; if (authErrorDiv) authErrorDiv.innerText = ''; });
+                    window.addEventListener('click', (e) => { if (e.target === modal) { modal.style.display = 'none'; if (authErrorDiv) authErrorDiv.innerText = ''; } });
                     if (toggleMsg) {
                         toggleMsg.addEventListener('click', (e) => {
                             e.preventDefault();
                             isLoginMode = !isLoginMode;
-                            if (isLoginMode) {
-                                modalTitle.innerText = 'Iniciar Sesión';
-                                submitBtn.innerText = 'Iniciar Sesión';
-                                toggleMsg.innerText = '¿No tienes cuenta? Regístrate';
-                            } else {
-                                modalTitle.innerText = 'Regístrate';
-                                submitBtn.innerText = 'Registrarse';
-                                toggleMsg.innerText = '¿Ya tienes cuenta? Inicia sesión';
-                            }
+                            if (isLoginMode) { modalTitle.innerText = 'Iniciar Sesión'; submitBtn.innerText = 'Iniciar Sesión'; toggleMsg.innerText = '¿No tienes cuenta? Regístrate'; }
+                            else { modalTitle.innerText = 'Regístrate'; submitBtn.innerText = 'Registrarse'; toggleMsg.innerText = '¿Ya tienes cuenta? Inicia sesión'; }
                             if (authErrorDiv) authErrorDiv.innerText = '';
                         });
                     }
-
-                    // Enviar formulario
                     if (submitBtn) {
                         submitBtn.addEventListener('click', async (e) => {
                             e.preventDefault();
                             const email = emailInput.value;
                             const password = passwordInput.value;
-                            if (!email || !password) {
-                                if (authErrorDiv) authErrorDiv.innerText = 'Completa todos los campos';
-                                return;
-                            }
+                            if (!email || !password) { if (authErrorDiv) authErrorDiv.innerText = 'Completa todos los campos'; return; }
                             if (authErrorDiv) authErrorDiv.innerText = '';
                             try {
-                                if (isLoginMode) {
-                                    await auth.signInWithEmailAndPassword(email, password);
-                                } else {
-                                    await auth.createUserWithEmailAndPassword(email, password);
-                                }
+                                if (isLoginMode) await auth.signInWithEmailAndPassword(email, password);
+                                else await auth.createUserWithEmailAndPassword(email, password);
                                 modal.style.display = 'none';
                                 emailInput.value = '';
                                 passwordInput.value = '';
                             } catch (error) {
                                 let msg = error.message;
-                                if (msg.includes('email-already-in-use')) msg = 'Este correo ya está registrado. Inicia sesión.';
-                                else if (msg.includes('weak-password')) msg = 'La contraseña debe tener al menos 6 caracteres.';
-                                else if (msg.includes('user-not-found')) msg = 'Usuario no encontrado. Regístrate primero.';
+                                if (msg.includes('email-already-in-use')) msg = 'Correo ya registrado. Inicia sesión.';
+                                else if (msg.includes('weak-password')) msg = 'Contraseña debe tener al menos 6 caracteres.';
+                                else if (msg.includes('user-not-found')) msg = 'Usuario no encontrado.';
                                 else if (msg.includes('wrong-password')) msg = 'Contraseña incorrecta.';
                                 if (authErrorDiv) authErrorDiv.innerText = msg;
                             }
                         });
                     }
-
-                    // Cerrar sesión
-                    if (logoutHeaderBtn) {
-                        logoutHeaderBtn.addEventListener('click', () => {
-                            if (confirm('¿Cerrar sesión?')) auth.signOut();
-                        });
-                    }
-
+                    if (logoutHeaderBtn) logoutHeaderBtn.addEventListener('click', () => { if (confirm('¿Cerrar sesión?')) auth.signOut(); });
                     auth.onAuthStateChanged((user) => {
                         if (user) {
                             if (registerHeaderBtn) registerHeaderBtn.style.display = 'none';
                             if (userHeaderPanel) userHeaderPanel.style.display = 'flex';
-                            const emailShort = user.email.split('@')[0];
-                            if (userHeaderEmail) userHeaderEmail.innerText = emailShort;
+                            if (userHeaderEmail) userHeaderEmail.innerText = user.email.split('@')[0];
                         } else {
                             if (registerHeaderBtn) registerHeaderBtn.style.display = 'inline-flex';
                             if (userHeaderPanel) userHeaderPanel.style.display = 'none';
@@ -684,93 +694,47 @@
             document.head.appendChild(firebaseAppScript);
         }
 
+        // ========== INICIALIZACIÓN ==========
         document.addEventListener('DOMContentLoaded', () => {
             initFadeIn();
             initSticky();
             loadProducts();
             initCarousel();
             loadFirebaseAndInit();
-        });
-            // ========== CARRUSEL DE PORTADAS ==========
-    function initCarousel() {
-        const slides = document.querySelectorAll('.carousel-slide');
-        const slidesContainer = document.getElementById('carouselSlides');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        const dotsContainer = document.getElementById('carouselDots');
-        let currentIndex = 0;
-        let interval;
-        const autoplayDelay = 4000; // 4 segundos entre cambios (ajústalo)
 
-        if (!slides.length) return;
-
-        // Crear puntos indicadores
-        dotsContainer.innerHTML = '';
-        slides.forEach((_, i) => {
-            const dot = document.createElement('span');
-            dot.classList.add('dot');
-            if (i === 0) dot.classList.add('active');
-            dot.addEventListener('click', () => goToSlide(i));
-            dotsContainer.appendChild(dot);
-        });
-
-        function updateDots() {
-            document.querySelectorAll('.dot').forEach((dot, i) => {
-                if (i === currentIndex) dot.classList.add('active');
-                else dot.classList.remove('active');
-            });
-        }
-
-        function goToSlide(index) {
-            if (index < 0) index = slides.length - 1;
-            if (index >= slides.length) index = 0;
-            currentIndex = index;
-            const offset = -currentIndex * 100;
-            slidesContainer.style.transform = `translateX(${offset}%)`;
-            updateDots();
-            resetAutoplay();
-        }
-
-        function nextSlide() { goToSlide(currentIndex + 1); }
-        function prevSlide() { goToSlide(currentIndex - 1); }
-
-        function startAutoplay() {
-            interval = setInterval(nextSlide, autoplayDelay);
-        }
-        function resetAutoplay() {
-            clearInterval(interval);
-            startAutoplay();
-        }
-
-        prevBtn.addEventListener('click', prevSlide);
-        nextBtn.addEventListener('click', nextSlide);
-
-        // Al hacer clic en una imagen, enviar mensaje de WhatsApp
-        slides.forEach(slide => {
-            slide.addEventListener('click', (e) => {
-                // Evitar que el clic en la imagen también dispare el autoplay o navegación
-                e.stopPropagation();
-                const msg = slide.getAttribute('data-wa-msg');
-                if (msg) {
-                    const phone = "584129056964"; // Tu número de WhatsApp (sin +, solo código país)
-                    const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
-                    window.open(url, '_blank');
+            // Modo oscuro/claro
+            const temaBtn = document.getElementById('temaBtn');
+            const temaGuardado = localStorage.getItem('tema');
+            if (temaGuardado === 'claro') {
+                document.body.classList.add('tema-claro');
+                temaBtn.textContent = '☀️';
+            } else {
+                document.body.classList.remove('tema-claro');
+                temaBtn.textContent = '🌙';
+            }
+            temaBtn.addEventListener('click', () => {
+                document.body.classList.toggle('tema-claro');
+                if (document.body.classList.contains('tema-claro')) {
+                    localStorage.setItem('tema', 'claro');
+                    temaBtn.textContent = '☀️';
+                } else {
+                    localStorage.setItem('tema', 'oscuro');
+                    temaBtn.textContent = '🌙';
                 }
             });
+
+            // Filtros y ver más
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const cat = btn.getAttribute('data-cat');
+                    cambiarCategoria(cat);
+                });
+            });
+            const verMasBtn = document.getElementById('verMasBtn');
+            if (verMasBtn) verMasBtn.addEventListener('click', toggleVerMas);
         });
-
-        // Iniciar autoplay (opcional, puedes comentar si no quieres automático)
-        startAutoplay();
-
-        // Pausar autoplay cuando el mouse está sobre el carrusel
-        const container = document.querySelector('.carousel-container');
-        container.addEventListener('mouseenter', () => clearInterval(interval));
-        container.addEventListener('mouseleave', startAutoplay);
-    }
-
-    // Asegurar que el carrusel se inicialice después de cargar el DOM
-    // Llama a initCarousel dentro del DOMContentLoaded (no lo repitas, solo agrega la línea)
-    // Si ya tienes un DOMContentLoaded, añade initCarousel(); allí.
     </script>
 </body>
 </html>
