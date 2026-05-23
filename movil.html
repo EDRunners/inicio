@@ -311,7 +311,9 @@
 
 <script>
     // ========== CONFIGURACIÓN ==========
+    // 👇 REEMPLAZA ESTA URL CON LA CORRECTA (debe terminar en ?output=csv)
     const PRODUCTS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRGjMz9Zwo1g8PruSjNcSJq6kTUQrEGkN_hQRBH0dvjIA_IwwKQ5p2pb7Bmrnvd7sLB2hMvqj-oFR6L/pub?output=csv";
+    
     const fallbackProducts = [
         { nombre: "Samsung Galaxy A17", especificaciones: "128GB Almacenamiento / 4GB RAM", precio: "$180", imagen_url: "image/sam-a171.webp", link_wa: "https://wa.me/584129056964?text=Hola,%20me%20interesa%20el%20Samsung%20Galaxy%20A17", categoria: "celular", stock: "disponible", descripcion: "Samsung Galaxy A17 con pantalla Super AMOLED, batería de larga duración y cámara de alta resolución.", imagenes_extra: "" },
         { nombre: "Honor X6c", especificaciones: "256GB Almacenamiento / 6GB RAM", precio: "$220", imagen_url: "image/HONOR1.webp", link_wa: "https://wa.me/584129056964?text=Hola,%20me%20interesa%20el%20Honor%20X6c", categoria: "celular", stock: "disponible", descripcion: "Teléfono Honor X6c con gran capacidad de almacenamiento y rendimiento fluido.", imagenes_extra: "" },
@@ -369,9 +371,11 @@
         });
     }
 
-    // ========== MODAL DE DETALLES (con múltiples imágenes CORREGIDO) ==========
+    // ========== MODAL DE DETALLES (con soporte completo para imagenes_extra) ==========
     let currentDetailProduct = null;
     function openDetailModal(product, imagenesExtraArray = []) {
+        console.log('Producto:', product.nombre);
+        console.log('Array imagenesExtra recibido:', imagenesExtraArray);
         currentDetailProduct = product;
         const modal = document.getElementById('detailModal');
         const nombreElem = document.getElementById('detalleNombre');
@@ -384,12 +388,13 @@
         
         nombreElem.innerText = product.nombre;
         // Construir array con todas las imágenes (principal + extras)
-        const allImages = [product.imagen_url, ...imagenesExtraArray].filter(url => url && typeof url === 'string' && url.trim() !== '');
+        const allImages = [product.imagen_url, ...imagenesExtraArray].filter(url => url && typeof url === 'string' && url.trim() !== '' && (url.startsWith('http') || url.startsWith('https')));
+        console.log('Todas las imágenes (filtradas):', allImages);
         const mainImageUrl = allImages.length > 0 ? allImages[0] : '';
         imagenMain.src = mainImageUrl;
         imagenMain.alt = product.nombre;
         
-        // Limpiar y generar miniaturas
+        // Limpiar y generar miniaturas si hay más de una imagen
         thumbContainer.innerHTML = '';
         if (allImages.length > 1) {
             allImages.forEach((imgUrl, idx) => {
@@ -404,6 +409,8 @@
                 });
                 thumbContainer.appendChild(thumb);
             });
+        } else {
+            console.log('No hay imágenes extra para mostrar (solo la principal)');
         }
         
         especificacionesElem.innerText = product.especificaciones;
@@ -417,14 +424,17 @@
         document.getElementById('detailModal').style.display = 'none';
     }
 
-    // ========== RENDER PRODUCTOS (CORREGIDO: índice i) ==========
+    // ========== RENDER PRODUCTOS (con procesamiento robusto de imagenes_extra) ==========
     function renderProducts(filterText = '') {
         const term = filterText.toLowerCase().trim();
         const carouselContainer = document.querySelector('.carousel-container');
         if (term !== '') { if (carouselContainer) carouselContainer.style.display = 'none'; } else { if (carouselContainer) carouselContainer.style.display = ''; }
         let productosFiltrados = currentProducts;
         if (term !== '') productosFiltrados = currentProducts.filter(p => p.nombre.toLowerCase().includes(term) || p.especificaciones.toLowerCase().includes(term));
-        if (productosFiltrados.length === 0) { productGrid.innerHTML = `<div class="no-results">🔍 No encontramos productos con "${filterText}". Escríbenos por WhatsApp y te ayudamos.</div>`; return; }
+        if (productosFiltrados.length === 0) {
+            productGrid.innerHTML = `<div class="no-results">🔍 No encontramos productos con "${filterText}". Escríbenos por WhatsApp y te ayudamos.</div>`;
+            return;
+        }
         const html = productosFiltrados.map((p, i) => {
             let stockHtml = '', btnDisabled = '', linkWa = p.link_wa;
             if (p.stock === 'agotado' || p.stock === '0') { stockHtml = `<div class="product-stock agotado">❌ Agotado</div>`; btnDisabled = 'disabled'; linkWa = '#'; }
@@ -441,15 +451,26 @@
                     </div>`;
         }).join('');
         productGrid.innerHTML = html;
+        
+        // Eventos para agregar al carrito
         document.querySelectorAll('.add-to-cart-btn').forEach(btn => btn.addEventListener('click', (e) => { e.preventDefault(); addToCart(btn.getAttribute('data-name'), btn.getAttribute('data-price'), btn.getAttribute('data-img')); alert(`${btn.getAttribute('data-name')} agregado al carrito`); }));
+        
+        // Eventos para ver detalles con procesamiento de imagenes_extra
         document.querySelectorAll('.btn-ver-detalles').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const idx = parseInt(btn.getAttribute('data-idx'));
                 const product = productosFiltrados[idx];
+                console.log('Producto seleccionado:', product.nombre);
+                console.log('Valor original de imagenes_extra:', product.imagenes_extra);
                 let imagenesExtra = [];
-                if (product.imagenes_extra && product.imagenes_extra.trim()) {
-                    // Limpieza robusta: quitar comillas dobles/simples al inicio/final de cada URL
-                    imagenesExtra = product.imagenes_extra.split(',').map(s => s.trim().replace(/^["']|["']$/g, '')).filter(s => s && s !== '');
+                if (product.imagenes_extra && typeof product.imagenes_extra === 'string' && product.imagenes_extra.trim()) {
+                    // Limpieza robusta: separar por coma, eliminar espacios, comillas dobles/simples, y filtrar vacíos
+                    imagenesExtra = product.imagenes_extra.split(',')
+                        .map(s => s.trim().replace(/^["']|["']$/g, ''))
+                        .filter(s => s && s !== '' && (s.startsWith('http://') || s.startsWith('https://')));
+                    console.log('URLs extra después de limpiar:', imagenesExtra);
+                } else {
+                    console.log('No hay imagenes_extra para este producto o es inválido');
                 }
                 openDetailModal(product, imagenesExtra);
             });
