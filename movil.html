@@ -125,7 +125,7 @@
         .carousel-container { position: relative; max-width: 1200px; margin: 40px auto 20px; overflow: hidden; border-radius: 20px; box-shadow: var(--glow); }
         .carousel-slides { display: flex; transition: transform 0.5s ease-in-out; }
         .carousel-slide { min-width: 100%; box-sizing: border-box; cursor: pointer; }
-        .carousel-slide img { width: 100%; height: auto; display: block; border-radius: 20px; object-fit: cover; max-height: 200px; }
+        .carousel-slide img { width: 100%; height: auto; display: block; border-radius: 20px; object-fit: cover; max-height: 450px; }
         .carousel-button { position: absolute; top: 50%; transform: translateY(-50%); background-color: rgba(0,0,0,0.5); color: white; border: none; font-size: 2rem; padding: 0 12px; cursor: pointer; border-radius: 50%; z-index: 10; transition: background 0.3s; }
         .carousel-button:hover { background-color: rgba(0,0,0,0.8); }
         .carousel-button.prev { left: 10px; }
@@ -208,23 +208,7 @@
     <div class="carousel-dots" id="carouselDots"></div>
 
     <!-- Destacado de la semana -->
-    <section class="portadas container fade-in">
-        <h2 class="section-title">✨ Destacado de la semana ✨</h2>
-        <div class="portadas-grid">
-            <div class="portada-card" onclick="window.open('https://wa.me/584129056964?text=Hola!%20Me%20gustaría%20saber%20del%20Pack%20Gamer%20Especial', '_blank')">
-                <img src="image/pack-gamer.webp" alt="Pack Gamer Especial" loading="lazy">
-                <div class="portada-info"><h3>Pack Gamer Especial</h3><p>Lleva tu experiencia al siguiente nivel</p></div>
-            </div>
-            <div class="portada-card" onclick="window.open('https://wa.me/584129056964?text=Hola!%20Me%20gustaría%20saber%20del%20Combo%20Revive-TV%20Oferta', '_blank')">
-                <img src="image/pack-moto1.webp" alt="Motorizados VS. Lluvia" loading="lazy">
-                <div class="portada-info"><h3>Motorizados VS. Lluvia</h3><p>Temporada de Lluvias</p></div>
-            </div>
-            <div class="portada-card" onclick="window.open('https://wa.me/584129056964?text=Hola!%20Me%20gustaría%20saber%20del%20Ventilador%20de%20Cuello%20Pro', '_blank')">
-                <img src="image/pack-entre.webp" alt="Innova" loading="lazy">
-                <div class="portada-info"><h3>Innova</h3><p>Convierte tu TV vieja en Smart TV</p></div>
-            </div>
-        </div>
-    </section>
+    ---
 
     <!-- Productos con filtros y límite -->
     <section class="products container fade-in">
