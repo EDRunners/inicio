@@ -2,6 +2,91 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- ========== METAETIQUETAS PARA REDES SOCIALES (Facebook, WhatsApp, Twitter) ========== -->
+    <!-- Open Graph -->
+    <meta property="og:title" content="EDRunners - Tecnología que mejora tu día">
+    <meta property="og:description" content="Soluciones tecnológicas confiables con entrega inmediata en Barquisimeto.">
+    <meta property="og:image" content="https://edrunners.github.io/inicio/image/logo-social.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://edrunners.github.io/inicio/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="EDRunners">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="EDRunners - Tecnología que mejora tu día">
+    <meta name="twitter:description" content="Soluciones tecnológicas confiables con entrega inmediata en Barquisimeto.">
+    <meta name="twitter:image" content="https://edrunners.github.io/inicio/image/logo-social.png">
+    
+    <!-- Favicon (ícono de pestaña) -->
+    <link rel="icon" type="image/png" href="image/favicon.png">
+    <link rel="apple-touch-icon" href="image/favicon.png">
+    
+    <title>EDRunners - Tecnología Confiable en Barquisimeto</title>
+    
+    <style>
+        body {
+            background: #141517;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .loader {
+            max-width: 300px;
+            padding: 20px;
+        }
+        .spinner {
+            border: 4px solid rgba(16,185,129,0.3);
+            border-top: 4px solid #10b981;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        p {
+            color: #a1a1aa;
+            font-size: 0.9rem;
+        }
+    </style>
+    <script>
+        function detectarDispositivo() {
+            if (window.innerWidth <= 768) return 'movil';
+            if (/Mobi|Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent)) return 'movil';
+            return 'escritorio';
+        }
+        const dispositivo = detectarDispositivo();
+        if (dispositivo === 'movil') {
+            window.location.href = 'movil.html';
+        } else {
+            window.location.href = 'escritorio.html';
+        }
+    </script>
+</head>
+<body>
+    <div class="loader">
+        <div class="spinner"></div>
+        <p>Detectando tu dispositivo...</p>
+        <p style="font-size: 0.8rem; margin-top: 10px;">Serás redirigido automáticamente.</p>
+    </div>
+</body>
+</html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EDRunners - Su Tienda Online de confianza</title>
     <style>
