@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     
-    <!-- Metaetiquetas para redes sociales -->
     <meta property="og:title" content="EDRunners - Tecnología que mejora tu día">
     <meta property="og:description" content="Soluciones tecnológicas confiables con entrega inmediata en Barquisimeto. Celulares, TV Box, ventiladores, consolas y más.">
     <meta property="og:image" content="https://edrunners.github.io/inicio/image/logo-social.webp">
@@ -59,20 +58,80 @@
         .btn.disabled { opacity: 0.5; pointer-events: none; }
         .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
         .fade-in.visible { opacity: 1; transform: translateY(0); }
+        
+        /* ========== HEADER MEJORADO PARA MÓVIL ========== */
         header {
-            padding: 20px 0; position: fixed; top: 0; width: 100%; background: rgba(20,23,21,0.95);
-            backdrop-filter: blur(10px); z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 20px 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(20,23,21,0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s ease;
         }
         body.tema-claro header { background: rgba(245,245,247,0.95); border-bottom-color: rgba(0,0,0,0.1); }
+        /* Header reducido al hacer scroll */
+        header.header-scrolled {
+            padding: 2px 0;
+        }
+        header.header-scrolled .logo {
+            font-size: 1.2rem;
+        }
+        header.header-scrolled .logo span {
+            display: none; /* Oculta "EDRunners" y deja solo "™" o un icono */
+        }
+        header.header-scrolled .logo::before {
+            
+            font-size: 1.2rem;
+        }
+        /* Ajuste para que el logo original no se muestre en modo scrolled */
+        header.header-scrolled .logo .text-primary {
+            display: none;
+        }
+        /* Si prefieres que desaparezca el logo por completo, usa esto: */
+        /* header.header-scrolled .logo { display: none; } */
+        
         .nav-container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-        .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
+        .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; transition: all 0.3s ease; }
+        
+        /* Ajuste de botones en el header cuando está scrolled */
+        header.header-scrolled .btn-outline {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+        header.header-scrolled .cart-icon {
+            font-size: 1.4rem;
+        }
+        header.header-scrolled .cart-count {
+            width: 18px;
+            height: 18px;
+            font-size: 0.6rem;
+            top: -6px;
+            right: -10px;
+        }
+        
         .sticky-search-container {
-            position: fixed; top: 80px; left: 0; width: 100%; z-index: 99;
-            background: var(--bg-color); padding: 12px 16px; border-bottom: 1px solid rgba(16,185,129,0.2);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3); transform: translateY(-100%);
-            transition: transform 0.3s ease; display: none;
+            position: fixed;
+            top: 80px; /* Altura del header normal */
+            left: 0;
+            width: 100%;
+            z-index: 99;
+            background: var(--bg-color);
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(16,185,129,0.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+            display: none;
+        }
+        /* Ajustar top del buscador cuando header está reducido */
+        body.header-scrolled .sticky-search-container {
+            top: 60px;
         }
         .sticky-search-container.visible { transform: translateY(0); }
+        
         .search-wrapper { max-width: 500px; margin: 0 auto; position: relative; }
         .search-input {
             width: 100%; padding: 14px 20px; background: var(--surface-color);
@@ -82,8 +141,13 @@
         .search-input:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(16,185,129,0.2); }
         .search-input::placeholder { color: var(--text-muted); }
         .search-icon-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--primary-color); font-size: 1.3rem; }
-        @media (max-width: 767px) { .sticky-search-container { display: block; } .hero { padding-top: 180px !important; } .nav-container { flex-direction: column; text-align: center; } }
+        @media (max-width: 767px) { 
+            .sticky-search-container { display: block; } 
+            .hero { padding-top: 180px !important; } 
+            .nav-container { flex-direction: column; text-align: center; }
+        }
         @media (min-width: 768px) { .sticky-search-container { display: none !important; } }
+        
         .no-results { text-align: center; padding: 40px; color: var(--text-muted); font-size: 1.1rem; grid-column: 1 / -1; }
         .hero { padding: 160px 0 100px; text-align: center; background: radial-gradient(circle at 50% 0%, rgba(16,185,129,0.1) 0%, transparent 50%); }
         .hero h1 { font-size: 2.5rem; margin-bottom: 20px; }
@@ -148,8 +212,8 @@
         .scroll-top-btn { position: fixed; bottom: 110px; left: 20px; background-color: var(--primary-color); color: white; width: 50px; height: 50px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 1.8rem; cursor: pointer; box-shadow: 0 4px 15px rgba(16,185,129,0.4); z-index: 1000; transition: var(--transition); border: none; }
         .scroll-top-btn:hover { transform: scale(1.1); background-color: var(--primary-hover); }
         @media (max-width: 768px) { .scroll-top-btn { bottom: 100px; left: 20px; width: 45px; height: 45px; font-size: 1.5rem; } }
-        .cart-icon { position: relative; cursor: pointer; font-size: 1.8rem; margin-left: 10px; }
-        .cart-count { position: absolute; top: -8px; right: -12px; background-color: var(--primary-color); color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .cart-icon { position: relative; cursor: pointer; font-size: 1.8rem; margin-left: 10px; transition: all 0.3s ease; }
+        .cart-count { position: absolute; top: -8px; right: -12px; background-color: var(--primary-color); color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; font-weight: bold; transition: all 0.3s ease; }
         .cart-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
         .cart-modal-content { background-color: var(--surface-color); width: 90%; max-width: 500px; max-height: 80vh; border-radius: 20px; padding: 20px; position: relative; overflow-y: auto; }
         .cart-modal-content h3 { margin-bottom: 20px; text-align: center; }
@@ -166,7 +230,7 @@
         .cart-actions button { flex: 1; }
         .close-cart { position: absolute; top: 10px; right: 15px; font-size: 28px; cursor: pointer; color: var(--text-muted); }
         
-        /* ========== NUEVOS ESTILOS PARA BOTONES DE ACCIÓN ========== */
+        /* ========== BOTONES DE PRODUCTO ========== */
         .product-actions {
             display: flex;
             justify-content: space-between;
@@ -202,6 +266,7 @@
             font-size: 1.6rem;
             transition: var(--transition);
             flex-shrink: 0;
+            text-decoration: none;
         }
         .btn-whatsapp-icon:hover {
             transform: scale(1.05);
@@ -266,7 +331,7 @@
 </head>
 <body>
 
-<header>
+<header id="mainHeader">
     <div class="container nav-container">
         <div class="logo">EDRunners <span class="text-primary">™</span></div>
         <div style="display: flex; gap: 10px; align-items: center;">
@@ -492,7 +557,7 @@
         document.getElementById('detailModal').style.display = 'none';
     }
 
-    // ========== RENDER PRODUCTOS (con nuevos botones) ==========
+    // ========== RENDER PRODUCTOS ==========
     function renderProducts(filterText = '') {
         const term = filterText.toLowerCase().trim();
         const carouselContainer = document.querySelector('.carousel-container');
@@ -533,10 +598,8 @@
         }).join('');
         productGrid.innerHTML = html;
         
-        // Eventos para agregar al carrito
         document.querySelectorAll('.add-to-cart-btn').forEach(btn => btn.addEventListener('click', (e) => { e.preventDefault(); addToCart(btn.getAttribute('data-name'), btn.getAttribute('data-price'), btn.getAttribute('data-img')); alert(`${btn.getAttribute('data-name')} agregado al carrito`); }));
         
-        // Eventos para ver detalles
         document.querySelectorAll('.btn-ver-detalles').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const idx = parseInt(btn.getAttribute('data-idx'));
@@ -643,8 +706,20 @@
         searchInitialized = true;
     }
 
-    function initSticky() { const stickySearch = document.getElementById('stickySearch'); if (!stickySearch) return; window.addEventListener('scroll', () => { if (window.innerWidth < 768 && window.pageYOffset > 100) stickySearch.classList.add('visible'); else stickySearch.classList.remove('visible'); }); }
-    function initFadeIn() { const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } }); }, { threshold: 0.15 }); document.querySelectorAll('.fade-in').forEach(el => observer.observe(el)); }
+    function initSticky() {
+        const stickySearch = document.getElementById('stickySearch');
+        if (!stickySearch) return;
+        window.addEventListener('scroll', () => {
+            if (window.innerWidth < 768 && window.pageYOffset > 100) stickySearch.classList.add('visible');
+            else stickySearch.classList.remove('visible');
+        });
+    }
+    
+    function initFadeIn() {
+        const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } }); }, { threshold: 0.15 });
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    }
+    
     function initCarousel() {
         const slides = document.querySelectorAll('.carousel-slide'), slidesContainer = document.getElementById('carouselSlides'), prevBtn = document.getElementById('prevBtn'), nextBtn = document.getElementById('nextBtn'), dotsContainer = document.getElementById('carouselDots');
         let currentIndex = 0, interval, touchStartX = 0, touchEndX = 0, autoplayDelay = 4000;
@@ -663,8 +738,23 @@
         startAutoplay(); const container = document.querySelector('.carousel-container'); container.addEventListener('mouseenter', () => clearInterval(interval)); container.addEventListener('mouseleave', startAutoplay); container.addEventListener('touchstart', () => clearInterval(interval)); container.addEventListener('touchend', startAutoplay);
     }
 
+    // ========== HEADER REDUCIDO AL HACER SCROLL ==========
+    function initHeaderScroll() {
+        const header = document.getElementById('mainHeader');
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > 50) {
+                header.classList.add('header-scrolled');
+            } else {
+                header.classList.remove('header-scrolled');
+            }
+            lastScroll = currentScroll;
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
-        initFadeIn(); initSticky(); loadProducts(); initCarousel(); loadCart(); initCartModal();
+        initFadeIn(); initSticky(); loadProducts(); initCarousel(); loadCart(); initCartModal(); initHeaderScroll();
         const scrollTopBtn = document.getElementById('scrollTopBtn');
         window.addEventListener('scroll', () => { if (window.scrollY > 300) scrollTopBtn.style.display = 'flex'; else scrollTopBtn.style.display = 'none'; });
         scrollTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
