@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     
-    <!-- ========== METAETIQUETAS PARA REDES SOCIALES (Facebook, WhatsApp, Twitter) ========== -->
+    <!-- Metaetiquetas para redes sociales -->
     <meta property="og:title" content="EDRunners - Tecnología que mejora tu día">
     <meta property="og:description" content="Soluciones tecnológicas confiables con entrega inmediata en Barquisimeto. Celulares, TV Box, ventiladores, consolas y más.">
     <meta property="og:image" content="https://edrunners.github.io/inicio/image/logo-social.webp">
@@ -125,7 +125,6 @@
         footer { background: var(--surface-color); padding: 40px 0; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); color: var(--text-muted); }
         .whatsapp-float { position: fixed; bottom: 30px; right: 30px; background-color: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 4px 15px rgba(37,211,102,0.4); z-index: 1000; transition: var(--transition); }
         .whatsapp-float:hover { transform: scale(1.1); }
-        .btn svg { margin-right: 8px; width: 20px; height: 20px; fill: currentColor; }
         .portadas { display: none; }
         .carousel-container { position: relative; max-width: 1200px; margin: 40px auto 20px; overflow: hidden; border-radius: 20px; box-shadow: var(--glow); }
         .carousel-slides { display: flex; transition: transform 0.5s ease-in-out; }
@@ -166,16 +165,88 @@
         .cart-actions { display: flex; justify-content: space-between; gap: 10px; }
         .cart-actions button { flex: 1; }
         .close-cart { position: absolute; top: 10px; right: 15px; font-size: 28px; cursor: pointer; color: var(--text-muted); }
-        .add-to-cart-btn { margin-top: 10px; background-color: transparent; border: 1px solid var(--primary-color); color: var(--primary-color); padding: 8px; border-radius: 8px; width: 100%; cursor: pointer; transition: var(--transition); }
-        .add-to-cart-btn:hover { background-color: var(--primary-color); color: white; }
-        .btn-ver-detalles { margin-top: 10px; background: none; border: 1px solid var(--primary-color); color: var(--primary-color); padding: 8px; border-radius: 8px; width: 100%; cursor: pointer; transition: var(--transition); }
-        .btn-ver-detalles:hover { background-color: var(--primary-color); color: white; }
+        
+        /* ========== NUEVOS ESTILOS PARA BOTONES DE ACCIÓN ========== */
+        .product-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .product-buttons-left {
+            display: flex;
+            flex: 1;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .btn-sm {
+            padding: 10px 12px;
+            font-size: 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            flex: 1;
+            min-width: 100px;
+        }
+        .btn-whatsapp-icon {
+            background-color: #25D366;
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+        .btn-whatsapp-icon:hover {
+            transform: scale(1.05);
+            background-color: #128C7E;
+        }
+        .btn-whatsapp-icon.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            background-color: #555;
+        }
+        @media (max-width: 480px) {
+            .product-actions {
+                flex-wrap: wrap;
+            }
+            .product-buttons-left {
+                width: 100%;
+            }
+            .btn-whatsapp-icon {
+                margin-top: 8px;
+                width: 100%;
+                border-radius: 8px;
+            }
+        }
+        .add-to-cart-btn, .btn-ver-detalles {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.8rem;
+            text-align: center;
+        }
+        .add-to-cart-btn:hover, .btn-ver-detalles:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
         .detail-modal .modal-content { max-width: 600px; max-height: 85vh; overflow-y: auto; }
         .detail-images { display: flex; gap: 8px; overflow-x: auto; margin: 15px 0; padding-bottom: 10px; }
         .detail-thumb { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
         .detail-thumb.active { border-color: var(--primary-color); }
         .detail-main-image { width: 100%; max-height: 300px; object-fit: contain; border-radius: 12px; margin-bottom: 10px; }
         .detail-desc { margin: 15px 0; line-height: 1.5; text-align: left; white-space: pre-wrap; }
+        
         @media (min-width: 768px) {
             .hero h1 { font-size: 3.5rem; }
             .product-grid { grid-template-columns: repeat(2, 1fr); }
@@ -421,7 +492,7 @@
         document.getElementById('detailModal').style.display = 'none';
     }
 
-    // ========== RENDER PRODUCTOS (con orden invertido: los más nuevos primero) ==========
+    // ========== RENDER PRODUCTOS (con nuevos botones) ==========
     function renderProducts(filterText = '') {
         const term = filterText.toLowerCase().trim();
         const carouselContainer = document.querySelector('.carousel-container');
@@ -434,23 +505,38 @@
         }
         const html = productosFiltrados.map((p, i) => {
             let stockHtml = '', btnDisabled = '', linkWa = p.link_wa;
-            if (p.stock === 'agotado' || p.stock === '0') { stockHtml = `<div class="product-stock agotado">❌ Agotado</div>`; btnDisabled = 'disabled'; linkWa = '#'; }
-            else if (p.stock === 'pocas' || (parseInt(p.stock) > 0 && parseInt(p.stock) < 5)) { stockHtml = `<div class="product-stock pocas">⚠️ ¡Últimas unidades!</div>`; }
+            let waIconClass = 'btn-whatsapp-icon';
+            if (p.stock === 'agotado' || p.stock === '0') {
+                stockHtml = `<div class="product-stock agotado">❌ Agotado</div>`;
+                btnDisabled = 'disabled';
+                linkWa = '#';
+                waIconClass += ' disabled';
+            } else if (p.stock === 'pocas' || (parseInt(p.stock) > 0 && parseInt(p.stock) < 5)) {
+                stockHtml = `<div class="product-stock pocas">⚠️ ¡Últimas unidades!</div>`;
+            }
             return `<div class="product-card" data-name="${p.nombre.replace(/"/g, '&quot;')}">
                         <div class="product-image">${p.imagen_url ? `<img src="${p.imagen_url}" alt="${p.nombre}" loading="lazy" onerror="this.parentElement.innerHTML='<span>📷 Imagen: ${p.nombre}</span>'">` : `<span>📷 Imagen: ${p.nombre}</span>`}</div>
                         <h3 class="product-title">${p.nombre}</h3>
                         <p class="product-specs">${p.especificaciones}</p>
                         ${p.precio ? `<div class="product-price">${p.precio}</div>` : ''}
                         ${stockHtml}
-                        <button class="add-to-cart-btn" data-name="${p.nombre.replace(/"/g, '&quot;')}" data-price="${p.precio}" data-img="${p.imagen_url}">➕ Agregar al carrito</button>
-                        <button class="btn-ver-detalles" data-idx="${i}">Ver detalles</button>
-                        <a href="${linkWa}" target="_blank" class="btn btn-outline ${btnDisabled}" style="width: 100%;">Consultar por WhatsApp</a>
+                        <div class="product-actions">
+                            <div class="product-buttons-left">
+                                <button class="add-to-cart-btn btn-sm" data-name="${p.nombre.replace(/"/g, '&quot;')}" data-price="${p.precio}" data-img="${p.imagen_url}">➕ Agregar</button>
+                                <button class="btn-ver-detalles btn-sm" data-idx="${i}">🔍 Ver detalles</button>
+                            </div>
+                            <a href="${linkWa}" target="_blank" class="${waIconClass}" ${btnDisabled === 'disabled' ? 'style="pointer-events: none;"' : ''}>
+                                💬
+                            </a>
+                        </div>
                     </div>`;
         }).join('');
         productGrid.innerHTML = html;
         
+        // Eventos para agregar al carrito
         document.querySelectorAll('.add-to-cart-btn').forEach(btn => btn.addEventListener('click', (e) => { e.preventDefault(); addToCart(btn.getAttribute('data-name'), btn.getAttribute('data-price'), btn.getAttribute('data-img')); alert(`${btn.getAttribute('data-name')} agregado al carrito`); }));
         
+        // Eventos para ver detalles
         document.querySelectorAll('.btn-ver-detalles').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const idx = parseInt(btn.getAttribute('data-idx'));
@@ -535,7 +621,7 @@
                     const csvText = await response.text();
                     const products = parseCSV(csvText);
                     if (products.length > 0) {
-                        allProducts = products.reverse(); // ✅ ORDEN INVERTIDO: los más nuevos primero
+                        allProducts = products.reverse();
                         aplicarFiltrosYRender();
                         setupSearchFilter();
                         return;
@@ -543,7 +629,7 @@
                 }
             } catch (e) { console.warn("Error CSV, usando respaldo", e); }
         }
-        allProducts = [...fallbackProducts].reverse(); // ✅ También invertir respaldo
+        allProducts = [...fallbackProducts].reverse();
         aplicarFiltrosYRender();
         setupSearchFilter();
     }
