@@ -432,8 +432,9 @@
 
 <script>
     // ========== CONFIGURACIÓN ==========
+    // ✅ ENLACE ACTUALIZADO DE GOOGLE SHEETS
     const PRODUCTS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRGjMz9Zwo1g8PruSjNcSJq6kTUQrEGkN_hQRBH0dvjIA_IwwKQ5p2pb7Bmrnvd7sLB2hMvqj-oFR6L/pub?output=csv";
-    const CONFIG_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRGjMz9Zwo1g8PruSjNcSJq6kTUQrEGkN_hQRBH0dvjIA_IwwKQ5p2pb7Bmrnvd7sLB2hMvqj-oFR6L/pub?output=csv";
+    const CONFIG_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRGjMz9Zwo1g8PruSjNcSJq6kTUQrEGkN_hQRBH0dvjIA_IwwKQ5p2pb7Bmrnvd7sLB2hMvqj-oFR6L/pub?gid=1&output=csv";
 
     const fallbackProducts = [
         { id_producto: "SAM-001", nombre: "Samsung Galaxy A17", especificaciones: "128GB Almacenamiento / 4GB RAM", precio: "$180", imagen_url: "image/sam-a171.webp", link_wa: "https://wa.me/584129056964?text=Hola,%20me%20interesa%20el%20Samsung%20Galaxy%20A17", categoria: "celular", stock: "disponible", descripcion: "Samsung Galaxy A17 con pantalla Super AMOLED, batería de larga duración y cámara de alta resolución.", imagenes_extra: "" },
@@ -547,7 +548,7 @@
                     priceDisplay = p.precio;
                 }
             }
-            // Usar id_producto si existe, sino usar el nombre normalizado
+            // ✅ USAR id_producto SIEMPRE (prioridad)
             const productId = p.id_producto || p.nombre.replace(/\s/g, '-').toLowerCase();
             return `<div class="product-card" data-name="${p.nombre.replace(/"/g, '&quot;')}">
                         <div class="product-image">${p.imagen_url ? `<img src="${p.imagen_url}" alt="${p.nombre}" loading="lazy" onerror="this.parentElement.innerHTML='<span>📷 Imagen: ${p.nombre}</span>'">` : `<span>📷 Imagen: ${p.nombre}</span>`}</div>
@@ -558,7 +559,7 @@
                         <div class="product-actions">
                             <div class="product-buttons-left">
                                 <button class="add-to-cart-btn btn-sm" data-name="${p.nombre.replace(/"/g, '&quot;')}" data-price-usd="${p.precio}" data-img="${p.imagen_url}">➕ Agregar</button>
-                                <a href="productos.html?id=${p.id_producto}" class="btn-ver-detalles btn-sm">🔍 Ver detalles</a>
+                                <a href="productos.html?id=${encodeURIComponent(productId)}" class="btn-ver-detalles btn-sm">🔍 Ver detalles</a>
                             </div>
                             <a href="${linkWa}" target="_blank" class="${waIconClass}" ${btnDisabled === 'disabled' ? 'style="pointer-events: none;"' : ''}>
                                 💬
