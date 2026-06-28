@@ -3,15 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta property="og:title" content="EDRunners | Producto">
-    <meta property="og:description" content="Descubre el producto en EDRunners.">
-    <meta property="og:image" content="https://edrunners.github.io/inicio/image/logo-social.webp">
-    <meta property="og:url" content="https://edrunners.github.io/inicio/">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="EDRunners Pro">
-    <meta name="twitter:card" content="summary_large_image">
-    <link rel="icon" type="image/webp" href="image/favicon.webp">
-    <link rel="apple-touch-icon" href="image/favicon.webp">
     <title>EDRunners | Producto</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -61,15 +52,6 @@
             z-index: 100;
             border-bottom: 1px solid rgba(255,255,255,0.05);
             transition: all 0.3s ease;
-        }
-        header.header-compacto { padding: 8px 0; }
-        header.header-compacto .logo { font-size: 1rem; opacity: 0.9; }
-        header.header-compacto .btn-outline { padding: 4px 10px; font-size: 0.75rem; }
-        header.header-compacto .cart-icon { font-size: 1.4rem; }
-        header.header-compacto #temaBtn { padding: 4px 8px; font-size: 1rem; }
-        @media (max-width: 767px) {
-            header.header-compacto .nav-actions .btn-outline:first-child svg { margin-right: 0; }
-            header.header-compacto .nav-actions .btn-outline:first-child span { display: none; }
         }
         body.tema-claro header { background: rgba(245,245,247,0.95); border-bottom-color: rgba(0,0,0,0.1); }
         .nav-container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
@@ -194,12 +176,11 @@
 
 <script>
     // ========== CONFIGURACIÓN ==========
-    // ✅ Misma URL que usas en escritorio.html (ya actualizada)
+    // ✅ MISMA URL QUE USAS EN escritorio.html (ya actualizada)
     const PRODUCTS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRGjMz9Zwo1g8PruSjNcSJq6kTUQrEGkN_hQRBH0dvjIA_IwwKQ5p2pb7Bmrnvd7sLB2hMvqj-oFR6L/pub?output=csv";
-    const CONFIG_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRGjMz9Zwo1g8PruSjNcSJq6kTUQrEGkN_hQRBH0dvjIA_IwwKQ5p2pb7Bmrnvd7sLB2hMvqj-oFR6L/pub?gid=1&output=csv";
     
     let allProducts = [];
-    let exchangeRate = 0;
+    let exchangeRate = 530.5; // Fijo (puedes ajustarlo si quieres)
     let showUSD = true;
 
     // ========== CARRITO (copiado de movil.html, funciona) ==========
@@ -314,40 +295,16 @@
         return products;
     }
 
-    async function loadExchangeRate() {
-        if (CONFIG_CSV_URL) {
-            try {
-                const response = await fetch(CONFIG_CSV_URL);
-                if (response.ok) {
-                    const csvText = await response.text();
-                    const lines = csvText.split(/\r?\n/);
-                    if (lines.length > 1) {
-                        for (let i = 1; i < lines.length; i++) {
-                            const row = lines[i].split(',');
-                            if (row[0] && row[0].toLowerCase().replace(/"/g, '') === 'tasa_bs_usd') {
-                                let rate = parseFloat(row[1]);
-                                if (!isNaN(rate)) exchangeRate = rate;
-                                break;
-                            }
-                        }
-                    }
-                }
-            } catch(e) { console.warn("Error cargando tasa de cambio", e); }
-        }
-        if (exchangeRate === 0) exchangeRate = 530.5;
-    }
-
-    // ========== MOSTRAR PRODUCTO ==========
+    // ========== MOSTRAR PRODUCTO (con logs y validaciones) ==========
     function mostrarProducto(id) {
         console.log('🔍 Buscando producto con ID:', id);
-        // Buscar el producto (case-insensitive por si hay diferencias)
-        const product = allProducts.find(p => p.id_producto.toLowerCase() === id.toLowerCase());
+        const product = allProducts.find(p => p.id_producto && p.id_producto.toLowerCase() === id.toLowerCase());
         const skeleton = document.getElementById('skeletonProduct');
         const content = document.getElementById('productContent');
         const notFound = document.getElementById('productNotFound');
 
         if (!product) {
-            console.warn('❌ Producto no encontrado para ID:', id);
+            console.warn('❌ Producto NO encontrado para ID:', id);
             console.log('IDs disponibles:', allProducts.map(p => p.id_producto));
             skeleton.style.display = 'none';
             content.style.display = 'none';
@@ -355,81 +312,93 @@
             return;
         }
 
-        console.log('✅ Producto encontrado:', product.nombre);
+        console.log('✅ Producto ENCONTRADO:', product.nombre);
+        
+        // Ocultar skeleton y notFound, mostrar content
         skeleton.style.display = 'none';
-        content.style.display = 'block';
         notFound.style.display = 'none';
+        content.style.display = 'block';
 
-        // Título y metadatos
-        document.title = `${product.nombre} | EDRunners`;
-        const ogTitle = document.querySelector('meta[property="og:title"]');
-        if (ogTitle) ogTitle.content = product.nombre;
-        const ogDesc = document.querySelector('meta[property="og:description"]');
-        if (ogDesc) ogDesc.content = product.descripcion || 'Producto en EDRunners.';
-        if (product.imagen_url) {
-            const ogImg = document.querySelector('meta[property="og:image"]');
-            if (ogImg) ogImg.content = product.imagen_url;
-        }
+        // Rellenar datos
+        try {
+            const titleEl = document.getElementById('prodTitle');
+            const specsEl = document.getElementById('prodSpecs');
+            const imgEl = document.getElementById('prodImage');
+            const priceEl = document.getElementById('prodPrice');
+            const stockEl = document.getElementById('prodStock');
+            const descEl = document.getElementById('prodDesc');
+            const amazonBtn = document.getElementById('prodAmazonBtn');
+            const waBtn = document.getElementById('prodWhatsappBtn');
 
-        // Contenido
-        document.getElementById('prodTitle').textContent = product.nombre;
-        document.getElementById('prodSpecs').textContent = product.especificaciones;
-        const img = document.getElementById('prodImage');
-        img.src = product.imagen_url || '';
-        img.alt = product.nombre;
+            // Verificar que todos los elementos existan
+            if (!titleEl) console.error('❌ prodTitle no encontrado');
+            if (!specsEl) console.error('❌ prodSpecs no encontrado');
+            if (!imgEl) console.error('❌ prodImage no encontrado');
+            if (!priceEl) console.error('❌ prodPrice no encontrado');
+            if (!stockEl) console.error('❌ prodStock no encontrado');
+            if (!descEl) console.error('❌ prodDesc no encontrado');
+            if (!amazonBtn) console.error('❌ prodAmazonBtn no encontrado');
+            if (!waBtn) console.error('❌ prodWhatsappBtn no encontrado');
 
-        // Precio
-        let priceDisplay = '';
-        if (product.precio) {
-            let priceNum = parseFloat(product.precio.replace('$', '').replace(' USD', '').trim());
-            if (!isNaN(priceNum)) {
-                priceDisplay = showUSD ? `$${priceNum.toFixed(2)}` : `Bs ${(priceNum * exchangeRate).toFixed(2)}`;
-            } else {
-                priceDisplay = product.precio;
+            // Asignar valores
+            titleEl.textContent = product.nombre || 'Sin nombre';
+            specsEl.textContent = product.especificaciones || '';
+            imgEl.src = product.imagen_url || '';
+            imgEl.alt = product.nombre || 'Producto';
+
+            // Precio
+            let priceDisplay = '';
+            if (product.precio) {
+                let priceNum = parseFloat(product.precio.replace('$', '').replace(' USD', '').trim());
+                if (!isNaN(priceNum)) {
+                    priceDisplay = showUSD ? `$${priceNum.toFixed(2)}` : `Bs ${(priceNum * exchangeRate).toFixed(2)}`;
+                } else {
+                    priceDisplay = product.precio;
+                }
             }
-        }
-        document.getElementById('prodPrice').textContent = priceDisplay || 'Consultar precio';
+            priceEl.textContent = priceDisplay || 'Consultar precio';
 
-        // Stock
-        const stockElem = document.getElementById('prodStock');
-        if (product.stock === 'agotado' || product.stock === '0') {
-            stockElem.textContent = '❌ Agotado';
-            stockElem.className = 'product-stock agotado';
-            document.getElementById('prodWhatsappBtn').classList.add('disabled');
-        } else if (product.stock === 'pocas' || (parseInt(product.stock) > 0 && parseInt(product.stock) < 5)) {
-            stockElem.textContent = '⚠️ ¡Últimas unidades!';
-            stockElem.className = 'product-stock pocas';
-            document.getElementById('prodWhatsappBtn').classList.remove('disabled');
-        } else {
-            stockElem.textContent = '✅ Disponible';
-            stockElem.className = 'product-stock';
-            document.getElementById('prodWhatsappBtn').classList.remove('disabled');
-        }
+            // Stock
+            if (product.stock === 'agotado' || product.stock === '0') {
+                stockEl.textContent = '❌ Agotado';
+                stockEl.className = 'product-stock agotado';
+                waBtn.classList.add('disabled');
+            } else if (product.stock === 'pocas' || (parseInt(product.stock) > 0 && parseInt(product.stock) < 5)) {
+                stockEl.textContent = '⚠️ ¡Últimas unidades!';
+                stockEl.className = 'product-stock pocas';
+                waBtn.classList.remove('disabled');
+            } else {
+                stockEl.textContent = '✅ Disponible';
+                stockEl.className = 'product-stock';
+                waBtn.classList.remove('disabled');
+            }
 
-        // Descripción
-        document.getElementById('prodDesc').innerHTML = (product.descripcion || '').replace(/\n/g, '<br>');
+            // Descripción
+            descEl.innerHTML = (product.descripcion || '').replace(/\n/g, '<br>');
 
-        // Botón Amazon
-        const amazonBtn = document.getElementById('prodAmazonBtn');
-        if (product.amazon_link && product.amazon_link.trim() !== '') {
-            amazonBtn.style.display = 'flex';
-            amazonBtn.onclick = () => window.open(product.amazon_link, '_blank');
-        } else {
-            amazonBtn.style.display = 'none';
-        }
+            // Botón Amazon
+            if (product.amazon_link && product.amazon_link.trim() !== '') {
+                amazonBtn.style.display = 'flex';
+                amazonBtn.onclick = () => window.open(product.amazon_link, '_blank');
+            } else {
+                amazonBtn.style.display = 'none';
+            }
 
-        // Botón WhatsApp
-        const waBtn = document.getElementById('prodWhatsappBtn');
-        if (product.link_wa && product.link_wa !== '#') {
-            waBtn.onclick = () => window.open(product.link_wa, '_blank');
-        } else {
-            waBtn.classList.add('disabled');
+            // Botón WhatsApp
+            if (product.link_wa && product.link_wa !== '#') {
+                waBtn.onclick = () => window.open(product.link_wa, '_blank');
+            } else {
+                waBtn.classList.add('disabled');
+            }
+
+            console.log('✅ Datos asignados correctamente');
+        } catch (err) {
+            console.error('❌ Error al asignar datos:', err);
         }
     }
 
     // ========== INICIALIZACIÓN ==========
     async function init() {
-        await loadExchangeRate();
         // Cargar productos desde CSV
         try {
             const response = await fetch(PRODUCTS_CSV_URL);
@@ -438,28 +407,42 @@
                 allProducts = parseCSV(csvText);
                 console.log('📦 Productos cargados:', allProducts.length);
             } else {
-                console.error('Error al cargar CSV:', response.status);
+                console.error('❌ Error al cargar CSV:', response.status);
+                document.getElementById('skeletonProduct').style.display = 'none';
+                document.getElementById('productNotFound').style.display = 'block';
+                return;
             }
-        } catch (e) { console.error('Error cargando productos', e); }
+        } catch (e) {
+            console.error('❌ Error cargando productos:', e);
+            document.getElementById('skeletonProduct').style.display = 'none';
+            document.getElementById('productNotFound').style.display = 'block';
+            return;
+        }
 
         // Leer ID de la URL
         const params = new URLSearchParams(window.location.search);
         const id = params.get('id') || params.get('prod') || '';
         console.log('📌 ID recibido en URL:', id);
-        if (id && allProducts.length > 0) {
-            mostrarProducto(id);
-        } else if (id && allProducts.length === 0) {
+
+        if (!id) {
+            document.getElementById('skeletonProduct').style.display = 'none';
+            document.getElementById('productNotFound').style.display = 'block';
+            document.querySelector('#productNotFound h2').textContent = 'No se proporcionó ID';
+            return;
+        }
+
+        if (allProducts.length === 0) {
             // Reintentar después de un breve retraso
             setTimeout(() => {
-                if (allProducts.length > 0) mostrarProducto(id);
-                else {
+                if (allProducts.length > 0) {
+                    mostrarProducto(id);
+                } else {
                     document.getElementById('skeletonProduct').style.display = 'none';
                     document.getElementById('productNotFound').style.display = 'block';
                 }
             }, 500);
         } else {
-            document.getElementById('skeletonProduct').style.display = 'none';
-            document.getElementById('productNotFound').style.display = 'block';
+            mostrarProducto(id);
         }
     }
 
