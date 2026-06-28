@@ -641,7 +641,7 @@
                         <div class="product-actions">
                             <div class="product-buttons-left">
                                 <button class="add-to-cart-btn btn-sm" data-name="${p.nombre.replace(/"/g, '&quot;')}" data-price-usd="${p.precio}" data-img="${p.imagen_url}">➕ Agregar</button>
-                                <button class="btn-ver-detalles btn-sm" data-idx="${i}">🔍 Ver detalles</button>
+                                <a href="productos.html?id=${p.id_producto}" class="btn-ver-detalles btn-sm">🔍 Ver detalles</a>
                             </div>
                             <a href="${linkWa}" target="_blank" class="${waIconClass}" ${btnDisabled === 'disabled' ? 'style="pointer-events: none;"' : ''}>
                                 💬
