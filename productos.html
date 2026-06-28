@@ -15,7 +15,7 @@
     <title>EDRunners | Producto</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ========== ESTILOS ========== */
+        /* ========== ESTILOS (mismos que en escritorio) ========== */
         :root {
             --bg-color: #141517;
             --surface-color: #1f2023;
@@ -194,7 +194,7 @@
 
 <script>
     // ========== CONFIGURACIÓN ==========
-    // ✅ ENLACE ACTUALIZADO DE GOOGLE SHEETS
+    // ✅ Misma URL que usas en escritorio.html (ya actualizada)
     const PRODUCTS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRGjMz9Zwo1g8PruSjNcSJq6kTUQrEGkN_hQRBH0dvjIA_IwwKQ5p2pb7Bmrnvd7sLB2hMvqj-oFR6L/pub?output=csv";
     const CONFIG_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRGjMz9Zwo1g8PruSjNcSJq6kTUQrEGkN_hQRBH0dvjIA_IwwKQ5p2pb7Bmrnvd7sLB2hMvqj-oFR6L/pub?gid=1&output=csv";
     
@@ -202,7 +202,7 @@
     let exchangeRate = 0;
     let showUSD = true;
 
-    // ========== CARRITO ==========
+    // ========== CARRITO (copiado de movil.html, funciona) ==========
     let cart = [];
     function loadCart() { const savedCart = localStorage.getItem('edrunners_cart'); if (savedCart) cart = JSON.parse(savedCart); else cart = []; updateCartUI(); }
     function saveCart() { localStorage.setItem('edrunners_cart', JSON.stringify(cart)); updateCartUI(); }
@@ -268,7 +268,7 @@
         });
     }
 
-    // ========== CARGA DE PRODUCTOS Y TASA ==========
+    // ========== PARSEO DE CSV ==========
     function parseCSV(csvText) {
         const lines = csvText.split(/\r?\n/);
         if (lines.length < 2) return [];
@@ -339,28 +339,37 @@
 
     // ========== MOSTRAR PRODUCTO ==========
     function mostrarProducto(id) {
-        const product = allProducts.find(p => p.id_producto === id);
+        console.log('🔍 Buscando producto con ID:', id);
+        // Buscar el producto (case-insensitive por si hay diferencias)
+        const product = allProducts.find(p => p.id_producto.toLowerCase() === id.toLowerCase());
         const skeleton = document.getElementById('skeletonProduct');
         const content = document.getElementById('productContent');
         const notFound = document.getElementById('productNotFound');
 
         if (!product) {
+            console.warn('❌ Producto no encontrado para ID:', id);
+            console.log('IDs disponibles:', allProducts.map(p => p.id_producto));
             skeleton.style.display = 'none';
             content.style.display = 'none';
             notFound.style.display = 'block';
-            console.warn('Producto no encontrado para ID:', id);
             return;
         }
 
+        console.log('✅ Producto encontrado:', product.nombre);
         skeleton.style.display = 'none';
         content.style.display = 'block';
         notFound.style.display = 'none';
 
         // Título y metadatos
         document.title = `${product.nombre} | EDRunners`;
-        document.querySelector('meta[property="og:title"]').content = product.nombre;
-        document.querySelector('meta[property="og:description"]').content = product.descripcion || 'Producto en EDRunners.';
-        if (product.imagen_url) document.querySelector('meta[property="og:image"]').content = product.imagen_url;
+        const ogTitle = document.querySelector('meta[property="og:title"]');
+        if (ogTitle) ogTitle.content = product.nombre;
+        const ogDesc = document.querySelector('meta[property="og:description"]');
+        if (ogDesc) ogDesc.content = product.descripcion || 'Producto en EDRunners.';
+        if (product.imagen_url) {
+            const ogImg = document.querySelector('meta[property="og:image"]');
+            if (ogImg) ogImg.content = product.imagen_url;
+        }
 
         // Contenido
         document.getElementById('prodTitle').textContent = product.nombre;
@@ -427,17 +436,27 @@
             if (response.ok) {
                 const csvText = await response.text();
                 allProducts = parseCSV(csvText);
+                console.log('📦 Productos cargados:', allProducts.length);
+            } else {
+                console.error('Error al cargar CSV:', response.status);
             }
-        } catch (e) { console.warn('Error cargando productos', e); }
+        } catch (e) { console.error('Error cargando productos', e); }
 
         // Leer ID de la URL
         const params = new URLSearchParams(window.location.search);
         const id = params.get('id') || params.get('prod') || '';
+        console.log('📌 ID recibido en URL:', id);
         if (id && allProducts.length > 0) {
             mostrarProducto(id);
         } else if (id && allProducts.length === 0) {
-            // Si aún no hay productos, esperar y reintentar
-            setTimeout(() => mostrarProducto(id), 500);
+            // Reintentar después de un breve retraso
+            setTimeout(() => {
+                if (allProducts.length > 0) mostrarProducto(id);
+                else {
+                    document.getElementById('skeletonProduct').style.display = 'none';
+                    document.getElementById('productNotFound').style.display = 'block';
+                }
+            }, 500);
         } else {
             document.getElementById('skeletonProduct').style.display = 'none';
             document.getElementById('productNotFound').style.display = 'block';
@@ -448,9 +467,8 @@
         loadCart();
         initCartModal();
         init();
-        const scrollTopBtn = document.getElementById('scrollTopBtn');
-        window.addEventListener('scroll', () => { if (window.scrollY > 300) scrollTopBtn.style.display = 'flex'; else scrollTopBtn.style.display = 'none'; });
-        scrollTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+        // Tema oscuro/claro
         const temaBtn = document.getElementById('temaBtn');
         const temaGuardado = localStorage.getItem('tema');
         if (temaGuardado === 'claro') { document.body.classList.add('tema-claro'); temaBtn.textContent = '☀️'; } else { document.body.classList.remove('tema-claro'); temaBtn.textContent = '🌙'; }
@@ -459,6 +477,11 @@
             if (document.body.classList.contains('tema-claro')) { localStorage.setItem('tema', 'claro'); temaBtn.textContent = '☀️'; }
             else { localStorage.setItem('tema', 'oscuro'); temaBtn.textContent = '🌙'; }
         });
+
+        // Scroll top
+        const scrollTopBtn = document.getElementById('scrollTopBtn');
+        window.addEventListener('scroll', () => { if (window.scrollY > 300) scrollTopBtn.style.display = 'flex'; else scrollTopBtn.style.display = 'none'; });
+        scrollTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
     });
 </script>
 </body>
