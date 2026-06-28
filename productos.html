@@ -3,8 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    
-    <!-- Metaetiquetas para redes sociales (dinámicas vía JS) -->
     <meta property="og:title" content="EDRunners | Producto">
     <meta property="og:description" content="Descubre el producto en EDRunners.">
     <meta property="og:image" content="https://edrunners.github.io/inicio/image/logo-social.webp">
@@ -14,11 +12,10 @@
     <meta name="twitter:card" content="summary_large_image">
     <link rel="icon" type="image/webp" href="image/favicon.webp">
     <link rel="apple-touch-icon" href="image/favicon.webp">
-    
     <title>EDRunners | Producto</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ========== ESTILOS BASE (mismos que en movil.html) ========== */
+        /* ========== ESTILOS (mismos que antes) ========== */
         :root {
             --bg-color: #141517;
             --surface-color: #1f2023;
@@ -55,15 +52,30 @@
         .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
         .fade-in.visible { opacity: 1; transform: translateY(0); }
         header {
-            padding: 20px 0; position: fixed; top: 0; width: 100%; background: rgba(20,23,21,0.95);
-            backdrop-filter: blur(10px); z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 20px 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(20,23,21,0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
             transition: all 0.3s ease;
+        }
+        header.header-compacto { padding: 8px 0; }
+        header.header-compacto .logo { font-size: 1rem; opacity: 0.9; }
+        header.header-compacto .btn-outline { padding: 4px 10px; font-size: 0.75rem; }
+        header.header-compacto .cart-icon { font-size: 1.4rem; }
+        header.header-compacto #temaBtn { padding: 4px 8px; font-size: 1rem; }
+        @media (max-width: 767px) {
+            header.header-compacto .nav-actions .btn-outline:first-child svg { margin-right: 0; }
+            header.header-compacto .nav-actions .btn-outline:first-child span { display: none; }
         }
         body.tema-claro header { background: rgba(245,245,247,0.95); border-bottom-color: rgba(0,0,0,0.1); }
         .nav-container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; transition: all 0.3s ease; }
         .nav-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-        .cart-icon { position: relative; cursor: pointer; font-size: 1.8rem; margin-left: 10px; }
+        .cart-icon { position: relative; cursor: pointer; font-size: 1.8rem; margin-left: 10px; transition: font-size 0.3s ease; }
         .cart-count { position: absolute; top: -8px; right: -12px; background-color: var(--primary-color); color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; font-weight: bold; }
         .cart-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
         .cart-modal-content { background-color: var(--surface-color); width: 90%; max-width: 500px; max-height: 80vh; border-radius: 20px; padding: 20px; position: relative; overflow-y: auto; }
@@ -80,142 +92,30 @@
         .cart-actions { display: flex; justify-content: space-between; gap: 10px; }
         .cart-actions button { flex: 1; }
         .close-cart { position: absolute; top: 10px; right: 15px; font-size: 28px; cursor: pointer; color: var(--text-muted); }
-
-        /* Producto */
-        .product-detail {
-            padding: 140px 0 60px;
-        }
-        .product-detail .product-image {
-            width: 100%;
-            max-width: 500px;
-            margin: 0 auto 30px;
-            border-radius: 16px;
-            overflow: hidden;
-            background: var(--surface-color);
-            padding: 20px;
-        }
-        .product-detail .product-image img {
-            width: 100%;
-            height: auto;
-            max-height: 400px;
-            object-fit: contain;
-            display: block;
-        }
-        .product-detail .product-title {
-            font-size: 2rem;
-            margin-bottom: 15px;
-        }
-        .product-detail .product-specs {
-            color: var(--text-muted);
-            font-size: 1rem;
-            margin-bottom: 10px;
-        }
-        .product-detail .product-price {
-            font-size: 2rem;
-            color: var(--primary-color);
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-        .product-detail .product-stock {
-            font-size: 0.9rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
+        .product-detail { padding: 140px 0 60px; }
+        .product-detail .product-image { width: 100%; max-width: 500px; margin: 0 auto 30px; border-radius: 16px; overflow: hidden; background: var(--surface-color); padding: 20px; }
+        .product-detail .product-image img { width: 100%; height: auto; max-height: 400px; object-fit: contain; display: block; }
+        .product-detail .product-title { font-size: 2rem; margin-bottom: 15px; }
+        .product-detail .product-specs { color: var(--text-muted); font-size: 1rem; margin-bottom: 10px; }
+        .product-detail .product-price { font-size: 2rem; color: var(--primary-color); font-weight: 700; margin-bottom: 20px; }
+        .product-detail .product-stock { font-size: 0.9rem; font-weight: bold; margin-bottom: 20px; }
         .product-detail .product-stock.agotado { color: #ff4444; }
         .product-detail .product-stock.pocas { color: #ffaa33; }
-        .product-detail .product-desc {
-            margin: 20px 0;
-            line-height: 1.6;
-            white-space: pre-wrap;
-        }
-        .product-detail .btn-amazon {
-            background-color: #FF9900;
-            color: white;
-            width: 100%;
-            margin-bottom: 10px;
-        }
-        .product-detail .btn-amazon:hover {
-            background-color: #e88a00;
-        }
-        .product-detail .btn-whatsapp {
-            width: 100%;
-            background-color: #25D366;
-            color: white;
-        }
-        .product-detail .btn-whatsapp:hover {
-            background-color: #128C7E;
-        }
-        .product-detail .btn-whatsapp.disabled {
-            opacity: 0.5;
-            pointer-events: none;
-            background-color: #555;
-        }
-        .product-detail .back-link {
-            display: inline-block;
-            margin-bottom: 30px;
-            color: var(--primary-color);
-            text-decoration: underline;
-        }
-        .product-detail .back-link:hover {
-            color: var(--primary-hover);
-        }
-        .skeleton-product {
-            text-align: center;
-            padding: 40px 0;
-        }
-        .skeleton-product .skeleton-image {
-            width: 100%;
-            max-width: 500px;
-            height: 300px;
-            margin: 0 auto 20px;
-            background: linear-gradient(90deg, var(--surface-color) 25%, var(--bg-color) 50%, var(--surface-color) 75%);
-            background-size: 200% 100%;
-            animation: skeleton-loading 1.5s infinite;
-            border-radius: 16px;
-        }
-        .skeleton-product .skeleton-title {
-            height: 30px;
-            width: 70%;
-            margin: 0 auto 10px;
-            background: linear-gradient(90deg, var(--surface-color) 25%, var(--bg-color) 50%, var(--surface-color) 75%);
-            background-size: 200% 100%;
-            animation: skeleton-loading 1.5s infinite;
-            border-radius: 8px;
-        }
-        .skeleton-product .skeleton-price {
-            height: 30px;
-            width: 40%;
-            margin: 0 auto 10px;
-            background: linear-gradient(90deg, var(--surface-color) 25%, var(--bg-color) 50%, var(--surface-color) 75%);
-            background-size: 200% 100%;
-            animation: skeleton-loading 1.5s infinite;
-            border-radius: 8px;
-        }
-        .skeleton-product .skeleton-desc {
-            height: 80px;
-            width: 100%;
-            margin: 10px auto;
-            background: linear-gradient(90deg, var(--surface-color) 25%, var(--bg-color) 50%, var(--surface-color) 75%);
-            background-size: 200% 100%;
-            animation: skeleton-loading 1.5s infinite;
-            border-radius: 8px;
-        }
-        @keyframes skeleton-loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
-        @media (max-width: 768px) {
-            .product-detail {
-                padding: 130px 0 40px;
-            }
-            .product-detail .product-title {
-                font-size: 1.5rem;
-            }
-            .product-detail .product-price {
-                font-size: 1.5rem;
-            }
-        }
+        .product-detail .product-desc { margin: 20px 0; line-height: 1.6; white-space: pre-wrap; }
+        .product-detail .btn-amazon { background-color: #FF9900; color: white; width: 100%; margin-bottom: 10px; }
+        .product-detail .btn-amazon:hover { background-color: #e88a00; }
+        .product-detail .btn-whatsapp { width: 100%; background-color: #25D366; color: white; }
+        .product-detail .btn-whatsapp:hover { background-color: #128C7E; }
+        .product-detail .btn-whatsapp.disabled { opacity: 0.5; pointer-events: none; background-color: #555; }
+        .product-detail .back-link { display: inline-block; margin-bottom: 30px; color: var(--primary-color); text-decoration: underline; }
+        .product-detail .back-link:hover { color: var(--primary-hover); }
+        .skeleton-product { text-align: center; padding: 40px 0; }
+        .skeleton-product .skeleton-image { width: 100%; max-width: 500px; height: 300px; margin: 0 auto 20px; background: linear-gradient(90deg, var(--surface-color) 25%, var(--bg-color) 50%, var(--surface-color) 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 16px; }
+        .skeleton-product .skeleton-title { height: 30px; width: 70%; margin: 0 auto 10px; background: linear-gradient(90deg, var(--surface-color) 25%, var(--bg-color) 50%, var(--surface-color) 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 8px; }
+        .skeleton-product .skeleton-price { height: 30px; width: 40%; margin: 0 auto 10px; background: linear-gradient(90deg, var(--surface-color) 25%, var(--bg-color) 50%, var(--surface-color) 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 8px; }
+        .skeleton-product .skeleton-desc { height: 80px; width: 100%; margin: 10px auto; background: linear-gradient(90deg, var(--surface-color) 25%, var(--bg-color) 50%, var(--surface-color) 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 8px; }
+        @keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        @media (max-width: 768px) { .product-detail { padding: 130px 0 40px; } .product-detail .product-title { font-size: 1.5rem; } .product-detail .product-price { font-size: 1.5rem; } }
         footer { background: var(--surface-color); padding: 40px 0; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); color: var(--text-muted); }
         .whatsapp-float { position: fixed; bottom: 30px; right: 30px; background-color: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 4px 15px rgba(37,211,102,0.4); z-index: 1000; transition: var(--transition); }
         .whatsapp-float:hover { transform: scale(1.1); }
@@ -244,7 +144,6 @@
 
 <main>
     <section class="product-detail container fade-in" id="productDetail">
-        <!-- Skeleton inicial -->
         <div class="skeleton-product" id="skeletonProduct">
             <a href="movil.html" class="back-link">← Volver a la tienda</a>
             <div class="skeleton-image"></div>
@@ -253,7 +152,6 @@
             <div class="skeleton-desc"></div>
             <div class="skeleton-desc" style="height: 40px;"></div>
         </div>
-        <!-- Contenido real (se llena con JS) -->
         <div id="productContent" style="display: none;">
             <a href="movil.html" class="back-link">← Volver a la tienda</a>
             <div class="product-image">
@@ -299,7 +197,6 @@
     const PRODUCTS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRGjMz9Zwo1g8PruSjNcSJq6kTUQrEGkN_hQRBH0dvjIA_IwwKQ5p2pb7Bmrnvd7sLB2hMvqj-oFR6L/pub?output=csv";
     const CONFIG_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRGjMz9Zwo1g8PruSjNcSJq6kTUQrEGkN_hQRBH0dvjIA_IwwKQ5p2pb7Bmrnvd7sLB2hMvqj-oFR6L/pub?gid=1&output=csv";
     
-    // ========== VARIABLES GLOBALES ==========
     let allProducts = [];
     let exchangeRate = 0;
     let showUSD = true;
@@ -450,6 +347,7 @@
             skeleton.style.display = 'none';
             content.style.display = 'none';
             notFound.style.display = 'block';
+            console.warn('Producto no encontrado para ID:', id);
             return;
         }
 
@@ -519,7 +417,7 @@
         }
     }
 
-    // ========== INICIO ==========
+    // ========== INICIALIZACIÓN ==========
     async function init() {
         await loadExchangeRate();
         // Cargar productos desde CSV
@@ -537,7 +435,7 @@
         if (id && allProducts.length > 0) {
             mostrarProducto(id);
         } else if (id && allProducts.length === 0) {
-            // Si aún no hay productos, esperar un poco y reintentar
+            // Si aún no hay productos, esperar y reintentar
             setTimeout(() => mostrarProducto(id), 500);
         } else {
             document.getElementById('skeletonProduct').style.display = 'none';
