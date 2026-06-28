@@ -72,7 +72,7 @@
         }
         /* Header compacto al hacer scroll */
         header.header-compacto {
-            padding: 6px 0;
+            padding: 8px 0;
         }
         header.header-compacto .logo {
             font-size: 1rem;
@@ -732,7 +732,7 @@
             } catch(e) { console.warn("Error cargando tasa de cambio", e); }
         }
         // Valor por defecto corregido (punto decimal, no coma)
-        if (exchangeRate === 0) exchangeRate = 530.5; // ABJ)
+        if (exchangeRate === 0) exchangeRate = 530.5;
     }
 
     function parseCSV(csvText) {
