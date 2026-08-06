@@ -89,6 +89,16 @@
         .product-specs { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px; flex-grow: 1; }
         .product-price-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .product-price { font-size: 1.4rem; font-weight: 700; color: var(--primary-color); }
+        
+        /* ========== ESTILOS DE BOTONES EN TARJETAS ========== */
+        .product-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; opacity: 0; transform: translateY(15px); transition: all 0.4s ease; margin-top: auto; }
+        .btn-card { padding: 10px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: var(--transition); text-align: center; border: none; }
+        .btn-add { background-color: transparent; color: var(--primary-color); border: 1px solid var(--primary-color); }
+        .btn-add:hover:not([disabled]) { background-color: rgba(16, 185, 129, 0.1); }
+        .btn-add:disabled { border-color: var(--text-muted); color: var(--text-muted); cursor: not-allowed; opacity: 0.5; }
+        .btn-view { background-color: var(--primary-color); color: #fff; }
+        .btn-view:hover { background-color: var(--primary-hover); box-shadow: var(--glow); }
+
         .badge-stock { position: absolute; top: 20px; right: 20px; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; z-index: 2; }
         .badge-agotado { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444; }
         .badge-pocas { background: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid #f59e0b; }
@@ -121,7 +131,7 @@
         .detail-desc { margin: 15px 0; line-height: 1.5; text-align: left; white-space: pre-wrap; }
     </style>
 </head>
-<body>
+<body class="tema-claro">
 
 <header id="mainHeader">
     <div class="container header-grid">
@@ -132,7 +142,7 @@
         </div>
         <div class="header-actions">
             <button id="currencyBtn" class="btn-outline btn" style="padding: 8px 16px;">💰 USD</button>
-            <button id="temaBtn" class="btn-outline btn" style="padding: 8px 16px; font-size: 1.1rem;">🌙</button>
+            <button id="temaBtn" class="btn-outline btn" style="padding: 8px 16px; font-size: 1.1rem;">☀️</button>
             <button id="cartIconDesktop" class="btn" style="position: relative; padding: 8px 20px;">
                 🛒 Carrito
                 <span id="cartBadge" style="position:absolute; top:-5px; right:-5px; background:#ef4444; color:white; border-radius:50%; width:22px; height:22px; font-size:0.75rem; display:flex; align-items:center; justify-content:center;">0</span>
@@ -233,11 +243,25 @@
 
     // ========== TEMA ==========
     const temaBtn = document.getElementById('temaBtn');
-    if (localStorage.getItem('tema') === 'claro') { document.body.classList.add('tema-claro'); temaBtn.textContent = '☀️'; }
+    
+    // Configuración para que el tema por defecto sea el CLARO
+    if (localStorage.getItem('tema') === 'oscuro') { 
+        document.body.classList.remove('tema-claro'); 
+        temaBtn.textContent = '🌙'; 
+    } else {
+        document.body.classList.add('tema-claro');
+        temaBtn.textContent = '☀️';
+    }
+
     temaBtn.addEventListener('click', () => {
         document.body.classList.toggle('tema-claro');
-        if (document.body.classList.contains('tema-claro')) { localStorage.setItem('tema', 'claro'); temaBtn.textContent = '☀️'; }
-        else { localStorage.setItem('tema', 'oscuro'); temaBtn.textContent = '🌙'; }
+        if (document.body.classList.contains('tema-claro')) { 
+            localStorage.setItem('tema', 'claro'); 
+            temaBtn.textContent = '☀️'; 
+        } else { 
+            localStorage.setItem('tema', 'oscuro'); 
+            temaBtn.textContent = '🌙'; 
+        }
     });
 
     // ========== MONEDA ==========
@@ -345,6 +369,8 @@
             else if (p.stock === 'pocas') badge = '<div class="badge-stock badge-pocas">Últimas uds.</div>';
             const precioDisplay = formatPrice(p.precio);
             const imgSrc = p.imagen_url || 'https://via.placeholder.com/250?text=EDRunners';
+            
+            // Botones actualizados para utilizar las clases CSS de `.btn-card`, `.btn-add`, `.btn-view`
             return `
             <div class="product-card">
                 ${badge}
@@ -355,9 +381,9 @@
                     <div class="product-price-row">
                         <span class="product-price">${precioDisplay}</span>
                     </div>
-                    <div class="product-actions" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; opacity:0; transform:translateY(15px); transition:all 0.4s ease;">
-                        <button class="btn-card btn-add" onclick="addToCart('${p.nombre.replace(/'/g, "\\'")}', '${p.precio}', '${imgSrc}')" ${badge.includes('Agotado') ? 'disabled style="opacity:0.5"' : ''}>+ Carrito</button>
-                        <button class="btn-card btn-view" data-idx="${idx}" style="background:var(--primary-color); color:white; border:none;">Ver Detalles</button>
+                    <div class="product-actions">
+                        <button class="btn-card btn-add" onclick="addToCart('${p.nombre.replace(/'/g, "\\'")}', '${p.precio}', '${imgSrc}')" ${badge.includes('Agotado') ? 'disabled' : ''}>+ Carrito</button>
+                        <button class="btn-card btn-view" data-idx="${idx}">Ver Detalles</button>
                     </div>
                 </div>
             </div>`;
@@ -377,7 +403,7 @@
             });
         });
 
-        // Mostrar acciones al hover (ya que el CSS las oculta)
+        // Mostrar acciones al hover
         document.querySelectorAll('.product-card').forEach(card => {
             card.addEventListener('mouseenter', () => {
                 const actions = card.querySelector('.product-actions');
