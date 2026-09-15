@@ -6,7 +6,7 @@
     <title>EDRunners Pro | Escritorio</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ========== ESTILOS (manteniendo el diseño de Gemini) ========== */
+        /* ========== ESTILOS (manteniendo el diseño) ========== */
         :root {
             --bg-color: #0f1012;
             --surface-color: #1a1b1e;
@@ -90,7 +90,6 @@
         .product-price-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .product-price { font-size: 1.4rem; font-weight: 700; color: var(--primary-color); }
         
-        /* ========== ESTILOS DE BOTONES EN TARJETAS ========== */
         .product-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; opacity: 0; transform: translateY(15px); transition: all 0.4s ease; margin-top: auto; }
         .btn-card { padding: 10px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: var(--transition); text-align: center; border: none; }
         .btn-add { background-color: transparent; color: var(--primary-color); border: 1px solid var(--primary-color); }
@@ -122,13 +121,130 @@
         .whatsapp-float { position: fixed; bottom: 40px; right: 40px; background: #25D366; color: white; width: 65px; height: 65px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 35px; z-index: 999; box-shadow: 0 10px 20px rgba(37,211,102,0.3); transition: var(--transition); }
         .whatsapp-float:hover { transform: translateY(-5px) scale(1.05); }
 
-        /* ========== MODAL DE DETALLES (estilo escritorio) ========== */
+        /* ========== MODAL DE DETALLES ========== */
         .detail-modal .modal-content { max-width: 600px; max-height: 85vh; overflow-y: auto; }
         .detail-images { display: flex; gap: 8px; overflow-x: auto; margin: 15px 0; padding-bottom: 10px; }
         .detail-thumb { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
         .detail-thumb.active { border-color: var(--primary-color); }
         .detail-main-image { width: 100%; max-height: 300px; object-fit: contain; border-radius: 12px; margin-bottom: 10px; }
         .detail-desc { margin: 15px 0; line-height: 1.5; text-align: left; white-space: pre-wrap; }
+
+        /* ========== MODAL DE CONFIANZA (SIEMPRE TEMA CLARO) ========== */
+        .trust-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(4px);
+            z-index: 3000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .trust-modal-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .trust-modal {
+            background: #ffffff;
+            color: #1f2937;
+            border-radius: 20px;
+            max-width: 420px;
+            width: 100%;
+            padding: 28px 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            text-align: center;
+            transform: translateY(20px) scale(0.95);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1);
+            max-height: 90vh;
+            overflow-y: auto;
+            font-family: 'Inter', sans-serif;
+        }
+        .trust-modal-overlay.open .trust-modal {
+            transform: translateY(0) scale(1);
+        }
+        .trust-icon {
+            display: block;
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            margin: 0 auto 15px;
+            filter: drop-shadow(0 4px 10px rgba(16, 185, 129, 0.25));
+        }
+        .trust-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #059669;
+            margin-bottom: 15px;
+        }
+        .trust-message {
+            font-size: 0.88rem;
+            line-height: 1.6;
+            color: #374151;
+            margin-bottom: 18px;
+            text-align: left;
+        }
+        .trust-message p {
+            margin-bottom: 10px;
+        }
+        .trust-message strong {
+            color: #111827;
+        }
+        .trust-message ul {
+            list-style: none;
+            padding: 0;
+            margin: 12px 0;
+        }
+        .trust-message li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+        }
+        .trust-message .check {
+            color: #10b981;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .trust-wa-link {
+            display: inline-block;
+            background: #f0fdf4;
+            border: 1px solid #10b981;
+            color: #059669;
+            padding: 10px 16px;
+            border-radius: 30px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+            margin-bottom: 16px;
+            transition: all 0.2s;
+        }
+        .trust-wa-link:hover {
+            background: #10b981;
+            color: white;
+        }
+        .trust-btn {
+            width: 100%;
+            padding: 14px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        .trust-btn:hover {
+            background: #059669;
+        }
+        .trust-btn:active {
+            transform: scale(0.98);
+        }
     </style>
 </head>
 <body class="tema-claro">
@@ -212,7 +328,7 @@
     </div>
 </div>
 
-<!-- Modal de Detalles del Producto (Escritorio) -->
+<!-- Modal de Detalles del Producto -->
 <div id="detailModal" class="modal cart-modal detail-modal" style="display: none; position: fixed; z-index: 2001; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.7); backdrop-filter:blur(5px); justify-content:center; align-items:center;">
     <div class="cart-modal-content modal-content" style="background: var(--surface-color); width: 90%; max-width: 600px; max-height: 85vh; border-radius: 20px; padding: 20px; position:relative; overflow-y:auto; border:1px solid var(--border-color);">
         <span class="close-cart close-detail-modal" style="position:absolute; top:10px; right:15px; font-size:28px; cursor:pointer; color:var(--text-muted);">&times;</span>
@@ -223,6 +339,25 @@
         <div id="detalleDescripcion" class="detail-desc" style="margin:15px 0; line-height:1.5; text-align:left; white-space:pre-wrap;"></div>
         <p id="detallePrecio" style="font-size: 1.5rem; color: var(--primary-color); font-weight: bold; margin-top: 15px;"></p>
         <a id="detalleLinkWa" href="#" target="_blank" class="btn" style="width: 100%; margin-top: 10px;">Consultar por WhatsApp</a>
+    </div>
+</div>
+
+<!-- ========== MODAL DE CONFIANZA (SIEMPRE TEMA CLARO) ========== -->
+<div class="trust-modal-overlay" id="trustModal">
+    <div class="trust-modal">
+        <img src="image/escudo-confianza.png" alt="Escudo de confianza" class="trust-icon">
+        <h2 class="trust-title">Compra 100% Segura</h2>
+        <div class="trust-message">
+            <p>En <strong>EDRunners Pro</strong> tu seguridad es nuestra prioridad. Esta página <strong>no solicita datos bancarios</strong>, <strong>no pide contraseñas</strong> y <strong>no almacena información sensible</strong>.</p>
+            <ul>
+                <li><span class="check">✅</span> Todas las compras y consultas se gestionan por <strong>WhatsApp oficial: 0412-9056964</strong>.</li>
+                <li><span class="check">✅</span> Verifica siempre que estés en el dominio correcto: <strong>edrunners.github.io</strong></li>
+                <li><span class="check">✅</span> Nunca compartas datos personales fuera de nuestro chat verificado.</li>
+            </ul>
+            <p>Navega con total tranquilidad. Estamos aquí para asesorarte de forma honesta y profesional.</p>
+        </div>
+        <a href="https://wa.me/584129056964?text=Hola,%20tengo%20una%20duda%20sobre%20la%20seguridad" target="_blank" class="trust-wa-link">💬 ¿Dudas? Escríbenos por WhatsApp</a>
+        <button class="trust-btn" id="trustAcceptBtn">Entendido, continuar</button>
     </div>
 </div>
 
@@ -241,10 +376,27 @@
     let showUSD = true;
     let cart = JSON.parse(localStorage.getItem('edrunners_cart')) || [];
 
+    // ========== MODAL DE CONFIANZA ==========
+    function initTrustModal() {
+        const TRUST_KEY = 'edrunners_trust_accepted';
+        const trustModal = document.getElementById('trustModal');
+        const acceptBtn = document.getElementById('trustAcceptBtn');
+        
+        // Solo mostrar si no ha sido aceptado antes (misma clave que en móvil)
+        if (!localStorage.getItem(TRUST_KEY)) {
+            setTimeout(() => {
+                trustModal.classList.add('open');
+            }, 1500); // 1.5 segundos
+        }
+        
+        acceptBtn.addEventListener('click', () => {
+            localStorage.setItem(TRUST_KEY, 'true');
+            trustModal.classList.remove('open');
+        });
+    }
+
     // ========== TEMA ==========
     const temaBtn = document.getElementById('temaBtn');
-    
-    // Configuración para que el tema por defecto sea el CLARO
     if (localStorage.getItem('tema') === 'oscuro') { 
         document.body.classList.remove('tema-claro'); 
         temaBtn.textContent = '🌙'; 
@@ -273,7 +425,7 @@
         renderCart();
     });
 
-    // ========== PARSEO DE CSV (con descripcion e imagenes_extra) ==========
+    // ========== PARSEO DE CSV ==========
     function parseCSV(csvText) {
         const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== '');
         if (lines.length < 2) return [];
@@ -355,7 +507,7 @@
         return showUSD ? `$${priceNum.toFixed(2)}` : `Bs ${(priceNum * exchangeRate).toFixed(2)}`;
     }
 
-    // ========== RENDER PRODUCTOS (con modal) ==========
+    // ========== RENDER PRODUCTOS ==========
     function renderProducts(products) {
         const grid = document.getElementById('desktopProductGrid');
         document.getElementById('resultsCount').innerText = `${products.length} producto(s)`;
@@ -370,7 +522,6 @@
             const precioDisplay = formatPrice(p.precio);
             const imgSrc = p.imagen_url || 'https://via.placeholder.com/250?text=EDRunners';
             
-            // Botones actualizados para utilizar las clases CSS de `.btn-card`, `.btn-add`, `.btn-view`
             return `
             <div class="product-card">
                 ${badge}
@@ -389,12 +540,10 @@
             </div>`;
         }).join('');
 
-        // Eventos para los botones "Ver Detalles"
         document.querySelectorAll('.btn-view[data-idx]').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const idx = parseInt(btn.getAttribute('data-idx'));
                 const product = products[idx];
-                // Obtener imagenes_extra
                 let imagenesExtra = [];
                 if (product.imagenes_extra && typeof product.imagenes_extra === 'string' && product.imagenes_extra.trim()) {
                     imagenesExtra = product.imagenes_extra.split(',').map(s => s.trim().replace(/^["']|["']$/g, '')).filter(s => s && s !== '' && (s.startsWith('http://') || s.startsWith('https://')));
@@ -403,7 +552,6 @@
             });
         });
 
-        // Mostrar acciones al hover
         document.querySelectorAll('.product-card').forEach(card => {
             card.addEventListener('mouseenter', () => {
                 const actions = card.querySelector('.product-actions');
@@ -416,14 +564,13 @@
         });
     }
 
-    // ========== MODAL DE DETALLES (Escritorio) ==========
+    // ========== MODAL DE DETALLES ==========
     function openDetailModal(product, imagenesExtraArray = []) {
         const modal = document.getElementById('detailModal');
         document.getElementById('detalleNombre').textContent = product.nombre;
         const allImages = [product.imagen_url, ...imagenesExtraArray].filter(url => url && typeof url === 'string' && url.trim() !== '' && (url.startsWith('http') || url.startsWith('https')));
         document.getElementById('detalleImagen').src = allImages.length > 0 ? allImages[0] : '';
         document.getElementById('detalleImagen').alt = product.nombre;
-        // Miniaturas
         const thumbContainer = document.getElementById('detalleThumbnails');
         thumbContainer.innerHTML = '';
         if (allImages.length > 1) {
@@ -470,7 +617,6 @@
         document.getElementById('detailModal').style.display = 'none';
     }
 
-    // Cerrar modal de detalles (click fuera o en la X)
     document.querySelector('.close-detail-modal').addEventListener('click', closeDetailModal);
     window.addEventListener('click', (e) => {
         if (e.target === document.getElementById('detailModal')) closeDetailModal();
@@ -529,7 +675,6 @@
         saveCart();
     }
 
-    // Eventos carrito
     document.getElementById('cartIconDesktop').addEventListener('click', () => {
         document.getElementById('cartSidebar').classList.add('open');
         document.getElementById('cartOverlay').classList.add('open');
@@ -565,6 +710,7 @@
     // Iniciar
     fetchData();
     renderCart();
+    initTrustModal(); // <-- Iniciar modal de confianza
 </script>
 </body>
 </html>
