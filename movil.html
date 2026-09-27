@@ -208,6 +208,7 @@
     <script>
         // ========== CONFIGURACIÓN Y ESTADO ==========
         const PRODUCTS_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRGjMz9Zwo1g8PruSjNcSJq6kTUQrEGkN_hQRBH0dvjIA_IwwKQ5p2pb7Bmrnvd7sLB2hMvqj-oFR6L/pub?output=csv";
+        const FALLBACK_IMG = "image/sin-imagen.webp";
         
         let allProducts = [];
         let currentCategory = 'todos';
@@ -216,7 +217,16 @@
         let cart = JSON.parse(localStorage.getItem('edrunners_cart_m')) || [];
         let activeProduct = null;
 
-        // ========== PARSEO CSV MEJORADO (maneja comillas y comas internas) ==========
+        // ========== HELPER: Proxy de imágenes con wsrv.nl ==========
+        function proxyImg(url) {
+            if (!url || typeof url !== 'string' || url.trim() === '') return FALLBACK_IMG;
+            if (url.startsWith('image/') || url.startsWith('/')) return url;
+            if (url.includes('wsrv.nl')) return url;
+            if (url.startsWith('http')) return `https://wsrv.nl/?url=${encodeURIComponent(url)}`;
+            return url;
+        }
+
+        // ========== PARSEO CSV MEJORADO ==========
         function parseCSVLine(line) {
             const result = [];
             let current = '';
@@ -241,22 +251,17 @@
             return result;
         }
 
-        // Convierte "47.933,00" o "47933.00" a 47933.00 (número)
         function parsePrecio(valor) {
             if (!valor) return 0;
-            let limpio = valor.replace(/[^\d.,]/g, '').trim();
+            let limpio = String(valor).replace(/[^\d.,]/g, '').trim();
             if (!limpio) return 0;
-            // Si tiene coma Y punto → formato europeo (47.933,00)
             if (limpio.includes('.') && limpio.includes(',')) {
-                // El punto es separador de miles, la coma es decimal
                 if (limpio.lastIndexOf(',') > limpio.lastIndexOf('.')) {
                     limpio = limpio.replace(/\./g, '').replace(',', '.');
                 } else {
-                    // Formato USA (47,933.00)
                     limpio = limpio.replace(/,/g, '');
                 }
             } else if (limpio.includes(',')) {
-                // Solo coma → puede ser decimal (47,93) o miles (47,933)
                 const partes = limpio.split(',');
                 if (partes[1] && partes[1].length === 3 && partes[0].length <= 3) {
                     limpio = limpio.replace(/,/g, '');
@@ -326,7 +331,7 @@
                     especificaciones: getV('especificaciones'),
                     precio: getV('precio'),
                     precio_bs: getV('precio_bs'),
-                    imagen_url: getV('imagen_url') || 'https://via.placeholder.com/300?text=EDRunners',
+                    imagen_url: getV('imagen_url'),
                     categoria: getV('categoria') || 'general',
                     stock: getV('stock') || 'disponible'
                 });
@@ -393,11 +398,13 @@
 
             grid.innerHTML = products.map(p => {
                 const isAgotado = p.stock === 'agotado' || p.stock === '0';
+                // ✅ Aplicamos el proxy a la imagen de la tarjeta
+                const imgSrc = proxyImg(p.imagen_url);
                 return `
                 <div class="product-card" onclick="openProductModal(${p.id})">
                     ${isAgotado ? '<div class="badge-agotado">Agotado</div>' : ''}
                     <div class="product-img-box">
-                        <img src="${p.imagen_url}" loading="lazy" onerror="this.src='https://via.placeholder.com/300?text=Sin+Imagen'">
+                        <img src="${imgSrc}" loading="lazy" onerror="this.src='${FALLBACK_IMG}'">
                     </div>
                     <div class="product-info">
                         <div class="p-title">${p.nombre}</div>
@@ -426,8 +433,9 @@
             if(!activeProduct) return;
 
             const imgEl = document.getElementById('modImg');
-            imgEl.src = activeProduct.imagen_url;
-            imgEl.onerror = () => { imgEl.src = 'https://via.placeholder.com/300?text=Sin+Imagen'; };
+            // ✅ Aplicamos el proxy a la imagen del modal
+            imgEl.src = proxyImg(activeProduct.imagen_url);
+            imgEl.onerror = () => { imgEl.src = FALLBACK_IMG; };
             document.getElementById('modTitle').innerText = activeProduct.nombre;
             document.getElementById('modSpecs').innerText = activeProduct.especificaciones || 'Sin especificaciones detalladas.';
             updateModalPrice();
@@ -479,6 +487,8 @@
         function addToCart(prod) {
             const numPrice = parsePrecio(prod.precio);
             const numPriceBS = parsePrecio(prod.precio_bs);
+            // ✅ Guardamos la URL ya proxeada
+            const imgProxied = proxyImg(prod.imagen_url);
             const exist = cart.find(i => i.nombre === prod.nombre);
             
             if(exist) exist.qty++;
@@ -486,7 +496,7 @@
                 nombre: prod.nombre, 
                 precioUSD: numPrice, 
                 precioBS: numPriceBS, 
-                img: prod.imagen_url, 
+                img: imgProxied, 
                 qty: 1 
             });
             
@@ -526,7 +536,7 @@
                 }
                 return `
                 <div class="cart-item">
-                    <img src="${item.img}" onerror="this.src='https://via.placeholder.com/60?text=?'">
+                    <img src="${item.img}" onerror="this.src='${FALLBACK_IMG}'">
                     <div class="cart-item-info">
                         <div class="cart-item-title">${item.nombre}</div>
                         <div class="cart-item-price">${pDisplay}</div>
