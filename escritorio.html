@@ -368,11 +368,10 @@
 <script>
     // ========== CONFIGURACIÓN ==========
     const PRODUCTS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRGjMz9Zwo1g8PruSjNcSJq6kTUQrEGkN_hQRBH0dvjIA_IwwKQ5p2pb7Bmrnvd7sLB2hMvqj-oFR6L/pub?output=csv";
-    const CONFIG_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRGjMz9Zwo1g8PruSjNcSJq6kTUQrEGkN_hQRBH0dvjIA_IwwKQ5p2pb7Bmrnvd7sLB2hMvqj-oFR6L/pub?gid=1&output=csv";
 
     let allProducts = [];
     let currentCategory = 'todos';
-    let exchangeRate = 850.5;
+    let exchangeRate = 850.5; // Fallback por si falla precio_bs
     let showUSD = true;
     let cart = JSON.parse(localStorage.getItem('edrunners_cart')) || [];
 
@@ -381,14 +380,9 @@
         const TRUST_KEY = 'edrunners_trust_accepted';
         const trustModal = document.getElementById('trustModal');
         const acceptBtn = document.getElementById('trustAcceptBtn');
-        
-        // Solo mostrar si no ha sido aceptado antes (misma clave que en móvil)
         if (!localStorage.getItem(TRUST_KEY)) {
-            setTimeout(() => {
-                trustModal.classList.add('open');
-            }, 1500); // 1.5 segundos
+            setTimeout(() => { trustModal.classList.add('open'); }, 1500);
         }
-        
         acceptBtn.addEventListener('click', () => {
             localStorage.setItem(TRUST_KEY, 'true');
             trustModal.classList.remove('open');
@@ -404,7 +398,6 @@
         document.body.classList.add('tema-claro');
         temaBtn.textContent = '☀️';
     }
-
     temaBtn.addEventListener('click', () => {
         document.body.classList.toggle('tema-claro');
         if (document.body.classList.contains('tema-claro')) { 
@@ -425,7 +418,7 @@
         renderCart();
     });
 
-    // ========== PARSEO DE CSV ==========
+    // ========== PARSEO DE CSV (con precio_bs) ==========
     function parseCSV(csvText) {
         const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== '');
         if (lines.length < 2) return [];
@@ -447,6 +440,7 @@
                 nombre: nombre,
                 especificaciones: getValue('especificaciones'),
                 precio: getValue('precio'),
+                precio_bs: getValue('precio_bs'), // 👈 NUEVO: precio en Bs ya calculado en la hoja
                 imagen_url: getValue('imagen_url'),
                 categoria: getValue('categoria') || 'general',
                 stock: getValue('stock') || 'disponible',
@@ -459,16 +453,7 @@
 
     async function fetchData() {
         try {
-            const [confRes, prodRes] = await Promise.all([ fetch(CONFIG_CSV_URL), fetch(PRODUCTS_CSV_URL) ]);
-            if (confRes.ok) {
-                const confLines = (await confRes.text()).split(/\r?\n/);
-                for(let line of confLines) {
-                    if (line.toLowerCase().includes('tasa_bs_usd')) {
-                        const val = parseFloat(line.split(',')[1]);
-                        if(!isNaN(val)) exchangeRate = val;
-                    }
-                }
-            }
+            const prodRes = await fetch(PRODUCTS_CSV_URL);
             if (prodRes.ok) {
                 allProducts = parseCSV(await prodRes.text()).reverse();
                 buildCategories();
@@ -501,10 +486,25 @@
         });
     }
 
-    function formatPrice(precioStr) {
-        let priceNum = parseFloat(precioStr.replace(/[^0-9.]/g, ''));
-        if (isNaN(priceNum)) return precioStr;
-        return showUSD ? `$${priceNum.toFixed(2)}` : `Bs ${(priceNum * exchangeRate).toFixed(2)}`;
+    // ========== FORMATO DE PRECIO (usa precio_bs si existe) ==========
+    function formatPrice(p) {
+        if (showUSD) {
+            let num = parseFloat((p.precio || '').replace(/[^0-9.]/g, ''));
+            if (isNaN(num)) return p.precio || '';
+            return `$${num.toFixed(2)}`;
+        } else {
+            // Modo Bolívares: usar precio_bs de la hoja
+            let bs = (p.precio_bs || '').trim();
+            if (bs && bs.toLowerCase() !== 'bs0,00' && bs.toLowerCase() !== 'bs0.00' && bs !== '0') {
+                // Si ya viene con "Bs" en el texto, no lo duplicamos
+                if (bs.toLowerCase().startsWith('bs')) return bs;
+                return `Bs ${bs}`;
+            }
+            // Fallback: calcular con exchangeRate
+            let num = parseFloat((p.precio || '').replace(/[^0-9.]/g, ''));
+            if (isNaN(num)) return p.precio || '';
+            return `Bs ${(num * exchangeRate).toFixed(2)}`;
+        }
     }
 
     // ========== RENDER PRODUCTOS ==========
@@ -519,7 +519,7 @@
             let badge = '';
             if (p.stock === 'agotado' || p.stock === '0') badge = '<div class="badge-stock badge-agotado">Agotado</div>';
             else if (p.stock === 'pocas') badge = '<div class="badge-stock badge-pocas">Últimas uds.</div>';
-            const precioDisplay = formatPrice(p.precio);
+            const precioDisplay = formatPrice(p);
             const imgSrc = p.imagen_url || 'https://via.placeholder.com/250?text=EDRunners';
             
             return `
@@ -533,7 +533,7 @@
                         <span class="product-price">${precioDisplay}</span>
                     </div>
                     <div class="product-actions">
-                        <button class="btn-card btn-add" onclick="addToCart('${p.nombre.replace(/'/g, "\\'")}', '${p.precio}', '${imgSrc}')" ${badge.includes('Agotado') ? 'disabled' : ''}>+ Carrito</button>
+                        <button class="btn-card btn-add" onclick="addToCart('${p.nombre.replace(/'/g, "\\'")}', '${p.precio}', '${p.precio_bs}', '${imgSrc}')" ${badge.includes('Agotado') ? 'disabled' : ''}>+ Carrito</button>
                         <button class="btn-card btn-view" data-idx="${idx}">Ver Detalles</button>
                     </div>
                 </div>
@@ -597,18 +597,7 @@
         }
         document.getElementById('detalleEspecificaciones').textContent = product.especificaciones || '';
         document.getElementById('detalleDescripcion').innerHTML = (product.descripcion || '').replace(/\n/g, '<br>');
-        let precioDisplay = '';
-        if (product.precio) {
-            let priceNum = parseFloat(product.precio.replace('$', '').replace(' USD', '').trim());
-            if (!isNaN(priceNum)) {
-                precioDisplay = showUSD ? `$${priceNum.toFixed(2)}` : `Bs ${(priceNum * exchangeRate).toFixed(2)}`;
-            } else {
-                precioDisplay = product.precio;
-            }
-        } else {
-            precioDisplay = 'Consultar precio';
-        }
-        document.getElementById('detallePrecio').textContent = precioDisplay;
+        document.getElementById('detallePrecio').textContent = formatPrice(product);
         document.getElementById('detalleLinkWa').href = product.link_wa || `https://wa.me/584129056964?text=Hola,%20me%20interesa%20${encodeURIComponent(product.nombre)}`;
         modal.style.display = 'flex';
     }
@@ -632,10 +621,10 @@
 
     // ========== CARRITO ==========
     function saveCart() { localStorage.setItem('edrunners_cart', JSON.stringify(cart)); renderCart(); }
-    function addToCart(name, priceUSD, image) {
+    function addToCart(name, priceUSD, priceBS, image) {
         const exist = cart.find(i => i.name === name);
         if (exist) exist.quantity++;
-        else cart.push({ name, priceUSD, image, quantity: 1 });
+        else cart.push({ name, priceUSD, priceBS, image, quantity: 1 });
         saveCart();
         document.getElementById('cartSidebar').classList.add('open');
         document.getElementById('cartOverlay').classList.add('open');
@@ -649,10 +638,23 @@
             return;
         }
         let totalUSD = 0;
+        let totalBS = 0;
         container.innerHTML = cart.map((item, index) => {
-            let priceNum = parseFloat(item.priceUSD.replace(/[^0-9.]/g, '')) || 0;
+            let priceNum = parseFloat((item.priceUSD || '').replace(/[^0-9.]/g, '')) || 0;
+            let priceBSNum = parseFloat((item.priceBS || '').replace(/[^0-9.,]/g, '').replace(',', '.')) || 0;
             totalUSD += priceNum * item.quantity;
-            let displayPrice = showUSD ? `$${priceNum.toFixed(2)}` : `Bs ${(priceNum * exchangeRate).toFixed(2)}`;
+            totalBS += priceBSNum * item.quantity;
+            // Mostrar el precio según moneda activa
+            let displayPrice = '';
+            if (showUSD) {
+                displayPrice = `$${priceNum.toFixed(2)}`;
+            } else {
+                if (priceBSNum > 0) {
+                    displayPrice = `Bs ${priceBSNum.toFixed(2)}`;
+                } else {
+                    displayPrice = `Bs ${(priceNum * exchangeRate).toFixed(2)}`;
+                }
+            }
             return `
             <div class="cart-item">
                 <img src="${item.image}" alt="">
@@ -667,7 +669,12 @@
                 </div>
             </div>`;
         }).join('');
-        document.getElementById('desktopCartTotal').innerText = showUSD ? `$${totalUSD.toFixed(2)}` : `Bs ${(totalUSD * exchangeRate).toFixed(2)}`;
+        // Mostrar total según moneda
+        if (showUSD) {
+            document.getElementById('desktopCartTotal').innerText = `$${totalUSD.toFixed(2)}`;
+        } else {
+            document.getElementById('desktopCartTotal').innerText = `Bs ${totalBS.toFixed(2)}`;
+        }
     }
     function changeQty(index, delta) {
         cart[index].quantity += delta;
@@ -690,8 +697,10 @@
         if(cart.length === 0) return alert("Agrega productos primero");
         let msg = "¡Hola! Quisiera procesar la compra de estos equipos:\n\n";
         cart.forEach(i => {
-            let priceNum = parseFloat(i.priceUSD.replace(/[^0-9.]/g, '')) || 0;
-            msg += `▫️ ${i.quantity}x ${i.name} ($${priceNum.toFixed(2)})\n`;
+            let priceNum = parseFloat((i.priceUSD || '').replace(/[^0-9.]/g, '')) || 0;
+            let priceBSNum = parseFloat((i.priceBS || '').replace(/[^0-9.,]/g, '').replace(',', '.')) || 0;
+            let displayPrice = showUSD ? `$${priceNum.toFixed(2)}` : `Bs ${priceBSNum > 0 ? priceBSNum.toFixed(2) : (priceNum * exchangeRate).toFixed(2)}`;
+            msg += `▫️ ${i.quantity}x ${i.name} (${displayPrice})\n`;
         });
         msg += `\nTotal estimado: ${document.getElementById('desktopCartTotal').innerText}`;
         window.open(`https://wa.me/584129056964?text=${encodeURIComponent(msg)}`, '_blank');
@@ -710,7 +719,7 @@
     // Iniciar
     fetchData();
     renderCart();
-    initTrustModal(); // <-- Iniciar modal de confianza
+    initTrustModal();
 </script>
 </body>
 </html>
