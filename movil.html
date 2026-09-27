@@ -18,16 +18,10 @@
             --border-color: rgba(255, 255, 255, 0.08);
             --transition: all 0.3s ease;
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg-color); color: var(--text-light); padding-bottom: 90px; overflow-x: hidden; }
         
-        /* ========== HEADER & SEARCH ========== */
-        .app-header {
-            position: sticky; top: 0; z-index: 100;
-            background: rgba(15, 16, 18, 0.85); backdrop-filter: blur(12px);
-            padding: 15px 20px 10px; border-bottom: 1px solid var(--border-color);
-        }
+        .app-header { position: sticky; top: 0; z-index: 100; background: rgba(15, 16, 18, 0.85); backdrop-filter: blur(12px); padding: 15px 20px 10px; border-bottom: 1px solid var(--border-color); }
         .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .logo { font-size: 1.4rem; font-weight: 700; color: var(--text-light); letter-spacing: -0.5px; }
         .currency-toggle { background: var(--surface-color); border: 1px solid var(--border-color); color: var(--text-light); padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
@@ -37,13 +31,11 @@
         .search-input:focus { border-color: var(--primary-color); }
         .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 1.1rem; opacity: 0.6; }
 
-        /* ========== CATEGORY CHIPS ========== */
         .filter-scroll { display: flex; overflow-x: auto; padding: 15px 20px; gap: 10px; scrollbar-width: none; border-bottom: 1px solid var(--border-color); }
         .filter-scroll::-webkit-scrollbar { display: none; }
         .chip { padding: 8px 18px; background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 24px; white-space: nowrap; font-size: 0.9rem; font-weight: 600; color: var(--text-muted); transition: var(--transition); cursor: pointer; }
         .chip.active { background: var(--primary-color); border-color: var(--primary-color); color: #fff; }
 
-        /* ========== PRODUCT GRID ========== */
         .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 15px 20px; }
         .product-card { background: var(--surface-color); border-radius: 16px; border: 1px solid var(--border-color); overflow: hidden; display: flex; flex-direction: column; position: relative; }
         .product-card:active { transform: scale(0.97); }
@@ -54,14 +46,12 @@
         .p-price { color: var(--primary-color); font-size: 1.1rem; font-weight: 700; }
         .badge-agotado { position: absolute; top: 8px; right: 8px; background: rgba(239, 68, 68, 0.9); color: white; padding: 4px 8px; border-radius: 8px; font-size: 0.7rem; font-weight: 700; }
 
-        /* ========== BOTTOM NAVIGATION ========== */
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: rgba(26, 27, 30, 0.95); backdrop-filter: blur(15px); display: flex; justify-content: space-around; padding: 12px 10px; padding-bottom: calc(12px + env(safe-area-inset-bottom)); border-top: 1px solid var(--border-color); z-index: 900; }
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 0.75rem; color: var(--text-muted); cursor: pointer; position: relative; font-weight: 600; }
         .nav-item.active { color: var(--primary-color); }
         .nav-icon { font-size: 1.4rem; }
         .cart-badge { position: absolute; top: -5px; right: 5px; background: #ef4444; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; font-weight: bold; }
 
-        /* ========== APP MODALS (BOTTOM SHEETS) ========== */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(3px); z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         .modal-overlay.open { opacity: 1; pointer-events: all; }
         
@@ -92,15 +82,12 @@
         .qty-btn { background: none; border: none; color: white; font-size: 1.1rem; cursor: pointer; padding: 0 5px; }
         .cart-total-box { display: flex; justify-content: space-between; align-items: center; font-size: 1.2rem; font-weight: 700; margin-bottom: 15px; }
 
-        /* ========== TOAST ========== */
         .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: var(--primary-color); color: white; padding: 12px 24px; border-radius: 30px; font-weight: 600; font-size: 0.9rem; z-index: 2000; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1); box-shadow: 0 5px 15px rgba(16,185,129,0.3); }
         .toast.show { transform: translateX(-50%) translateY(0); }
 
-        /* Skeleton Loaders */
         .skeleton { background: linear-gradient(90deg, var(--surface-color) 25%, #2a2d32 50%, var(--surface-color) 75%); background-size: 200% 100%; animation: loading 1.5s infinite; border-radius: 12px; }
         @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-        /* ========== MODAL DE CONFIANZA ========== */
         .trust-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); z-index: 3000; display: flex; justify-content: center; align-items: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         .trust-modal-overlay.open { opacity: 1; pointer-events: all; }
         .trust-modal { background: #ffffff; color: #1f2937; border-radius: 20px; max-width: 400px; width: 100%; padding: 28px 22px; box-shadow: 0 20px 60px rgba(0,0,0,0.4); text-align: center; transform: translateY(20px) scale(0.95); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1); max-height: 90vh; overflow-y: auto; font-family: 'Inter', sans-serif; }
@@ -121,7 +108,6 @@
 </head>
 <body>
 
-    <!-- Header Fijo -->
     <header class="app-header">
         <div class="header-top">
             <div class="logo">EDRunners<span style="color:var(--primary-color)">™</span></div>
@@ -133,12 +119,10 @@
         </div>
     </header>
 
-    <!-- Filtros Horizontales (Chips) -->
     <div class="filter-scroll" id="mFilters">
         <div class="chip active" data-cat="todos">Todos</div>
     </div>
 
-    <!-- Grid de Productos -->
     <main class="product-grid" id="mGrid">
         <div class="product-card skeleton" style="height: 220px;"></div>
         <div class="product-card skeleton" style="height: 220px;"></div>
@@ -146,7 +130,6 @@
         <div class="product-card skeleton" style="height: 220px;"></div>
     </main>
 
-    <!-- Barra de Navegación Inferior -->
     <nav class="bottom-nav">
         <div class="nav-item active" onclick="window.scrollTo({top:0, behavior:'smooth'})">
             <span class="nav-icon">🏠</span>
@@ -167,10 +150,8 @@
         </a>
     </nav>
 
-    <!-- Overlay general para los Modales -->
     <div class="modal-overlay" id="appOverlay" onclick="closeAllModals()"></div>
 
-    <!-- MODAL DE PRODUCTO (Bottom Sheet) -->
     <div class="bottom-sheet" id="productModal">
         <div class="sheet-handle-wrap">
             <div class="sheet-handle"></div>
@@ -185,36 +166,28 @@
             <div class="modal-specs" id="modSpecs">Detalles...</div>
         </div>
         <div class="sheet-footer">
-            <button class="btn-primary" id="modAddBtn">
-                🛒 Agregar al Carrito
-            </button>
+            <button class="btn-primary" id="modAddBtn">🛒 Agregar al Carrito</button>
         </div>
     </div>
 
-    <!-- MODAL DE CARRITO (Bottom Sheet) -->
     <div class="bottom-sheet" id="cartModal" style="height: 85vh;">
         <div class="sheet-handle-wrap">
             <div class="sheet-handle"></div>
             <h3 style="margin-left: 15px; flex-grow: 1;">Mi Carrito</h3>
             <button class="close-sheet-btn" onclick="closeAllModals()">&times;</button>
         </div>
-        <div class="sheet-content" id="mCartItems" style="flex-grow: 1;">
-        </div>
+        <div class="sheet-content" id="mCartItems" style="flex-grow: 1;"></div>
         <div class="sheet-footer">
             <div class="cart-total-box">
                 <span>Total:</span>
                 <span id="mCartTotal" style="color:var(--primary-color)">$0.00</span>
             </div>
-            <button class="btn-primary" onclick="checkout()">
-                Enviar pedido por WhatsApp
-            </button>
+            <button class="btn-primary" onclick="checkout()">Enviar pedido por WhatsApp</button>
         </div>
     </div>
 
-    <!-- Notificación Toast -->
     <div class="toast" id="appToast">¡Agregado al carrito! 🛒</div>
 
-    <!-- ========== MODAL DE CONFIANZA ========== -->
     <div class="trust-modal-overlay" id="trustModal">
         <div class="trust-modal">
             <img src="image/escudo-confianza.png" alt="Escudo de confianza" class="trust-icon">
@@ -238,11 +211,61 @@
         
         let allProducts = [];
         let currentCategory = 'todos';
-        let exchangeRate = 843.5; // Fallback por si falta precio_bs
+        let exchangeRate = 843.5;
         let showUSD = true;
         let cart = JSON.parse(localStorage.getItem('edrunners_cart_m')) || [];
-        
         let activeProduct = null;
+
+        // ========== PARSEO CSV MEJORADO (maneja comillas y comas internas) ==========
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            for (let i = 0; i < line.length; i++) {
+                const ch = line[i];
+                if (ch === '"') {
+                    if (inQuotes && line[i+1] === '"') {
+                        current += '"';
+                        i++;
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (ch === ',' && !inQuotes) {
+                    result.push(current.trim());
+                    current = '';
+                } else {
+                    current += ch;
+                }
+            }
+            result.push(current.trim());
+            return result;
+        }
+
+        // Convierte "47.933,00" o "47933.00" a 47933.00 (número)
+        function parsePrecio(valor) {
+            if (!valor) return 0;
+            let limpio = valor.replace(/[^\d.,]/g, '').trim();
+            if (!limpio) return 0;
+            // Si tiene coma Y punto → formato europeo (47.933,00)
+            if (limpio.includes('.') && limpio.includes(',')) {
+                // El punto es separador de miles, la coma es decimal
+                if (limpio.lastIndexOf(',') > limpio.lastIndexOf('.')) {
+                    limpio = limpio.replace(/\./g, '').replace(',', '.');
+                } else {
+                    // Formato USA (47,933.00)
+                    limpio = limpio.replace(/,/g, '');
+                }
+            } else if (limpio.includes(',')) {
+                // Solo coma → puede ser decimal (47,93) o miles (47,933)
+                const partes = limpio.split(',');
+                if (partes[1] && partes[1].length === 3 && partes[0].length <= 3) {
+                    limpio = limpio.replace(/,/g, '');
+                } else {
+                    limpio = limpio.replace(',', '.');
+                }
+            }
+            return parseFloat(limpio) || 0;
+        }
 
         // ========== INICIALIZACIÓN ==========
         async function initApp() {
@@ -251,11 +274,19 @@
             try {
                 const prodRes = await fetch(PRODUCTS_CSV);
                 if(prodRes.ok) {
-                    allProducts = parseProducts(await prodRes.text()).reverse();
+                    const csvText = await prodRes.text();
+                    allProducts = parseProducts(csvText).reverse();
+                    if (allProducts.length === 0) {
+                        document.getElementById('mGrid').innerHTML = '<p style="grid-column:1/-1; text-align:center; padding:20px;">No se encontraron productos.</p>';
+                        return;
+                    }
                     buildChips();
                     renderGrid(allProducts);
+                } else {
+                    document.getElementById('mGrid').innerHTML = '<p style="grid-column:1/-1; text-align:center; padding:20px;">Error al cargar productos.</p>';
                 }
             } catch(e) {
+                console.error('Error:', e);
                 document.getElementById('mGrid').innerHTML = '<p style="grid-column:1/-1; text-align:center; padding:20px;">Sin conexión. Verifica tu internet.</p>';
             }
         }
@@ -274,31 +305,27 @@
             });
         }
 
-        // ========== PARSEO DE DATOS (con precio_bs) ==========
+        // ========== PARSEO DE PRODUCTOS ==========
         function parseProducts(csvText) {
             const lines = csvText.split(/\r?\n/).filter(l => l.trim() !== '');
-            const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+            if (lines.length < 2) return [];
+            const headers = parseCSVLine(lines[0]).map(h => h.trim().toLowerCase());
             const products = [];
             
             for(let i=1; i<lines.length; i++) {
-                let values = [], inQuote = false, current = '';
-                for(let ch of lines[i]) {
-                    if(ch === '"') inQuote = !inQuote;
-                    else if(ch === ',' && !inQuote) { values.push(current.trim()); current = ''; }
-                    else current += ch;
-                }
-                values.push(current.trim());
+                const values = parseCSVLine(lines[i]);
+                if (values.length < 2) continue;
                 
-                const getV = (key) => { const idx = headers.indexOf(key); return idx !== -1 ? values[idx] : ''; };
+                const getV = (key) => { const idx = headers.indexOf(key); return idx !== -1 ? (values[idx] || '') : ''; };
                 const nombre = getV('nombre');
                 if(!nombre) continue;
 
                 products.push({
                     id: i,
                     nombre: nombre,
-                    especificaciones: getV('especificaciones').replace(/\\n/g, '\n'),
+                    especificaciones: getV('especificaciones'),
                     precio: getV('precio'),
-                    precio_bs: getV('precio_bs'), // 👈 NUEVO
+                    precio_bs: getV('precio_bs'),
                     imagen_url: getV('imagen_url') || 'https://via.placeholder.com/300?text=EDRunners',
                     categoria: getV('categoria') || 'general',
                     stock: getV('stock') || 'disponible'
@@ -310,17 +337,14 @@
         // ========== FORMATO DE PRECIO ==========
         function formatPrice(p) {
             if (showUSD) {
-                let num = parseFloat((p.precio || '').replace(/[^0-9.]/g, '')) || 0;
+                const num = parsePrecio(p.precio);
                 return `$${num.toFixed(2)}`;
             } else {
-                // Modo Bolívares: usar precio_bs de la hoja
-                let bs = (p.precio_bs || '').trim();
-                if (bs && bs.toLowerCase() !== 'bs0,00' && bs.toLowerCase() !== 'bs0.00' && bs !== '0') {
-                    if (bs.toLowerCase().startsWith('bs')) return bs;
-                    return `Bs ${bs}`;
+                const bs = (p.precio_bs || '').trim();
+                if (bs && !/^bs?\s*0([.,]0+)?$/i.test(bs)) {
+                    return bs.toLowerCase().startsWith('bs') ? bs : `Bs ${bs}`;
                 }
-                // Fallback: calcular con exchangeRate
-                let num = parseFloat((p.precio || '').replace(/[^0-9.]/g, '')) || 0;
+                const num = parsePrecio(p.precio);
                 return `Bs ${(num * exchangeRate).toFixed(2)}`;
             }
         }
@@ -373,7 +397,7 @@
                 <div class="product-card" onclick="openProductModal(${p.id})">
                     ${isAgotado ? '<div class="badge-agotado">Agotado</div>' : ''}
                     <div class="product-img-box">
-                        <img src="${p.imagen_url}" loading="lazy">
+                        <img src="${p.imagen_url}" loading="lazy" onerror="this.src='https://via.placeholder.com/300?text=Sin+Imagen'">
                     </div>
                     <div class="product-info">
                         <div class="p-title">${p.nombre}</div>
@@ -393,7 +417,6 @@
             renderCartModal();
         });
 
-        // ========== LÓGICA DE MODALES ==========
         const overlay = document.getElementById('appOverlay');
         const pModal = document.getElementById('productModal');
         const cModal = document.getElementById('cartModal');
@@ -402,7 +425,9 @@
             activeProduct = allProducts.find(p => p.id === id);
             if(!activeProduct) return;
 
-            document.getElementById('modImg').src = activeProduct.imagen_url;
+            const imgEl = document.getElementById('modImg');
+            imgEl.src = activeProduct.imagen_url;
+            imgEl.onerror = () => { imgEl.src = 'https://via.placeholder.com/300?text=Sin+Imagen'; };
             document.getElementById('modTitle').innerText = activeProduct.nombre;
             document.getElementById('modSpecs').innerText = activeProduct.especificaciones || 'Sin especificaciones detalladas.';
             updateModalPrice();
@@ -439,7 +464,6 @@
             cModal.classList.remove('open');
         }
 
-        // ========== CARRITO ==========
         function saveCart() { 
             localStorage.setItem('edrunners_cart_m', JSON.stringify(cart)); 
             updateCartBadge(); 
@@ -453,9 +477,8 @@
         }
 
         function addToCart(prod) {
-            const numPrice = parseFloat((prod.precio || '').replace(/[^0-9.]/g, '')) || 0;
-            // Guardamos también el precio_bs para usarlo cuando cambiemos de moneda
-            const numPriceBS = parseFloat((prod.precio_bs || '').replace(/[^0-9.,]/g, '').replace(',', '.')) || 0;
+            const numPrice = parsePrecio(prod.precio);
+            const numPriceBS = parsePrecio(prod.precio_bs);
             const exist = cart.find(i => i.nombre === prod.nombre);
             
             if(exist) exist.qty++;
@@ -503,7 +526,7 @@
                 }
                 return `
                 <div class="cart-item">
-                    <img src="${item.img}">
+                    <img src="${item.img}" onerror="this.src='https://via.placeholder.com/60?text=?'">
                     <div class="cart-item-info">
                         <div class="cart-item-title">${item.nombre}</div>
                         <div class="cart-item-price">${pDisplay}</div>
@@ -548,7 +571,6 @@
             window.open(`https://wa.me/584129056964?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        // Arrancar la app
         initApp();
     </script>
 </body>
