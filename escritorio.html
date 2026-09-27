@@ -129,122 +129,24 @@
         .detail-main-image { width: 100%; max-height: 300px; object-fit: contain; border-radius: 12px; margin-bottom: 10px; }
         .detail-desc { margin: 15px 0; line-height: 1.5; text-align: left; white-space: pre-wrap; }
 
-        /* ========== MODAL DE CONFIANZA (SIEMPRE TEMA CLARO) ========== */
-        .trust-modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.75);
-            backdrop-filter: blur(4px);
-            z-index: 3000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-        .trust-modal-overlay.open {
-            opacity: 1;
-            pointer-events: all;
-        }
-        .trust-modal {
-            background: #ffffff;
-            color: #1f2937;
-            border-radius: 20px;
-            max-width: 420px;
-            width: 100%;
-            padding: 28px 24px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-            text-align: center;
-            transform: translateY(20px) scale(0.95);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1);
-            max-height: 90vh;
-            overflow-y: auto;
-            font-family: 'Inter', sans-serif;
-        }
-        .trust-modal-overlay.open .trust-modal {
-            transform: translateY(0) scale(1);
-        }
-        .trust-icon {
-            display: block;
-            width: 90px;
-            height: 90px;
-            object-fit: contain;
-            margin: 0 auto 15px;
-            filter: drop-shadow(0 4px 10px rgba(16, 185, 129, 0.25));
-        }
-        .trust-title {
-            font-size: 1.35rem;
-            font-weight: 700;
-            color: #059669;
-            margin-bottom: 15px;
-        }
-        .trust-message {
-            font-size: 0.88rem;
-            line-height: 1.6;
-            color: #374151;
-            margin-bottom: 18px;
-            text-align: left;
-        }
-        .trust-message p {
-            margin-bottom: 10px;
-        }
-        .trust-message strong {
-            color: #111827;
-        }
-        .trust-message ul {
-            list-style: none;
-            padding: 0;
-            margin: 12px 0;
-        }
-        .trust-message li {
-            margin-bottom: 8px;
-            display: flex;
-            align-items: flex-start;
-            gap: 6px;
-        }
-        .trust-message .check {
-            color: #10b981;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-        .trust-wa-link {
-            display: inline-block;
-            background: #f0fdf4;
-            border: 1px solid #10b981;
-            color: #059669;
-            padding: 10px 16px;
-            border-radius: 30px;
-            font-size: 0.82rem;
-            font-weight: 600;
-            text-decoration: none;
-            margin-bottom: 16px;
-            transition: all 0.2s;
-        }
-        .trust-wa-link:hover {
-            background: #10b981;
-            color: white;
-        }
-        .trust-btn {
-            width: 100%;
-            padding: 14px;
-            background: #10b981;
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background 0.2s;
-            font-family: 'Inter', sans-serif;
-        }
-        .trust-btn:hover {
-            background: #059669;
-        }
-        .trust-btn:active {
-            transform: scale(0.98);
-        }
+        /* ========== MODAL DE CONFIANZA ========== */
+        .trust-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); z-index: 3000; display: flex; justify-content: center; align-items: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .trust-modal-overlay.open { opacity: 1; pointer-events: all; }
+        .trust-modal { background: #ffffff; color: #1f2937; border-radius: 20px; max-width: 420px; width: 100%; padding: 28px 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.4); text-align: center; transform: translateY(20px) scale(0.95); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1); max-height: 90vh; overflow-y: auto; font-family: 'Inter', sans-serif; }
+        .trust-modal-overlay.open .trust-modal { transform: translateY(0) scale(1); }
+        .trust-icon { display: block; width: 90px; height: 90px; object-fit: contain; margin: 0 auto 15px; filter: drop-shadow(0 4px 10px rgba(16, 185, 129, 0.25)); }
+        .trust-title { font-size: 1.35rem; font-weight: 700; color: #059669; margin-bottom: 15px; }
+        .trust-message { font-size: 0.88rem; line-height: 1.6; color: #374151; margin-bottom: 18px; text-align: left; }
+        .trust-message p { margin-bottom: 10px; }
+        .trust-message strong { color: #111827; }
+        .trust-message ul { list-style: none; padding: 0; margin: 12px 0; }
+        .trust-message li { margin-bottom: 8px; display: flex; align-items: flex-start; gap: 6px; }
+        .trust-message .check { color: #10b981; font-weight: 700; flex-shrink: 0; }
+        .trust-wa-link { display: inline-block; background: #f0fdf4; border: 1px solid #10b981; color: #059669; padding: 10px 16px; border-radius: 30px; font-size: 0.82rem; font-weight: 600; text-decoration: none; margin-bottom: 16px; transition: all 0.2s; }
+        .trust-wa-link:hover { background: #10b981; color: white; }
+        .trust-btn { width: 100%; padding: 14px; background: #10b981; color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background 0.2s; font-family: 'Inter', sans-serif; }
+        .trust-btn:hover { background: #059669; }
+        .trust-btn:active { transform: scale(0.98); }
     </style>
 </head>
 <body class="tema-claro">
@@ -310,7 +212,6 @@
     </section>
 </main>
 
-<!-- Carrito Modal Lateral -->
 <div class="cart-overlay" id="cartOverlay"></div>
 <div class="cart-sidebar" id="cartSidebar">
     <div class="cart-header">
@@ -328,12 +229,11 @@
     </div>
 </div>
 
-<!-- Modal de Detalles del Producto -->
 <div id="detailModal" class="modal cart-modal detail-modal" style="display: none; position: fixed; z-index: 2001; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.7); backdrop-filter:blur(5px); justify-content:center; align-items:center;">
     <div class="cart-modal-content modal-content" style="background: var(--surface-color); width: 90%; max-width: 600px; max-height: 85vh; border-radius: 20px; padding: 20px; position:relative; overflow-y:auto; border:1px solid var(--border-color);">
         <span class="close-cart close-detail-modal" style="position:absolute; top:10px; right:15px; font-size:28px; cursor:pointer; color:var(--text-muted);">&times;</span>
         <h3 id="detalleNombre" style="margin-bottom: 15px;"></h3>
-        <img id="detalleImagen" class="detail-main-image" src="" alt="" style="width:100%; max-height:300px; object-fit:contain; border-radius:12px; margin-bottom:10px;">
+        <img id="detalleImagen" class="detail-main-image" src="" alt="" style="width:100%; max-height:300px; object-fit:contain; border-radius:12px; margin-bottom:10px;" onerror="this.src='https://via.placeholder.com/300?text=Sin+Imagen'">
         <div id="detalleThumbnails" class="detail-images" style="display:flex; gap:8px; overflow-x:auto; margin:15px 0; padding-bottom:10px;"></div>
         <p id="detalleEspecificaciones" style="color: var(--text-muted); margin-bottom: 10px;"></p>
         <div id="detalleDescripcion" class="detail-desc" style="margin:15px 0; line-height:1.5; text-align:left; white-space:pre-wrap;"></div>
@@ -342,7 +242,6 @@
     </div>
 </div>
 
-<!-- ========== MODAL DE CONFIANZA (SIEMPRE TEMA CLARO) ========== -->
 <div class="trust-modal-overlay" id="trustModal">
     <div class="trust-modal">
         <img src="image/escudo-confianza.png" alt="Escudo de confianza" class="trust-icon">
@@ -371,7 +270,7 @@
 
     let allProducts = [];
     let currentCategory = 'todos';
-    let exchangeRate = 850.5; // Fallback por si falla precio_bs
+    let exchangeRate = 850.5;
     let showUSD = true;
     let cart = JSON.parse(localStorage.getItem('edrunners_cart')) || [];
 
@@ -418,21 +317,61 @@
         renderCart();
     });
 
-    // ========== PARSEO DE CSV (con precio_bs) ==========
+    // ========== PARSEO CSV ROBUSTO ==========
+    function parseCSVLine(line) {
+        const result = [];
+        let current = '';
+        let inQuotes = false;
+        for (let i = 0; i < line.length; i++) {
+            const ch = line[i];
+            if (ch === '"') {
+                if (inQuotes && line[i+1] === '"') {
+                    current += '"';
+                    i++;
+                } else {
+                    inQuotes = !inQuotes;
+                }
+            } else if (ch === ',' && !inQuotes) {
+                result.push(current.trim());
+                current = '';
+            } else {
+                current += ch;
+            }
+        }
+        result.push(current.trim());
+        return result;
+    }
+
+    function parsePrecio(valor) {
+        if (!valor) return 0;
+        let limpio = String(valor).replace(/[^\d.,]/g, '').trim();
+        if (!limpio) return 0;
+        if (limpio.includes('.') && limpio.includes(',')) {
+            if (limpio.lastIndexOf(',') > limpio.lastIndexOf('.')) {
+                limpio = limpio.replace(/\./g, '').replace(',', '.');
+            } else {
+                limpio = limpio.replace(/,/g, '');
+            }
+        } else if (limpio.includes(',')) {
+            const partes = limpio.split(',');
+            if (partes[1] && partes[1].length === 3 && partes[0].length <= 3) {
+                limpio = limpio.replace(/,/g, '');
+            } else {
+                limpio = limpio.replace(',', '.');
+            }
+        }
+        return parseFloat(limpio) || 0;
+    }
+
     function parseCSV(csvText) {
         const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== '');
         if (lines.length < 2) return [];
-        const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+        const headers = parseCSVLine(lines[0]).map(h => h.trim().toLowerCase());
         const products = [];
         for (let i = 1; i < lines.length; i++) {
-            let values = [], inQuote = false, current = '';
-            for (let ch of lines[i]) {
-                if (ch === '"') inQuote = !inQuote;
-                else if (ch === ',' && !inQuote) { values.push(current.trim()); current = ''; }
-                else current += ch;
-            }
-            values.push(current.trim());
-            const getValue = (key) => { const idx = headers.indexOf(key); return idx !== -1 ? values[idx] : ''; };
+            const values = parseCSVLine(lines[i]);
+            if (values.length < 2) continue;
+            const getValue = (key) => { const idx = headers.indexOf(key); return idx !== -1 ? (values[idx] || '') : ''; };
             const nombre = getValue('nombre');
             if (!nombre) continue;
             products.push({
@@ -440,7 +379,7 @@
                 nombre: nombre,
                 especificaciones: getValue('especificaciones'),
                 precio: getValue('precio'),
-                precio_bs: getValue('precio_bs'), // 👈 NUEVO: precio en Bs ya calculado en la hoja
+                precio_bs: getValue('precio_bs'),
                 imagen_url: getValue('imagen_url'),
                 categoria: getValue('categoria') || 'general',
                 stock: getValue('stock') || 'disponible',
@@ -456,6 +395,10 @@
             const prodRes = await fetch(PRODUCTS_CSV_URL);
             if (prodRes.ok) {
                 allProducts = parseCSV(await prodRes.text()).reverse();
+                if (allProducts.length === 0) {
+                    document.getElementById('desktopProductGrid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">No se encontraron productos.</div>';
+                    return;
+                }
                 buildCategories();
                 renderProducts(allProducts);
             }
@@ -486,23 +429,17 @@
         });
     }
 
-    // ========== FORMATO DE PRECIO (usa precio_bs si existe) ==========
+    // ========== FORMATO DE PRECIO ==========
     function formatPrice(p) {
         if (showUSD) {
-            let num = parseFloat((p.precio || '').replace(/[^0-9.]/g, ''));
-            if (isNaN(num)) return p.precio || '';
+            const num = parsePrecio(p.precio);
             return `$${num.toFixed(2)}`;
         } else {
-            // Modo Bolívares: usar precio_bs de la hoja
-            let bs = (p.precio_bs || '').trim();
-            if (bs && bs.toLowerCase() !== 'bs0,00' && bs.toLowerCase() !== 'bs0.00' && bs !== '0') {
-                // Si ya viene con "Bs" en el texto, no lo duplicamos
-                if (bs.toLowerCase().startsWith('bs')) return bs;
-                return `Bs ${bs}`;
+            const bs = (p.precio_bs || '').trim();
+            if (bs && !/^bs?\s*0([.,]0+)?$/i.test(bs)) {
+                return bs.toLowerCase().startsWith('bs') ? bs : `Bs ${bs}`;
             }
-            // Fallback: calcular con exchangeRate
-            let num = parseFloat((p.precio || '').replace(/[^0-9.]/g, ''));
-            if (isNaN(num)) return p.precio || '';
+            const num = parsePrecio(p.precio);
             return `Bs ${(num * exchangeRate).toFixed(2)}`;
         }
     }
@@ -525,7 +462,7 @@
             return `
             <div class="product-card">
                 ${badge}
-                <div class="product-image"><img src="${imgSrc}" loading="lazy" alt="${p.nombre}"></div>
+                <div class="product-image"><img src="${imgSrc}" loading="lazy" alt="${p.nombre}" onerror="this.src='https://via.placeholder.com/250?text=Sin+Imagen'"></div>
                 <div class="product-info">
                     <h3 class="product-title">${p.nombre}</h3>
                     <p class="product-specs">${p.especificaciones}</p>
@@ -569,8 +506,10 @@
         const modal = document.getElementById('detailModal');
         document.getElementById('detalleNombre').textContent = product.nombre;
         const allImages = [product.imagen_url, ...imagenesExtraArray].filter(url => url && typeof url === 'string' && url.trim() !== '' && (url.startsWith('http') || url.startsWith('https')));
-        document.getElementById('detalleImagen').src = allImages.length > 0 ? allImages[0] : '';
-        document.getElementById('detalleImagen').alt = product.nombre;
+        const mainImg = document.getElementById('detalleImagen');
+        mainImg.src = allImages.length > 0 ? allImages[0] : '';
+        mainImg.alt = product.nombre;
+        mainImg.onerror = () => { mainImg.src = 'https://via.placeholder.com/300?text=Sin+Imagen'; };
         const thumbContainer = document.getElementById('detalleThumbnails');
         thumbContainer.innerHTML = '';
         if (allImages.length > 1) {
@@ -579,14 +518,9 @@
                 thumb.src = imgUrl;
                 thumb.className = 'detail-thumb';
                 if (idx === 0) thumb.classList.add('active');
-                thumb.style.width = '80px';
-                thumb.style.height = '80px';
-                thumb.style.objectFit = 'cover';
-                thumb.style.borderRadius = '8px';
-                thumb.style.cursor = 'pointer';
-                thumb.style.border = '2px solid transparent';
+                thumb.onerror = () => { thumb.style.display = 'none'; };
                 thumb.addEventListener('click', () => {
-                    document.getElementById('detalleImagen').src = imgUrl;
+                    mainImg.src = imgUrl;
                     document.querySelectorAll('.detail-thumb').forEach(t => t.classList.remove('active'));
                     thumb.classList.add('active');
                 });
@@ -640,11 +574,10 @@
         let totalUSD = 0;
         let totalBS = 0;
         container.innerHTML = cart.map((item, index) => {
-            let priceNum = parseFloat((item.priceUSD || '').replace(/[^0-9.]/g, '')) || 0;
-            let priceBSNum = parseFloat((item.priceBS || '').replace(/[^0-9.,]/g, '').replace(',', '.')) || 0;
+            let priceNum = parsePrecio(item.priceUSD);
+            let priceBSNum = parsePrecio(item.priceBS);
             totalUSD += priceNum * item.quantity;
             totalBS += priceBSNum * item.quantity;
-            // Mostrar el precio según moneda activa
             let displayPrice = '';
             if (showUSD) {
                 displayPrice = `$${priceNum.toFixed(2)}`;
@@ -657,7 +590,7 @@
             }
             return `
             <div class="cart-item">
-                <img src="${item.image}" alt="">
+                <img src="${item.image}" alt="" onerror="this.src='https://via.placeholder.com/60?text=?'">
                 <div>
                     <div style="font-weight:600; font-size:0.9rem">${item.name}</div>
                     <div style="color:var(--primary-color); font-size:0.85rem">${displayPrice}</div>
@@ -669,7 +602,6 @@
                 </div>
             </div>`;
         }).join('');
-        // Mostrar total según moneda
         if (showUSD) {
             document.getElementById('desktopCartTotal').innerText = `$${totalUSD.toFixed(2)}`;
         } else {
@@ -697,8 +629,8 @@
         if(cart.length === 0) return alert("Agrega productos primero");
         let msg = "¡Hola! Quisiera procesar la compra de estos equipos:\n\n";
         cart.forEach(i => {
-            let priceNum = parseFloat((i.priceUSD || '').replace(/[^0-9.]/g, '')) || 0;
-            let priceBSNum = parseFloat((i.priceBS || '').replace(/[^0-9.,]/g, '').replace(',', '.')) || 0;
+            let priceNum = parsePrecio(i.priceUSD);
+            let priceBSNum = parsePrecio(i.priceBS);
             let displayPrice = showUSD ? `$${priceNum.toFixed(2)}` : `Bs ${priceBSNum > 0 ? priceBSNum.toFixed(2) : (priceNum * exchangeRate).toFixed(2)}`;
             msg += `▫️ ${i.quantity}x ${i.name} (${displayPrice})\n`;
         });
