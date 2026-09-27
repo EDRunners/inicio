@@ -37,7 +37,6 @@
         ::-webkit-scrollbar-thumb { background: var(--surface-hover); border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--primary-color); }
 
-        /* ========== COMPONENTES GENERALES ========== */
         .container { max-width: 1400px; margin: 0 auto; padding: 0 40px; }
         .text-primary { color: var(--primary-color); }
         .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 24px; background-color: var(--primary-color); color: #fff; border-radius: 8px; font-weight: 600; cursor: pointer; transition: var(--transition); border: none; }
@@ -45,7 +44,6 @@
         .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-light); }
         .btn-outline:hover { border-color: var(--primary-color); color: var(--primary-color); background: rgba(16,185,129,0.05); }
 
-        /* ========== HEADER ========== */
         header { position: fixed; top: 0; width: 100%; background: rgba(15, 16, 18, 0.85); backdrop-filter: blur(12px); z-index: 1000; border-bottom: 1px solid var(--border-color); padding: 15px 0; transition: var(--transition); }
         body.tema-claro header { background: rgba(255, 255, 255, 0.9); }
         .header-grid { display: grid; grid-template-columns: auto 1fr auto; gap: 40px; align-items: center; }
@@ -56,7 +54,6 @@
         .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
         .header-actions { display: flex; align-items: center; gap: 15px; }
         
-        /* ========== HERO + CAROUSEL ========== */
         .hero-section { padding: 140px 0 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; min-height: 70vh; }
         .hero-content h1 { font-size: 4rem; line-height: 1.1; margin-bottom: 20px; }
         .hero-content p { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 30px; max-width: 90%; }
@@ -69,7 +66,6 @@
         .carousel-btn.prev { left: 20px; }
         .carousel-btn.next { right: 20px; }
 
-        /* ========== TIENDA ========== */
         .shop-container { display: grid; grid-template-columns: 250px 1fr; gap: 40px; padding: 60px 0; align-items: start; }
         .sidebar { position: sticky; top: 100px; background: var(--surface-color); padding: 30px; border-radius: 16px; border: 1px solid var(--border-color); }
         .sidebar h3 { margin-bottom: 20px; font-size: 1.2rem; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
@@ -102,7 +98,6 @@
         .badge-agotado { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444; }
         .badge-pocas { background: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid #f59e0b; }
 
-        /* ========== CARRITO MODAL (lateral) ========== */
         .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 1999; display: none; opacity: 0; transition: opacity 0.3s; }
         .cart-sidebar { position: fixed; top: 0; right: -450px; width: 450px; height: 100vh; background: var(--surface-color); z-index: 2000; padding: 30px; box-shadow: -10px 0 30px rgba(0,0,0,0.2); transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; border-left: 1px solid var(--border-color); }
         .cart-sidebar.open { right: 0; }
@@ -115,13 +110,11 @@
         .cart-footer { padding-top: 20px; border-top: 1px solid var(--border-color); margin-top: 20px; }
         .cart-total-row { display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; }
 
-        /* ========== Skeleton ========== */
         .skeleton { background: linear-gradient(90deg, var(--surface-color) 25%, var(--bg-color) 50%, var(--surface-color) 75%); background-size: 200% 100%; animation: loading 1.5s infinite; border-radius: 8px; }
         @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
         .whatsapp-float { position: fixed; bottom: 40px; right: 40px; background: #25D366; color: white; width: 65px; height: 65px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 35px; z-index: 999; box-shadow: 0 10px 20px rgba(37,211,102,0.3); transition: var(--transition); }
         .whatsapp-float:hover { transform: translateY(-5px) scale(1.05); }
 
-        /* ========== MODAL DE DETALLES ========== */
         .detail-modal .modal-content { max-width: 600px; max-height: 85vh; overflow-y: auto; }
         .detail-images { display: flex; gap: 8px; overflow-x: auto; margin: 15px 0; padding-bottom: 10px; }
         .detail-thumb { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
@@ -129,7 +122,6 @@
         .detail-main-image { width: 100%; max-height: 300px; object-fit: contain; border-radius: 12px; margin-bottom: 10px; }
         .detail-desc { margin: 15px 0; line-height: 1.5; text-align: left; white-space: pre-wrap; }
 
-        /* ========== MODAL DE CONFIANZA ========== */
         .trust-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); z-index: 3000; display: flex; justify-content: center; align-items: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         .trust-modal-overlay.open { opacity: 1; pointer-events: all; }
         .trust-modal { background: #ffffff; color: #1f2937; border-radius: 20px; max-width: 420px; width: 100%; padding: 28px 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.4); text-align: center; transform: translateY(20px) scale(0.95); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1); max-height: 90vh; overflow-y: auto; font-family: 'Inter', sans-serif; }
@@ -181,9 +173,9 @@
         </div>
         <div class="carousel-desktop">
             <div class="carousel-slides" id="mainCarousel">
-                <div class="carousel-slide"><img src="image/carr1.webp" alt="Oferta 1" onerror="this.src='https://via.placeholder.com/800x450/1a1b1e/10b981?text=EDRunners+Ofertas'"></div>
-                <div class="carousel-slide"><img src="image/pack-gamer.webp" alt="Pack Gamer" onerror="this.src='https://via.placeholder.com/800x450/1a1b1e/10b981?text=Setup+Gamer'"></div>
-                <div class="carousel-slide"><img src="image/pack-moto1.webp" alt="Oferta Teléfonos" onerror="this.src='https://via.placeholder.com/800x450/1a1b1e/10b981?text=Smartphones'"></div>
+                <div class="carousel-slide"><img src="image/carr1.webp" alt="Oferta 1" onerror="this.src='image/sin-imagen.webp'"></div>
+                <div class="carousel-slide"><img src="image/pack-gamer.webp" alt="Pack Gamer" onerror="this.src='image/sin-imagen.webp'"></div>
+                <div class="carousel-slide"><img src="image/pack-moto1.webp" alt="Oferta Teléfonos" onerror="this.src='image/sin-imagen.webp'"></div>
             </div>
             <button class="carousel-btn prev" onclick="moveCarousel(-1)">❮</button>
             <button class="carousel-btn next" onclick="moveCarousel(1)">❯</button>
@@ -233,7 +225,7 @@
     <div class="cart-modal-content modal-content" style="background: var(--surface-color); width: 90%; max-width: 600px; max-height: 85vh; border-radius: 20px; padding: 20px; position:relative; overflow-y:auto; border:1px solid var(--border-color);">
         <span class="close-cart close-detail-modal" style="position:absolute; top:10px; right:15px; font-size:28px; cursor:pointer; color:var(--text-muted);">&times;</span>
         <h3 id="detalleNombre" style="margin-bottom: 15px;"></h3>
-        <img id="detalleImagen" class="detail-main-image" src="" alt="" style="width:100%; max-height:300px; object-fit:contain; border-radius:12px; margin-bottom:10px;" onerror="this.src='https://via.placeholder.com/300?text=Sin+Imagen'">
+        <img id="detalleImagen" class="detail-main-image" src="" alt="" style="width:100%; max-height:300px; object-fit:contain; border-radius:12px; margin-bottom:10px;" onerror="this.src='image/sin-imagen.webp'">
         <div id="detalleThumbnails" class="detail-images" style="display:flex; gap:8px; overflow-x:auto; margin:15px 0; padding-bottom:10px;"></div>
         <p id="detalleEspecificaciones" style="color: var(--text-muted); margin-bottom: 10px;"></p>
         <div id="detalleDescripcion" class="detail-desc" style="margin:15px 0; line-height:1.5; text-align:left; white-space:pre-wrap;"></div>
@@ -267,12 +259,27 @@
 <script>
     // ========== CONFIGURACIÓN ==========
     const PRODUCTS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRGjMz9Zwo1g8PruSjNcSJq6kTUQrEGkN_hQRBH0dvjIA_IwwKQ5p2pb7Bmrnvd7sLB2hMvqj-oFR6L/pub?output=csv";
+    const FALLBACK_IMG = "image/sin-imagen.webp";
 
     let allProducts = [];
     let currentCategory = 'todos';
     let exchangeRate = 850.5;
     let showUSD = true;
     let cart = JSON.parse(localStorage.getItem('edrunners_cart')) || [];
+
+    // ========== HELPER: Proxy de imágenes con wsrv.nl ==========
+    // Envuelve cualquier URL de imagen con el CDN wsrv.nl para saltar bloqueos ISP.
+    function proxyImg(url) {
+        if (!url || typeof url !== 'string' || url.trim() === '') return FALLBACK_IMG;
+        // Si ya es una ruta local (empieza con image/ o /), no proxear
+        if (url.startsWith('image/') || url.startsWith('/')) return url;
+        // Si ya es un proxy de wsrv, no duplicar
+        if (url.includes('wsrv.nl')) return url;
+        // Si es una URL externa (http/https), envolver con wsrv.nl
+        if (url.startsWith('http')) return `https://wsrv.nl/?url=${encodeURIComponent(url)}`;
+        // Fallback
+        return url;
+    }
 
     // ========== MODAL DE CONFIANZA ==========
     function initTrustModal() {
@@ -457,12 +464,13 @@
             if (p.stock === 'agotado' || p.stock === '0') badge = '<div class="badge-stock badge-agotado">Agotado</div>';
             else if (p.stock === 'pocas') badge = '<div class="badge-stock badge-pocas">Últimas uds.</div>';
             const precioDisplay = formatPrice(p);
-            const imgSrc = p.imagen_url || 'https://via.placeholder.com/250?text=EDRunners';
+            // ✅ APLICAMOS EL PROXY wsrv.nl A LA IMAGEN PRINCIPAL
+            const imgSrc = proxyImg(p.imagen_url);
             
             return `
             <div class="product-card">
                 ${badge}
-                <div class="product-image"><img src="${imgSrc}" loading="lazy" alt="${p.nombre}" onerror="this.src='https://via.placeholder.com/250?text=Sin+Imagen'"></div>
+                <div class="product-image"><img src="${imgSrc}" loading="lazy" alt="${p.nombre}" onerror="this.src='${FALLBACK_IMG}'"></div>
                 <div class="product-info">
                     <h3 class="product-title">${p.nombre}</h3>
                     <p class="product-specs">${p.especificaciones}</p>
@@ -505,11 +513,14 @@
     function openDetailModal(product, imagenesExtraArray = []) {
         const modal = document.getElementById('detailModal');
         document.getElementById('detalleNombre').textContent = product.nombre;
-        const allImages = [product.imagen_url, ...imagenesExtraArray].filter(url => url && typeof url === 'string' && url.trim() !== '' && (url.startsWith('http') || url.startsWith('https')));
+        // ✅ APLICAMOS EL PROXY wsrv.nl A TODAS LAS IMÁGENES (principal + extras)
+        const rawImages = [product.imagen_url, ...imagenesExtraArray].filter(url => url && typeof url === 'string' && url.trim() !== '');
+        const allImages = rawImages.map(url => proxyImg(url));
+        
         const mainImg = document.getElementById('detalleImagen');
-        mainImg.src = allImages.length > 0 ? allImages[0] : '';
+        mainImg.src = allImages.length > 0 ? allImages[0] : FALLBACK_IMG;
         mainImg.alt = product.nombre;
-        mainImg.onerror = () => { mainImg.src = 'https://via.placeholder.com/300?text=Sin+Imagen'; };
+        mainImg.onerror = () => { mainImg.src = FALLBACK_IMG; };
         const thumbContainer = document.getElementById('detalleThumbnails');
         thumbContainer.innerHTML = '';
         if (allImages.length > 1) {
@@ -588,9 +599,11 @@
                     displayPrice = `Bs ${(priceNum * exchangeRate).toFixed(2)}`;
                 }
             }
+            // La imagen del carrito ya viene proxeada desde addToCart
+            const cartImg = item.image || FALLBACK_IMG;
             return `
             <div class="cart-item">
-                <img src="${item.image}" alt="" onerror="this.src='https://via.placeholder.com/60?text=?'">
+                <img src="${cartImg}" alt="" onerror="this.src='${FALLBACK_IMG}'">
                 <div>
                     <div style="font-weight:600; font-size:0.9rem">${item.name}</div>
                     <div style="color:var(--primary-color); font-size:0.85rem">${displayPrice}</div>
