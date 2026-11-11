@@ -6,7 +6,7 @@
     <title>EDRunners Pro | Escritorio</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ========== ESTILOS (manteniendo el diseño) ========== */
+        /* ========== ESTILOS ========== */
         :root {
             --bg-color: #0f1012;
             --surface-color: #1a1b1e;
@@ -98,6 +98,12 @@
         .badge-agotado { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444; }
         .badge-pocas { background: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid #f59e0b; }
 
+        /* ========== NUEVAS ETIQUETAS ========== */
+        .product-tag { position: absolute; top: 20px; left: 20px; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; z-index: 2; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .product-tag.nuevo { background: #3b82f6; color: #fff; }
+        .product-tag.oferta { background: #ef4444; color: #fff; }
+        .product-tag.top { background: #f59e0b; color: #fff; }
+
         .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 1999; display: none; opacity: 0; transition: opacity 0.3s; }
         .cart-sidebar { position: fixed; top: 0; right: -450px; width: 450px; height: 100vh; background: var(--surface-color); z-index: 2000; padding: 30px; box-shadow: -10px 0 30px rgba(0,0,0,0.2); transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; border-left: 1px solid var(--border-color); }
         .cart-sidebar.open { right: 0; }
@@ -121,6 +127,16 @@
         .detail-thumb.active { border-color: var(--primary-color); }
         .detail-main-image { width: 100%; max-height: 300px; object-fit: contain; border-radius: 12px; margin-bottom: 10px; }
         .detail-desc { margin: 15px 0; line-height: 1.5; text-align: left; white-space: pre-wrap; }
+
+        /* ========== ESTILOS PRODUCTOS RELACIONADOS ========== */
+        .related-container { margin-top: 25px; border-top: 1px solid var(--border-color); padding-top: 20px; }
+        .related-container h4 { margin-bottom: 15px; font-size: 1rem; color: var(--text-light); }
+        .related-grid { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; }
+        .related-item { min-width: 100px; max-width: 100px; background: var(--bg-color); padding: 10px; border-radius: 10px; text-align: center; cursor: pointer; border: 1px solid var(--border-color); transition: var(--transition); }
+        .related-item:hover { border-color: var(--primary-color); transform: translateY(-3px); }
+        .related-item img { width: 100%; height: 70px; object-fit: contain; margin-bottom: 8px; }
+        .related-item p { font-size: 0.75rem; font-weight: 600; line-height: 1.2; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .related-item span { font-size: 0.8rem; color: var(--primary-color); font-weight: 700; }
 
         .trust-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); z-index: 3000; display: flex; justify-content: center; align-items: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         .trust-modal-overlay.open { opacity: 1; pointer-events: all; }
@@ -222,7 +238,7 @@
 </div>
 
 <div id="detailModal" class="modal cart-modal detail-modal" style="display: none; position: fixed; z-index: 2001; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.7); backdrop-filter:blur(5px); justify-content:center; align-items:center;">
-    <div class="cart-modal-content modal-content" style="background: var(--surface-color); width: 90%; max-width: 600px; max-height: 85vh; border-radius: 20px; padding: 20px; position:relative; overflow-y:auto; border:1px solid var(--border-color);">
+    <div class="cart-modal-content modal-content" id="detailModalContent" style="background: var(--surface-color); width: 90%; max-width: 600px; max-height: 85vh; border-radius: 20px; padding: 20px; position:relative; overflow-y:auto; border:1px solid var(--border-color);">
         <span class="close-cart close-detail-modal" style="position:absolute; top:10px; right:15px; font-size:28px; cursor:pointer; color:var(--text-muted);">&times;</span>
         <h3 id="detalleNombre" style="margin-bottom: 15px;"></h3>
         <img id="detalleImagen" class="detail-main-image" src="" alt="" style="width:100%; max-height:300px; object-fit:contain; border-radius:12px; margin-bottom:10px;" onerror="this.src='image/sin-imagen.webp'">
@@ -231,6 +247,12 @@
         <div id="detalleDescripcion" class="detail-desc" style="margin:15px 0; line-height:1.5; text-align:left; white-space:pre-wrap;"></div>
         <p id="detallePrecio" style="font-size: 1.5rem; color: var(--primary-color); font-weight: bold; margin-top: 15px;"></p>
         <a id="detalleLinkWa" href="#" target="_blank" class="btn" style="width: 100%; margin-top: 10px;">Consultar por WhatsApp</a>
+        
+        <!-- Contenedor de Productos Relacionados -->
+        <div id="detalleRelacionados" class="related-container" style="display: none;">
+            <h4>También te puede interesar</h4>
+            <div class="related-grid" id="relatedGrid"></div>
+        </div>
     </div>
 </div>
 
@@ -268,16 +290,11 @@
     let cart = JSON.parse(localStorage.getItem('edrunners_cart')) || [];
 
     // ========== HELPER: Proxy de imágenes con wsrv.nl ==========
-    // Envuelve cualquier URL de imagen con el CDN wsrv.nl para saltar bloqueos ISP.
     function proxyImg(url) {
         if (!url || typeof url !== 'string' || url.trim() === '') return FALLBACK_IMG;
-        // Si ya es una ruta local (empieza con image/ o /), no proxear
         if (url.startsWith('image/') || url.startsWith('/')) return url;
-        // Si ya es un proxy de wsrv, no duplicar
         if (url.includes('wsrv.nl')) return url;
-        // Si es una URL externa (http/https), envolver con wsrv.nl
         if (url.startsWith('http')) return `https://wsrv.nl/?url=${encodeURIComponent(url)}`;
-        // Fallback
         return url;
     }
 
@@ -391,7 +408,9 @@
                 categoria: getValue('categoria') || 'general',
                 stock: getValue('stock') || 'disponible',
                 descripcion: getValue('descripcion') || '',
-                imagenes_extra: getValue('imagenes_extra') || ''
+                imagenes_extra: getValue('imagenes_extra') || '',
+                etiqueta: getValue('etiqueta') || '', // ✅ NUEVO CAMPO
+                relacionados: getValue('relacionados') || '' // ✅ NUEVO CAMPO
             });
         }
         return products;
@@ -463,12 +482,19 @@
             let badge = '';
             if (p.stock === 'agotado' || p.stock === '0') badge = '<div class="badge-stock badge-agotado">Agotado</div>';
             else if (p.stock === 'pocas') badge = '<div class="badge-stock badge-pocas">Últimas uds.</div>';
+            
+            // ✅ NUEVA ETIQUETA VISUAL
+            let tagHtml = '';
+            if (p.etiqueta && p.etiqueta.trim() !== '') {
+                tagHtml = `<div class="product-tag ${p.etiqueta.toLowerCase().trim()}">${p.etiqueta}</div>`;
+            }
+
             const precioDisplay = formatPrice(p);
-            // ✅ APLICAMOS EL PROXY wsrv.nl A LA IMAGEN PRINCIPAL
             const imgSrc = proxyImg(p.imagen_url);
             
             return `
             <div class="product-card">
+                ${tagHtml}
                 ${badge}
                 <div class="product-image"><img src="${imgSrc}" loading="lazy" alt="${p.nombre}" onerror="this.src='${FALLBACK_IMG}'"></div>
                 <div class="product-info">
@@ -512,8 +538,11 @@
     // ========== MODAL DE DETALLES ==========
     function openDetailModal(product, imagenesExtraArray = []) {
         const modal = document.getElementById('detailModal');
+        const modalContent = document.getElementById('detailModalContent');
+        // Resetear scroll al abrir
+        modalContent.scrollTop = 0;
+        
         document.getElementById('detalleNombre').textContent = product.nombre;
-        // ✅ APLICAMOS EL PROXY wsrv.nl A TODAS LAS IMÁGENES (principal + extras)
         const rawImages = [product.imagen_url, ...imagenesExtraArray].filter(url => url && typeof url === 'string' && url.trim() !== '');
         const allImages = rawImages.map(url => proxyImg(url));
         
@@ -521,6 +550,7 @@
         mainImg.src = allImages.length > 0 ? allImages[0] : FALLBACK_IMG;
         mainImg.alt = product.nombre;
         mainImg.onerror = () => { mainImg.src = FALLBACK_IMG; };
+        
         const thumbContainer = document.getElementById('detalleThumbnails');
         thumbContainer.innerHTML = '';
         if (allImages.length > 1) {
@@ -540,11 +570,52 @@
         } else {
             thumbContainer.innerHTML = '<div style="color:var(--text-muted); font-size:0.9rem;">No hay imágenes adicionales</div>';
         }
+        
         document.getElementById('detalleEspecificaciones').textContent = product.especificaciones || '';
         document.getElementById('detalleDescripcion').innerHTML = (product.descripcion || '').replace(/\n/g, '<br>');
         document.getElementById('detallePrecio').textContent = formatPrice(product);
         document.getElementById('detalleLinkWa').href = product.link_wa || `https://wa.me/584129056964?text=Hola,%20me%20interesa%20${encodeURIComponent(product.nombre)}`;
+        
+        // ✅ LÓGICA DE PRODUCTOS RELACIONADOS
+        const relatedContainer = document.getElementById('detalleRelacionados');
+        const relatedGrid = document.getElementById('relatedGrid');
+        relatedGrid.innerHTML = '';
+        
+        if (product.relacionados && product.relacionados.trim() !== '') {
+            // Separar IDs, limpiar espacios y convertir a mayúsculas para evitar errores
+            const relatedIds = product.relacionados.split(',').map(id => id.trim().toUpperCase());
+            // Buscar los productos en la base de datos global
+            const relatedProds = allProducts.filter(p => relatedIds.includes(p.id_producto.toUpperCase()));
+            
+            if (relatedProds.length > 0) {
+                relatedContainer.style.display = 'block';
+                relatedGrid.innerHTML = relatedProds.map(rp => `
+                    <div class="related-item" onclick="jumpToRelated('${rp.id_producto}')">
+                        <img src="${proxyImg(rp.imagen_url)}" onerror="this.src='${FALLBACK_IMG}'">
+                        <p>${rp.nombre}</p>
+                        <span>${formatPrice(rp)}</span>
+                    </div>
+                `).join('');
+            } else {
+                relatedContainer.style.display = 'none';
+            }
+        } else {
+            relatedContainer.style.display = 'none';
+        }
+
         modal.style.display = 'flex';
+    }
+
+    // ✅ FUNCIÓN PARA SALTAR A UN PRODUCTO RELACIONADO
+    function jumpToRelated(idProducto) {
+        const product = allProducts.find(p => p.id_producto === idProducto);
+        if (product) {
+            let imagenesExtra = [];
+            if (product.imagenes_extra && typeof product.imagenes_extra === 'string' && product.imagenes_extra.trim()) {
+                imagenesExtra = product.imagenes_extra.split(',').map(s => s.trim().replace(/^["']|["']$/g, '')).filter(s => s && s !== '' && (s.startsWith('http://') || s.startsWith('https://')));
+            }
+            openDetailModal(product, imagenesExtra);
+        }
     }
 
     function closeDetailModal() {
@@ -599,7 +670,6 @@
                     displayPrice = `Bs ${(priceNum * exchangeRate).toFixed(2)}`;
                 }
             }
-            // La imagen del carrito ya viene proxeada desde addToCart
             const cartImg = item.image || FALLBACK_IMG;
             return `
             <div class="cart-item">
