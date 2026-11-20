@@ -44,6 +44,16 @@
         .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-light); }
         .btn-outline:hover { border-color: var(--primary-color); color: var(--primary-color); background: rgba(16,185,129,0.05); }
 
+        .btn-full-page {
+            width: 100%; margin-top: 10px;
+            background: transparent; color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+        .btn-full-page:hover {
+            background: rgba(16, 185, 129, 0.1); color: var(--primary-color);
+            transform: translateY(-2px); box-shadow: var(--glow);
+        }
+
         header { position: fixed; top: 0; width: 100%; background: rgba(15, 16, 18, 0.85); backdrop-filter: blur(12px); z-index: 1000; border-bottom: 1px solid var(--border-color); padding: 15px 0; transition: var(--transition); }
         body.tema-claro header { background: rgba(255, 255, 255, 0.9); }
         .header-grid { display: grid; grid-template-columns: auto 1fr auto; gap: 40px; align-items: center; }
@@ -247,6 +257,7 @@
         <div id="detalleDescripcion" class="detail-desc" style="margin:15px 0; line-height:1.5; text-align:left; white-space:pre-wrap;"></div>
         <p id="detallePrecio" style="font-size: 1.5rem; color: var(--primary-color); font-weight: bold; margin-top: 15px;"></p>
         <a id="detalleLinkWa" href="#" target="_blank" class="btn" style="width: 100%; margin-top: 10px;">Consultar por WhatsApp</a>
+        <a id="detalleLinkCompleta" href="#" class="btn btn-full-page">📄 Ver ficha completa del producto</a>
         
         <!-- Contenedor de Productos Relacionados -->
         <div id="detalleRelacionados" class="related-container" style="display: none;">
@@ -409,8 +420,8 @@
                 stock: getValue('stock') || 'disponible',
                 descripcion: getValue('descripcion') || '',
                 imagenes_extra: getValue('imagenes_extra') || '',
-                etiqueta: getValue('etiqueta') || '', // ✅ NUEVO CAMPO
-                relacionados: getValue('relacionados') || '' // ✅ NUEVO CAMPO
+                etiqueta: getValue('etiqueta') || '',
+                relacionados: getValue('relacionados') || ''
             });
         }
         return products;
@@ -483,7 +494,6 @@
             if (p.stock === 'agotado' || p.stock === '0') badge = '<div class="badge-stock badge-agotado">Agotado</div>';
             else if (p.stock === 'pocas') badge = '<div class="badge-stock badge-pocas">Últimas uds.</div>';
             
-            // ✅ NUEVA ETIQUETA VISUAL
             let tagHtml = '';
             if (p.etiqueta && p.etiqueta.trim() !== '') {
                 tagHtml = `<div class="product-tag ${p.etiqueta.toLowerCase().trim()}">${p.etiqueta}</div>`;
@@ -539,7 +549,6 @@
     function openDetailModal(product, imagenesExtraArray = []) {
         const modal = document.getElementById('detailModal');
         const modalContent = document.getElementById('detailModalContent');
-        // Resetear scroll al abrir
         modalContent.scrollTop = 0;
         
         document.getElementById('detalleNombre').textContent = product.nombre;
@@ -576,15 +585,15 @@
         document.getElementById('detallePrecio').textContent = formatPrice(product);
         document.getElementById('detalleLinkWa').href = product.link_wa || `https://wa.me/584129056964?text=Hola,%20me%20interesa%20${encodeURIComponent(product.nombre)}`;
         
-        // ✅ LÓGICA DE PRODUCTOS RELACIONADOS
+        const targetId = product.id_producto || product.nombre.replace(/\s/g, '-').toLowerCase();
+        document.getElementById('detalleLinkCompleta').href = `producto.html?id=${encodeURIComponent(targetId)}`;
+        
         const relatedContainer = document.getElementById('detalleRelacionados');
         const relatedGrid = document.getElementById('relatedGrid');
         relatedGrid.innerHTML = '';
         
         if (product.relacionados && product.relacionados.trim() !== '') {
-            // Separar IDs, limpiar espacios y convertir a mayúsculas para evitar errores
             const relatedIds = product.relacionados.split(',').map(id => id.trim().toUpperCase());
-            // Buscar los productos en la base de datos global
             const relatedProds = allProducts.filter(p => relatedIds.includes(p.id_producto.toUpperCase()));
             
             if (relatedProds.length > 0) {
@@ -606,7 +615,6 @@
         modal.style.display = 'flex';
     }
 
-    // ✅ FUNCIÓN PARA SALTAR A UN PRODUCTO RELACIONADO
     function jumpToRelated(idProducto) {
         const product = allProducts.find(p => p.id_producto === idProducto);
         if (product) {
