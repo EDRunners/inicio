@@ -37,7 +37,7 @@
         .chip.active { background: var(--primary-color); border-color: var(--primary-color); color: #fff; }
 
         .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 15px 20px; }
-        .product-card { background: var(--surface-color); border-radius: 16px; border: 1px solid var(--border-color); overflow: hidden; display: flex; flex-direction: column; position: relative; }
+        .product-card { background: var(--surface-color); border-radius: 16px; border: 1px solid var(--border-color); overflow: hidden; display: flex; flex-direction: column; position: relative; cursor: pointer; }
         .product-card:active { transform: scale(0.97); }
         .product-img-box { width: 100%; height: 140px; background: #fff; display: flex; align-items: center; justify-content: center; padding: 10px; }
         .product-img-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
@@ -46,7 +46,7 @@
         .p-price { color: var(--primary-color); font-size: 1.1rem; font-weight: 700; }
         .badge-agotado { position: absolute; top: 8px; right: 8px; background: rgba(239, 68, 68, 0.9); color: white; padding: 4px 8px; border-radius: 8px; font-size: 0.7rem; font-weight: 700; z-index: 2; }
 
-        /* ========== NUEVAS ETIQUETAS MÓVIL ========== */
+        /* ========== ETIQUETAS MÓVIL ========== */
         .product-tag { position: absolute; top: 8px; left: 8px; padding: 4px 8px; border-radius: 8px; font-size: 0.65rem; font-weight: 800; z-index: 2; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .product-tag.nuevo { background: #3b82f6; color: #fff; }
         .product-tag.oferta { background: #ef4444; color: #fff; }
@@ -69,22 +69,6 @@
         .close-sheet-btn { position: absolute; right: 20px; top: 12px; background: var(--surface-color); border: none; color: var(--text-light); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; }
         
         .sheet-content { overflow-y: auto; padding: 0 20px 20px; }
-        .modal-img { width: 100%; height: 250px; object-fit: contain; background: #fff; border-radius: 16px; margin-bottom: 20px; padding: 15px; }
-        .modal-title { font-size: 1.3rem; margin-bottom: 5px; line-height: 1.2; }
-        .modal-price { font-size: 1.8rem; color: var(--primary-color); font-weight: 700; margin-bottom: 15px; }
-        .modal-specs { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; background: var(--surface-color); padding: 15px; border-radius: 12px; white-space: pre-line; }
-
-        /* ========== BOTÓN VER FICHA COMPLETA MÓVIL ========== */
-        .btn-full-sheet {
-            display: flex; align-items: center; justify-content: center; gap: 6px;
-            width: 100%; padding: 12px; margin-top: 10px;
-            background: var(--surface-color); color: var(--primary-color);
-            border: 1px solid var(--primary-color); border-radius: 12px;
-            font-size: 0.95rem; font-weight: 700; text-decoration: none;
-            transition: var(--transition);
-        }
-        .btn-full-sheet:active { background: rgba(16, 185, 129, 0.12); transform: scale(0.98); }
-        
         .sheet-footer { padding: 15px 20px; padding-bottom: calc(15px + env(safe-area-inset-bottom)); border-top: 1px solid var(--border-color); background: var(--bg-color); }
         .btn-primary { width: 100%; padding: 16px; background: var(--primary-color); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; }
         .btn-primary:active { background: var(--primary-active); transform: scale(0.98); }
@@ -104,17 +88,6 @@
 
         .skeleton { background: linear-gradient(90deg, var(--surface-color) 25%, #2a2d32 50%, var(--surface-color) 75%); background-size: 200% 100%; animation: loading 1.5s infinite; border-radius: 12px; }
         @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-
-        /* ========== PRODUCTOS RELACIONADOS MÓVIL ========== */
-        .related-container { margin-top: 25px; border-top: 1px solid var(--border-color); padding-top: 20px; }
-        .related-container h4 { margin-bottom: 12px; font-size: 1rem; color: var(--text-light); }
-        .related-grid { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
-        .related-grid::-webkit-scrollbar { display: none; }
-        .related-item { min-width: 90px; max-width: 90px; background: var(--surface-color); padding: 8px; border-radius: 10px; text-align: center; cursor: pointer; border: 1px solid var(--border-color); transition: var(--transition); }
-        .related-item:active { transform: scale(0.95); }
-        .related-item img { width: 100%; height: 60px; object-fit: contain; margin-bottom: 6px; }
-        .related-item p { font-size: 0.7rem; font-weight: 600; line-height: 1.2; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .related-item span { font-size: 0.75rem; color: var(--primary-color); font-weight: 700; }
 
         .trust-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); z-index: 3000; display: flex; justify-content: center; align-items: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         .trust-modal-overlay.open { opacity: 1; pointer-events: all; }
@@ -180,32 +153,6 @@
 
     <div class="modal-overlay" id="appOverlay" onclick="closeAllModals()"></div>
 
-    <div class="bottom-sheet" id="productModal">
-        <div class="sheet-handle-wrap">
-            <div class="sheet-handle"></div>
-            <button class="close-sheet-btn" onclick="closeAllModals()">&times;</button>
-        </div>
-        <div class="sheet-content" id="modalSheetContent">
-            <img src="" alt="Producto" class="modal-img" id="modImg">
-            <h2 class="modal-title" id="modTitle">Nombre del Producto</h2>
-            <div class="modal-price" id="modPrice">$0.00</div>
-            
-            <h4 style="margin-bottom: 8px; color: var(--text-light);">Especificaciones:</h4>
-            <div class="modal-specs" id="modSpecs">Detalles...</div>
-
-            <a href="#" id="modFullPageLink" class="btn-full-sheet">📄 Ver ficha completa</a>
-
-            <!-- Contenedor de Productos Relacionados -->
-            <div id="detalleRelacionados" class="related-container" style="display: none;">
-                <h4>También te puede interesar</h4>
-                <div class="related-grid" id="relatedGrid"></div>
-            </div>
-        </div>
-        <div class="sheet-footer">
-            <button class="btn-primary" id="modAddBtn">🛒 Agregar al Carrito</button>
-        </div>
-    </div>
-
     <div class="bottom-sheet" id="cartModal" style="height: 85vh;">
         <div class="sheet-handle-wrap">
             <div class="sheet-handle"></div>
@@ -251,7 +198,6 @@
         let exchangeRate = 843.5;
         let showUSD = true;
         let cart = JSON.parse(localStorage.getItem('edrunners_cart_m')) || [];
-        let activeProduct = null;
 
         // ========== HELPER: Proxy de imágenes con wsrv.nl ==========
         function proxyImg(url) {
@@ -438,6 +384,7 @@
             grid.innerHTML = products.map(p => {
                 const isAgotado = p.stock === 'agotado' || p.stock === '0';
                 const imgSrc = proxyImg(p.imagen_url);
+                const targetId = p.id_producto || p.id;
                 
                 let tagHtml = '';
                 if (p.etiqueta && p.etiqueta.trim() !== '') {
@@ -445,7 +392,7 @@
                 }
 
                 return `
-                <div class="product-card" onclick="openProductModal(${p.id})">
+                <div class="product-card" onclick="openProductDetail('${String(targetId).replace(/'/g, "\\'")}')">
                     ${tagHtml}
                     ${isAgotado ? '<div class="badge-agotado">Agotado</div>' : ''}
                     <div class="product-img-box">
@@ -459,88 +406,21 @@
             }).join('');
         }
 
+        function openProductDetail(idProducto) {
+            window.location.href = `producto.html?id=${encodeURIComponent(idProducto)}`;
+        }
+
         document.getElementById('mSearch').addEventListener('input', filterAndRender);
 
         document.getElementById('mCurrencyBtn').addEventListener('click', (e) => {
             showUSD = !showUSD;
             e.target.innerText = showUSD ? 'Moneda: USD' : 'Moneda: Bs';
             filterAndRender();
-            if(activeProduct) updateModalPrice();
             renderCartModal();
         });
 
         const overlay = document.getElementById('appOverlay');
-        const pModal = document.getElementById('productModal');
         const cModal = document.getElementById('cartModal');
-
-        function openProductModal(id) {
-            activeProduct = allProducts.find(p => p.id === id);
-            if(!activeProduct) return;
-
-            const modalSheet = document.getElementById('modalSheetContent');
-            modalSheet.scrollTop = 0;
-
-            const imgEl = document.getElementById('modImg');
-            imgEl.src = proxyImg(activeProduct.imagen_url);
-            imgEl.onerror = () => { imgEl.src = FALLBACK_IMG; };
-            document.getElementById('modTitle').innerText = activeProduct.nombre;
-            document.getElementById('modSpecs').innerText = activeProduct.especificaciones || 'Sin especificaciones detalladas.';
-            updateModalPrice();
-
-            const fullLinkEl = document.getElementById('modFullPageLink');
-            const targetId = activeProduct.id_producto || activeProduct.id;
-            fullLinkEl.href = `producto.html?id=${encodeURIComponent(targetId)}`;
-
-            const btn = document.getElementById('modAddBtn');
-            const isAgotado = activeProduct.stock === 'agotado' || activeProduct.stock === '0';
-            
-            if(isAgotado) {
-                btn.innerText = "Producto Agotado";
-                btn.disabled = true;
-            } else {
-                btn.innerText = "🛒 Agregar al Carrito";
-                btn.disabled = false;
-                btn.onclick = () => { addToCart(activeProduct); };
-            }
-
-            const relatedContainer = document.getElementById('detalleRelacionados');
-            const relatedGrid = document.getElementById('relatedGrid');
-            relatedGrid.innerHTML = '';
-            
-            if (activeProduct.relacionados && activeProduct.relacionados.trim() !== '') {
-                const relatedIds = activeProduct.relacionados.split(',').map(id => id.trim().toUpperCase());
-                const relatedProds = allProducts.filter(p => p.id_producto && relatedIds.includes(p.id_producto.toUpperCase()));
-                
-                if (relatedProds.length > 0) {
-                    relatedContainer.style.display = 'block';
-                    relatedGrid.innerHTML = relatedProds.map(rp => `
-                        <div class="related-item" onclick="jumpToRelated('${rp.id_producto}')">
-                            <img src="${proxyImg(rp.imagen_url)}" onerror="this.src='${FALLBACK_IMG}'">
-                            <p>${rp.nombre}</p>
-                            <span>${formatPrice(rp)}</span>
-                        </div>
-                    `).join('');
-                } else {
-                    relatedContainer.style.display = 'none';
-                }
-            } else {
-                relatedContainer.style.display = 'none';
-            }
-
-            overlay.classList.add('open');
-            pModal.classList.add('open');
-        }
-
-        function jumpToRelated(idProducto) {
-            const product = allProducts.find(p => p.id_producto === idProducto);
-            if (product) {
-                openProductModal(product.id);
-            }
-        }
-
-        function updateModalPrice() {
-            if(activeProduct) document.getElementById('modPrice').innerText = formatPrice(activeProduct);
-        }
 
         function openCartModal() {
             renderCartModal();
@@ -550,7 +430,6 @@
 
         function closeAllModals() {
             overlay.classList.remove('open');
-            pModal.classList.remove('open');
             cModal.classList.remove('open');
         }
 
@@ -564,32 +443,6 @@
             document.getElementById('mCartBadge').innerText = count;
             if(count === 0) document.getElementById('mCartBadge').style.display = 'none';
             else document.getElementById('mCartBadge').style.display = 'flex';
-        }
-
-        function addToCart(prod) {
-            const numPrice = parsePrecio(prod.precio);
-            const numPriceBS = parsePrecio(prod.precio_bs);
-            const imgProxied = proxyImg(prod.imagen_url);
-            const exist = cart.find(i => i.nombre === prod.nombre);
-            
-            if(exist) exist.qty++;
-            else cart.push({ 
-                nombre: prod.nombre, 
-                precioUSD: numPrice, 
-                precioBS: numPriceBS, 
-                img: imgProxied, 
-                qty: 1 
-            });
-            
-            saveCart();
-            closeAllModals();
-            showToast();
-        }
-
-        function showToast() {
-            const toast = document.getElementById('appToast');
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2500);
         }
 
         function renderCartModal() {
